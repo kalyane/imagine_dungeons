@@ -1,0 +1,33 @@
+doctype html 
+html 
+    head 
+        title Sign up - Imagine Dungeons 
+        link(rel="stylesheet" href="/css/style.css")
+        link(rel="icon" type="image/x-icon" href="/images/favicon.ico")
+    body 
+        if message
+            .alert= message
+        .bg
+            .box_center
+                a(href="/").logo Imagine Dungeons 
+                form(action="/signup" method="post") 
+                    label(for="first_name") First Name
+                    br
+                    input(type="text" id="first_name" name="first_name")
+                    br
+                    label(for="last_name") Last Name  
+                    br
+                    input(type="text" id="last_name" name="last_name")
+                    br
+                    label(for="email") Email Address 
+                    br
+                    input(type="email" id="email" name="email")
+                    br
+                    label(for="password") Password  
+                    br
+                    input(type="password" id="password" name="password")
+                    br
+                    input(type="submit" value="SIGNUP")
+
+                div.link_question Already have an account? 
+                    a(href="/login") Login now

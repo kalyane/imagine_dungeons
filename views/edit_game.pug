@@ -1,0 +1,96 @@
+doctype html 
+html 
+    head 
+        title Game Editing - Imagine Dungeons 
+        link(rel="stylesheet" href="/css/edit_game_style.css")
+        link(rel="icon" type="image/x-icon" href="/images/favicon.ico")
+        script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
+        script(type="importmap").
+            {
+                "imports": {
+                    "three": "https://cdn.skypack.dev/three@0.139.2/build/three.module",
+                        "three/": "https://cdn.skypack.dev/three@0.139.2/",      
+                        "dat.gui": "https://cdn.skypack.dev/dat.gui",
+                        "drag-controls": "https://cdn.skypack.dev/three-dragcontrols",
+                        "cannon-es": "https://cdn.skypack.dev/cannon-es"
+                }
+            }
+    body 
+        nav
+            button#save SAVE GAME
+        .edit_game(id_game=game.id_game)
+            .left
+                .settings.box
+                    .header SETTINGS
+                    .content
+                        label(for="game_name") Game name  
+                        br
+                        input(type="text" id="game_name" name="game_name" value=game.name)
+                .properties.box
+                    .header ASSET PROPERTIES
+                    .content 
+                        img#selected_img
+                        label(for="game_name") Object name  
+                        br
+                        input(type="text" id="object_name" name="object_name" value=game.name)
+
+
+            .middle
+                .canva.box
+                    .header LAYOUT
+                    .canva_container
+                        canvas#editCanvas
+                .project.box
+                    .header PROJECT
+                    .added_assets
+                        .project_player
+                        .project_solid
+
+            .right
+                .assets.box
+                    .header ASSETS
+                    div.collapsible
+                        i.fa-solid.fa-person 
+                        | &nbsp;&nbsp;
+                        span Players
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                            if a.type == "player"
+                                .asset_card(model=a.name)
+                                    img(src="/images/models/"+a.name+".png", alt=a.name)
+                                    span=a.name
+                        
+                    div.collapsible
+                        i.fa-solid.fa-cube
+                        | &nbsp;&nbsp;
+                        span Solid Objects
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                                if a.type == "solid"
+                                    .asset_card(model=a.name)
+                                        img(src="/images/models/"+a.name+".png", alt=a.name)
+                                        span=a.name
+                        
+    script(type="module" src="/edit_client.js")
+    script. 
+        // collapsible
+        var coll = document.getElementsByClassName("collapsible");
+
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var icon = this.getElementsByClassName("icon_collapse")[0];
+                var content = this.nextSibling;
+                if (content.style.display === "block") {
+                    icon.classList.remove("fa-minus");
+                    icon.classList.add("fa-plus");
+                    content.style.display = "none";
+                } else {
+                    icon.classList.remove("fa-plus");
+                    icon.classList.add("fa-minus");
+                    content.style.display = "block";
+                }
+            });
+        }

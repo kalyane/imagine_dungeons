@@ -1,0 +1,64 @@
+@font-face {
+    font-family: Rye;
+    src: url(/fonts/Rye-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Regular;
+    src: url(/fonts/Lato-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Bold;
+    src: url(/fonts/Lato-Bold.ttf);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Lato-Regular;
+}
+
+body, html {
+    height: 100%;
+}
+
+.play_game{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+}
+
+.header{
+    box-sizing:border-box;
+    background-color: black;
+    padding: 10px;
+    color: #C4C4C4;
+    width: 100%;
+    font-size: 15px;
+}
+
+.box{
+    background-color: #252526;
+    outline:2px solid black;
+}
+
+.canva{
+    flex: 0 0 80%;
+    height: 100%;
+    color: #C4C4C4;
+    max-width: 80vw;
+}
+
+.metric{
+    flex: 0 0 20%;
+    height: 100%;
+    max-width: 20vw;
+}
+
+.canva_container{
+    flex:1;
+    height: 640px;
+    width: 960px;
+}

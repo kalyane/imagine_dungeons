@@ -1,0 +1,42 @@
+doctype html 
+html 
+    head 
+        title Home - Imagine Dungeons 
+        link(rel="stylesheet" href="/css/style.css")
+        link(rel="icon" type="image/x-icon" href="/images/favicon.ico")
+    body 
+        include includes/nav
+        .home
+            .banner
+                .banner_left
+                    img(src="/images/logo.png" alt="Logo")
+                    h1 The best place to develop your own Dungeon Games and train AI agents to play them!
+                    br
+                    p. 
+                        Imagine Dungeons is an online 3D game engine that provides an architecture 
+                        for easy game environment simulations perfect for students and researchers.
+                
+                .banner_right
+                    img(src="/images/sample_dungeon.png" alt="dungeon")
+
+            .cards 
+                .card 
+                    .icon 
+                        img(src="/images/dungeon_icon.png" alt="dungeon")
+                    h3 Design Your Own Game 
+                    p Get access to a range of low poly dungeon assets and characters to create a customizable game  following a dungeon game architecture.
+
+                .card 
+                    .icon 
+                        img(src="/images/machine_learning_icon.png" alt="dungeon")
+                    h3 Train an AI Agent
+                    p Our ImagineDungeons.js library will allow an integration with the game to train your reinforcement learning agent.
+
+                .card 
+                    .icon 
+                        img(src="/images/swordsman_icon.png" alt="dungeon")
+                    h3 Play & Share With Others 
+                    p The games created in the platform can be shared with the world so that anyone can play, including AI agents.
+
+        include includes/footer 
+            

@@ -1,0 +1,190 @@
+@font-face {
+    font-family: Rye;
+    src: url(/fonts/Rye-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Regular;
+    src: url(/fonts/Lato-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Bold;
+    src: url(/fonts/Lato-Bold.ttf);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Lato-Regular;
+}
+
+body, html {
+    height: 100%;
+    background-color: black;
+}
+
+.edit_game{
+    display: flex;
+    flex-wrap: wrap;
+    height: calc(100% - 42px);
+    width: 100%;
+}
+
+.header{
+    box-sizing:border-box;
+    background-color: black;
+    padding: 10px;
+    color: #C4C4C4;
+    width: 100%;
+    font-size: 15px;
+}
+
+.left{
+    flex: 0 0 20%;
+    height: 100%;
+    color: #C4C4C4;
+}
+
+.left .properties{
+    height: 60%;
+}
+
+.left .settings{
+    height: 40%;
+}
+
+.left .settings .content{
+    padding: 10px;
+    font-size: 13px;
+}
+
+.content input[type="text"]{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #3E3E42;
+    color: white;
+}
+
+.content input:focus {
+    outline: none;
+}
+
+.content label{
+    margin-right: 10px;
+}
+
+.middle{
+    flex: 0 0 55%;
+    height: 100%;
+    max-width: 55vw;
+}
+.right{
+    flex: 0 0 25%;
+    height: 100%;
+}
+
+.canva{
+    height: 70%;
+    min-height: 70%;
+    display:flex;
+    flex-direction:column;
+}
+
+.project{
+    height: 30%;
+}
+
+.assets{
+    height: 100%;
+    overflow: auto;
+}
+
+.box{
+    background-color: #252526;
+    outline:2px solid black;
+}
+.c_left{
+    float: left;
+}
+.c_right{
+    float: right;
+}
+.canva_container{
+    flex:1;
+    max-height: 55vw;
+    max-height: calc(100% - 38px);
+}
+
+.collapsible {
+    box-sizing:border-box;
+    background-color: #3E3E42;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+  
+.active, .collapsible:hover {
+    background-color: #555;
+}
+
+.collapsible_content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+}
+
+.icon_collapse{
+    float: right;
+}
+
+.asset_card, .added_asset{
+    cursor: pointer;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    display: inline-table;
+    text-align: center;
+    font-size: small;
+}
+
+.asset_card img, .added_asset img{
+    height: 80px;
+    width: 80px;
+    display: block;
+}
+
+.added_assets{
+    height: calc(100% - 38px);
+    max-height: calc(100% - 38px);
+    overflow: auto;
+}
+
+.project_player,  .project_solid{
+    display: inline;
+}
+
+nav{
+    text-align: right;
+}
+
+#save{
+    padding: 7px 20px;
+    color: #3E3E42 !important;
+    background-color: #B15328;
+    border-radius: 5px;
+    border: none;
+    margin: 5px 30px;
+    font-size: 15px;
+}

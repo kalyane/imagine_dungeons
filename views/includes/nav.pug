@@ -1,0 +1,11 @@
+nav
+    div.logo Imagine Dungeons
+    div.links
+        if session.loggedin
+            a(href="/games") Your games 
+            a(href="/logout").btn-medium LOGOUT
+        else
+            a(href="/") Home 
+            a(href="") About 
+            a(href="/signup").btn-light SIGNUP 
+            a(href="/login").btn-medium LOGIN 
