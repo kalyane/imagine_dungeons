@@ -32,7 +32,7 @@ html
                         img#selected_img
                         label(for="game_name") Object name  
                         br
-                        input(type="text" id="object_name" name="object_name" value=game.name)
+                        input(type="text" id="object_name" name="object_name")
 
 
             .middle
@@ -62,13 +62,25 @@ html
                                     span=a.name
                         
                     div.collapsible
-                        i.fa-solid.fa-cube
+                        i.fa-solid.fa-dungeon
                         | &nbsp;&nbsp;
-                        span Solid Objects
+                        span Modular
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content
                         each a in assets
-                                if a.type == "solid"
+                                if a.type == "modular"
+                                    .asset_card(model=a.name)
+                                        img(src="/images/models/"+a.name+".png", alt=a.name)
+                                        span=a.name
+
+                    div.collapsible
+                        i.fa-solid.fa-cube
+                        | &nbsp;&nbsp;
+                        span Objects
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                                if a.type == "object"
                                     .asset_card(model=a.name)
                                         img(src="/images/models/"+a.name+".png", alt=a.name)
                                         span=a.name

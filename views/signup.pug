@@ -6,7 +6,7 @@ html
         link(rel="icon" type="image/x-icon" href="/images/favicon.ico")
     body 
         if message
-            .alert= message
+            .alert(class=message.type)= message.text
         .bg
             .box_center
                 a(href="/").logo Imagine Dungeons 

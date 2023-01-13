@@ -27,7 +27,7 @@ export default class Rogue extends Character
         // add sword to player
         const rightHand = this.model.getObjectByName("mixamorigRightHand")
 
-        this.sword = this.resources.items.swordModel.scene
+        this.sword = this.resources.items.sword.scene
         this.sword.scale.set(20, 20, 20)
         this.sword.rotation.set(0, 0, - Math.PI / 4 )
         rightHand.add(this.sword)

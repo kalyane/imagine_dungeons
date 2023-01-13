@@ -220,10 +220,29 @@ footer a{
 }
 
 .alert{
-    background-color: #FFE1E3;
     padding: 10px max(50px, 10%);
+}
+
+.alert.error{
+    background-color: #FFE1E3;
     color: #FA5060;
 }
+
+.alert.success{
+    background-color: #D1E7DD;
+    color: #0F5133;
+}
+
+.alert.warning{
+    background-color: #FFF3CD;
+    color: #6A4E03;
+}
+
+.alert.info{
+    background-color: #CFF4FC;
+    color: #075162;
+}
+
 .games{
     box-sizing:border-box;
     padding: 100px 50px;

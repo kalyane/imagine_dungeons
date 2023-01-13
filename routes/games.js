@@ -3,6 +3,8 @@ const express = require('express');
 let router = express.Router();
 var mysqlConnection = require('../database').databaseConnection;
 
+// TODO: guarantee only the owner can access edit pages
+
 router
     .route("/")
     .get((request, response)=>{
@@ -19,16 +21,16 @@ router
 
 router
     .route("/create")
-    .get((req, res)=>{
+    .get((request, response)=>{
         if (request.session.loggedin){
             var sql = "INSERT INTO games (`id_user`) VALUES (?);"
             mysqlConnection.query(sql, [request.session.id_user], (err, res, fields) => {
                 if (err) throw err;
                 else{
-                    mysqlConnection.query('SELECT * FROM game WHERE id_user = ? ORDER BY `date_created` DESC LIMIT 1', [request.session.id_user], function(suberr, subres, subfields) {
+                    mysqlConnection.query('SELECT * FROM games WHERE id_user = ? ORDER BY `date_created` DESC LIMIT 1', [request.session.id_user], function(suberr, subres, subfields) {
                         if (suberr) throw suberr;
                         else{
-                            response.redirect('/edit/game/'+subres[0].id_game)
+                            response.redirect('/games/edit/'+subres[0].id_game)
                         }
                     })
                 }
@@ -40,18 +42,21 @@ router
 router
     .route("/edit/:id_game")
     .get((request, response)=>{
-        // when production ask for LOGGED IN ************ id_user = request.session.id_user
-        var id_game = request.params.id_game;
-        mysqlConnection.query('SELECT * FROM games WHERE id_game = ? and id_user = ?', [id_game, 1], function(error, results, fields) {
-            if (error) throw error;
-            if (results.length > 0){
-                mysqlConnection.query('SELECT * FROM assets', [], function(error2, results2, fields2) {
-                    response.render('edit_game', {game: results[0], assets: results2});
-                })
-            }else{
-                response.redirect('/login')
-            }
-        })
+        if (request.session.loggedin){
+            var id_user = request.session.id_user
+            var id_game = request.params.id_game;
+            mysqlConnection.query('SELECT * FROM games WHERE id_game = ? and id_user = ?', [id_game, id_user], function(error, results, fields) {
+                if (error) throw error;
+                if (results.length > 0){
+                    mysqlConnection.query('SELECT * FROM assets', [], function(error2, results2, fields2) {
+                        response.render('edit_game', {game: results[0], assets: results2});
+                    })
+                }else{
+                    response.redirect('/login')
+                }
+            })
+        }
+        else response.redirect('/login')
     });
 
 router

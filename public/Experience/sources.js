@@ -1,4 +1,5 @@
 export default [
+    // players
     {
         name: 'cleric',
         type: 'gltfModel',
@@ -19,30 +20,81 @@ export default [
         type: 'gltfModel',
         path: '/models/players/warrior.glb'
     },
-    {
-        name: 'foxModel',
-        type: 'gltfModel',
-        path: '/models/Fox/glTF/Fox.gltf'
-    },
-    {
-        name: 'warriorModel',
-        type: 'gltfModel',
-        path: '/models/Warrior/warrior_good.glb'
-    },
-    {
-        name: 'swordModel',
-        type: 'gltfModel',
-        path: '/models/Weapons/Sword.glb'
-    },
-    {
-        name: 'zombieModel',
-        type: 'gltfModel',
-        path: '/models/Zombie/zombie.glb'
-    },
+
+    // modular
     {
         name: 'wall',
         type: 'gltfModel',
-        path: '/models/solids/wall.glb'
+        path: '/models/modular/wall.glb'
+    },
+    {
+        name: 'fence_90',
+        type: 'gltfModel',
+        path: '/models/modular/fence_90.glb'
+    },
+    {
+        name: 'fence_end',
+        type: 'gltfModel',
+        path: '/models/modular/fence_end.glb'
+    },
+    {
+        name: 'fence_straight',
+        type: 'gltfModel',
+        path: '/models/modular/fence_straight.glb'
+    },
+
+    // objects
+    {
+        name: 'banner',
+        type: 'gltfModel',
+        path: '/models/objects/banner.glb'
+    },
+    {
+        name: 'barrel',
+        type: 'gltfModel',
+        path: '/models/objects/barrel.glb'
+    },
+    {
+        name: 'chair',
+        type: 'gltfModel',
+        path: '/models/objects/chair.glb'
+    },
+    {
+        name: 'column_circle',
+        type: 'gltfModel',
+        path: '/models/objects/column_circle.glb'
+    },
+    {
+        name: 'column_square',
+        type: 'gltfModel',
+        path: '/models/objects/column_square.glb'
+    },
+    {
+        name: 'crate',
+        type: 'gltfModel',
+        path: '/models/objects/crate.glb'
+    },
+    {
+        name: 'statue_horse',
+        type: 'gltfModel',
+        path: '/models/objects/statue_horse.glb'
+    },
+    {
+        name: 'table_big',
+        type: 'gltfModel',
+        path: '/models/objects/table_big.glb'
+    },
+    {
+        name: 'table_small',
+        type: 'gltfModel',
+        path: '/models/objects/table_small.glb'
+    },
+
+    // weapons
+    {
+        name: 'sword',
+        type: 'gltfModel',
+        path: '/models/weapons/sword.glb'
     }
 ]
 

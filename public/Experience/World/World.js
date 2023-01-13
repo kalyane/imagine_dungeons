@@ -1,12 +1,9 @@
 import Experience from '../Experience.js'
 import EventEmitter from '../Utils/EventEmitter.js'
 import * as THREE from '/build/three.module.js'
-import Fox from './Fox.js'
 import Cleric from './Models/Cleric.js'
 import Ranger from './Models/Ranger.js'
 import Rogue from './Models/Rogue.js'
-import Warrior from './Models/Warrior.js'
-import Zombie from './Zombie.js'
 import Wall from './Models/Wall.js'
 
 import { DragControls } from '/jsm/controls/DragControls.js'
@@ -37,13 +34,10 @@ export default class World extends EventEmitter
         {
             // Setup
             this.modelClasses = {
-                "fox": Fox,
-                "zombie": Zombie,
                 "wall" : Wall,
                 "cleric": Cleric,
                 "ranger": Ranger,
-                "rogue": Rogue,
-                "warrior": Warrior
+                "rogue": Rogue
             }
 
             // if not playing user can drag objects
