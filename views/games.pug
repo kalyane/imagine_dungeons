@@ -26,20 +26,20 @@ html
                         br
                         p Create Game
             if games
-                each g in games 
+                each game in games 
                     div.game-card
                         .content
                             img(src="/images/wall.png")
                             .icons 
-                                a(href="/games/edit/"+g.id_game)
+                                a(href="/games/edit/"+game._id)
                                     i.fa-solid.fa-pen-to-square
-                                a(href="/games/play/"+g.id_game)
+                                a(href="/games/play/"+game._id)
                                     i.fa-solid.fa-play
-                                a(onclick="deleteGame("+g.id_game+")")
+                                a(onclick="deleteGame("+game._id+")")
                                     i.fa-solid.fa-trash-can
                             .subcontent
-                                h4= g.name
-                                p Last updated on #{g.last_updated}
+                                h4= game.name
+                                p Last updated on #{game.updatedAt}
 
         include includes/footer 
             

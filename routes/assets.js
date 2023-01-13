@@ -1,20 +1,21 @@
 const express = require('express');
 
 let router = express.Router();
-var mysqlConnection = require('../database').databaseConnection;
+const InGameAsset = require('../dbmodels/InGameAsset');
+const Asset = require('../dbmodels/Asset');
 
 router
     .route("/:id_game")
-    .get((request, response)=>{
-        var id_game = request.params.id_game;
-        mysqlConnection.query('SELECT game_assets.*, assets.name as asset_name FROM game_assets INNER JOIN assets ON game_assets.id_asset=assets.id_asset WHERE id_game = ?', [id_game], function(error, results, fields) {
-            if (error) throw error;
-            else{
-                response.send(results);
-            }
-        })
+    .get(async (request, response) => {
+        const id_game = request.params.id_game;
+        try {
+            const assets = await InGameAsset.find({id_game});
+            response.send(assets);
+        } catch (error) {
+            throw error;
+        }
     })
-    .post((request, response)=>{
+    .post(async (request, response)=>{
         let id_game = request.params.id_game;
         let assets = request.body.assets;
 
@@ -26,36 +27,42 @@ router
             let model_name = request.body.assets[i].model_name;
             var id_asset;
 
-            // get the id_asset
-            mysqlConnection.query('SELECT id_asset FROM assets WHERE name = ?', [model_name], function(error, results, fields) {
-                if (error) throw error;
-                else{
-                    id_asset = results[0].id_asset
-                }
-            })
+            try {
+                // get the id_asset
+                const asset = await Asset.findOne({name: model_name});
+                id_asset = asset._id;
+            } catch (error) {
+                throw error;
+            }
 
-            // check if the asset is already in the database
-            mysqlConnection.query('SELECT * FROM game_assets WHERE id_game = ? and name = ?', [id_game, name], function(error, results, fields) {
-                if (error) throw error;
-                // update existing asset
-                if (results.length == 1){
-                    mysqlConnection.query('UPDATE game_assets SET position_x = ?, position_z = ?, rotation_y = ? WHERE id_game = ? and name = ?', 
-                    [position_x, position_z, rotation_y, id_game, name], function(error2, results2, fields2) {
-                        if (error) throw error;
-                    })
+            try {
+                // check if the asset is already in the database
+                const existingAsset = await InGameAsset.findOne({id_game, name});
+                if (existingAsset) {
+                    // update existing asset
+                    existingAsset.position_x = position_x;
+                    existingAsset.position_z = position_z;
+                    existingAsset.rotation_y = rotation_y;
+                    await existingAsset.save();
+                } else {
+                    // create new asset
+                    const newAsset = new InGameAsset({
+                        name,
+                        id_asset,
+                        id_game,
+                        position_x,
+                        position_z,
+                        rotation_y
+                    });
+                    await newAsset.save();
                 }
-                else{
-                    mysqlConnection.query('INSERT INTO game_assets (`name`,`id_asset`, `id_game`, `position_x`, `position_z`,`rotation_y`) VALUES (?, ?, ?, ?, ?, ?)', 
-                    [name, id_asset, id_game, position_x, position_z,rotation_y], function(error2, results2, fields2) {
-                        if (error) throw error;
-                    })
-                }
-            })
-
-            response.end();
+                response.end();
+            } catch (error) {
+                throw error;
+            }
         }
-        
     });
+    
     
 
 module.exports = router;
