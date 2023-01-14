@@ -6,6 +6,10 @@ window.experience = experience;
 
 // get model that were saved in the database
 var id_game = document.getElementsByClassName("edit_game")[0].getAttributeNode("id_game").value;
+var size_x = document.getElementById('size_x');
+var size_z = document.getElementById('size_z');
+
+updateGridSize()
 
 var url = "/assets/" + id_game
 
@@ -22,6 +26,21 @@ experience.world.on('ready', () => {
         updateAddedAssets()
     });
 });
+
+size_x.addEventListener('change', (event) => {
+    updateGridSize()
+})
+
+size_z.addEventListener('change', (event) => {
+    updateGridSize()
+})
+
+function updateGridSize(){
+    experience.world.gridSize.x = size_x.value * 2;
+    experience.world.gridSize.z = size_z.value * 2;
+    experience.world.floorMesh.scale.set(experience.world.gridSize.x, experience.world.gridSize.z, 1);
+    experience.world.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
+}
 
 var assets = document.getElementsByClassName("asset_card");
 
@@ -64,7 +83,11 @@ document.getElementById("save").addEventListener("click", function() {
 function saveGameDetails(){
     // for now game just has name
     const input = document.getElementById('game_name');
-    let data = {name: input.value};
+    let data = {
+        name: input.value,
+        size_x: size_x.value,
+        size_z: size_z.value
+    };
     console.log(data)
 
     fetch("/games/update/"+id_game, {

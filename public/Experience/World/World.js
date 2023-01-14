@@ -10,7 +10,7 @@ import { DragControls } from '/jsm/controls/DragControls.js'
 
 export default class World extends EventEmitter
 {
-    constructor()
+    constructor(gridSize = {'x':50,'z':50})
     {
         super()
         this.experience = new Experience()
@@ -24,10 +24,38 @@ export default class World extends EventEmitter
         this.assetsDragBox = []
         this.dictModels = {}
         // this should change by the user
-        this.gridSize = {'x':50,'z':50}
+        this.gridSize = gridSize
         // grid helper, needs to change based on world size
-        this.gridHelper = new THREE.GridHelper(50, 10, 0x000000, 0xffffff)
-        this.scene.add(this.gridHelper)
+        //this.gridHelper = new THREE.GridHelper(50, 10, 0x000000, 0xffffff)
+        //this.scene.add(this.gridHelper)
+
+        this.floorGeo = new THREE.PlaneGeometry(1, 1);
+
+        const textureLoader = new THREE.TextureLoader();
+        this.floorTexture = textureLoader.load( '/images/texture/floor.png' );
+        const normalMap = textureLoader.load( '/images/texture/floor_normal.png' );
+        const bumpMap = textureLoader.load( '/images/texture/floor_bump.png' );
+
+        this.floorTexture.wrapS = THREE.RepeatWrapping;
+        this.floorTexture.wrapT = THREE.RepeatWrapping;
+        this.floorTexture.repeat.set(this.gridSize.x/2, this.gridSize.z/2);
+
+        const material = new THREE.MeshStandardMaterial({
+            map: this.floorTexture,
+            normalMap: normalMap,
+            bumpMap: bumpMap,
+            bumpScale: 0.05
+        });
+
+        this.floorMesh = new THREE.Mesh(this.floorGeo, material);
+        this.floorMesh.rotateX( - Math.PI / 2 );
+
+        this.floorMesh.material.side = THREE.DoubleSide;
+
+        this.scene.add(this.floorMesh);
+
+        this.floorMesh.scale.set(this.gridSize.x, this.gridSize.z)
+
 
         // Wait for resources
         this.resources.on('ready', () =>

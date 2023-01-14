@@ -9,11 +9,13 @@ import Resources from './Utils/Resources.js'
 
 import sources from './sources.js'
 
+import { GUI } from 'dat.gui'
+
 let instance = null
 
 export default class Experience
 {
-    constructor(_canvas, playing = false)
+    constructor(_canvas, gridSize = {'x':50,'z':50}, playing = false)
     {
         // Singleton
         if(instance)
@@ -31,13 +33,34 @@ export default class Experience
         this.time = new Time()
         this.scene = new THREE.Scene()
 
-        this.scene.background = new THREE.Color('skyblue');
-        let light = new THREE.AmbientLight( 0xFFFFFF , 2);
+        //this.scene.background = new THREE.Color('#222222');
+
+        // this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 1, 10);
+
+        this.scene.background = new THREE.Color(0xb0b16);
+
+        /*
+
+        var params = {
+            color: 0xb0b16
+        };
+        
+        var gui = new GUI();
+        
+        var folder = gui.addFolder( 'MATERIAL' );
+        
+        folder.addColor(params, 'color')
+            .onChange(() => this.scene.background.set(params.color));
+        
+        folder.open();
+        */
+
+        let light = new THREE.AmbientLight( 0x444444 , 2);
         this.scene.add(light);
 
         this.resources = new Resources(sources)
         
-        this.world = new World()
+        this.world = new World(gridSize)
         this.camera = new Camera()
         this.renderer = new Renderer()
 

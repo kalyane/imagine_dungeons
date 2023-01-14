@@ -18,7 +18,7 @@ html
     body 
         nav
             button#save SAVE GAME
-        .edit_game(id_game=game.id_game)
+        .edit_game(id_game=game._id)
             .left
                 .settings.box
                     .header SETTINGS
@@ -26,6 +26,13 @@ html
                         label(for="game_name") Game name  
                         br
                         input(type="text" id="game_name" name="game_name" value=game.name)
+                        br
+                        label Map size  
+                        .size
+                            label(for="size_x") x
+                            input(type="number" id="size_x" name="size_x" min="1" value=game.size_x)
+                            label(for="size_z") z
+                            input(type="number" id="size_z" name="size_z" min="1" value=game.size_z)
                 .properties.box
                     .header ASSET PROPERTIES
                     .content 
@@ -69,6 +76,18 @@ html
                     .collapsible_content
                         each a in assets
                                 if a.type == "modular"
+                                    .asset_card(model=a.name)
+                                        img(src="/images/models/"+a.name+".png", alt=a.name)
+                                        span=a.name
+
+                    div.collapsible
+                        i.fa-solid.fa-lightbulb
+                        | &nbsp;&nbsp;
+                        span Light
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                                if a.type == "light"
                                     .asset_card(model=a.name)
                                         img(src="/images/models/"+a.name+".png", alt=a.name)
                                         span=a.name

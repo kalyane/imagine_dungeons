@@ -25,7 +25,7 @@ router
     .route("/create")
     .get(async (request, response) => {
         if (request.session.loggedin) {
-            const game = new Game({ user: request.session.id_user });
+            const game = new Game({ user: request.session.id_user, size_x: 50, size_z: 50 });
             await game.save();
             response.redirect(`/games/edit/${game._id}`);
         } else {
@@ -91,9 +91,11 @@ router
     .route("/update/:id_game")
     .post(async (request, response)=>{
         var id_game = request.params.id_game;
-        var name = request.body.name
+        var name = request.body.name;
+        var size_x = request.body.size_x
+        var size_z = request.body.size_z
         try {
-            await Game.findOneAndUpdate({ _id: id_game }, { name: name });
+            await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z });
         } catch (error) {
             throw error;
         }
