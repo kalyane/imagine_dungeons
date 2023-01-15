@@ -9,7 +9,7 @@ router
     .get(async (request, response) => {
         const id_game = request.params.id_game;
         try {
-            const assets = await InGameAsset.find({id_game});
+            const assets = await InGameAsset.find({game: id_game}).populate('asset');
             response.send(assets);
         } catch (error) {
             throw error;
@@ -47,12 +47,12 @@ router
                 } else {
                     // create new asset
                     const newAsset = new InGameAsset({
-                        name,
-                        id_asset,
-                        id_game,
-                        position_x,
-                        position_z,
-                        rotation_y
+                        name: name,
+                        asset: id_asset,
+                        game: id_game,
+                        position_x: position_x,
+                        position_z: position_z,
+                        rotation_y: rotation_y
                     });
                     await newAsset.save();
                 }

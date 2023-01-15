@@ -36,6 +36,8 @@ router
 router
     .route("/edit/:id_game")
     .get(async (request, response)=>{
+        // make sure only user
+        /*
         if (request.session.loggedin){
             var id_user = request.session.id_user
             var id_game = request.params.id_game;
@@ -52,6 +54,19 @@ router
             }
         }
         else response.redirect('/login')
+        */
+        var id_game = request.params.id_game;
+        try {
+            const game = await Game.findOne({ _id: id_game});
+            if (game) {
+                const assets = await Asset.find({});
+                response.render('edit_game', {game: game, assets: assets});
+            } else {
+                response.redirect('/login')
+            }
+        } catch (error) {
+            throw error;
+        }
     });
 
 router

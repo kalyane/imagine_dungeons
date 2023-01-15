@@ -4,7 +4,7 @@ import * as THREE from '/build/three.module.js'
 import Cleric from './Models/Cleric.js'
 import Ranger from './Models/Ranger.js'
 import Rogue from './Models/Rogue.js'
-import Wall from './Models/Wall.js'
+import Wall from './Models/Modular/Wall.js'
 
 import { DragControls } from '/jsm/controls/DragControls.js'
 

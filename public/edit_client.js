@@ -18,7 +18,7 @@ experience.world.on('ready', () => {
         return response.json();
     }).then(function(assets) {
         for (var i = 0; i < assets.length; i++){
-            experience.world.addModel(assets[i].asset_name, assets[i].name);
+            experience.world.addModel(assets[i].asset.name, assets[i].name);
             experience.world.dictModels[assets[i].name].modelDragBox.position.x = assets[i].position_x
             experience.world.dictModels[assets[i].name].modelDragBox.position.z = assets[i].position_z
             experience.world.dictModels[assets[i].name].modelDragBox.rotation.y = assets[i].rotation_y

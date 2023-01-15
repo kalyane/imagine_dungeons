@@ -56,18 +56,7 @@ html
             .right
                 .assets.box
                     .header ASSETS
-                    div.collapsible
-                        i.fa-solid.fa-person 
-                        | &nbsp;&nbsp;
-                        span Players
-                        i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                            if a.type == "player"
-                                .asset_card(model=a.name)
-                                    img(src="/images/models/"+a.name+".png", alt=a.name)
-                                    span=a.name
-                        
+
                     div.collapsible
                         i.fa-solid.fa-dungeon
                         | &nbsp;&nbsp;
@@ -79,6 +68,30 @@ html
                                     .asset_card(model=a.name)
                                         img(src="/images/models/"+a.name+".png", alt=a.name)
                                         span=a.name
+                                        
+                    div.collapsible
+                        i.fa-solid.fa-person 
+                        | &nbsp;&nbsp;
+                        span Players
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                            if a.type == "player"
+                                .asset_card(model=a.name)
+                                    img(src="/images/models/"+a.name+".png", alt=a.name)
+                                    span=a.name
+
+                    div.collapsible
+                        i.fa-solid.fa-skull 
+                        | &nbsp;&nbsp;
+                        span Monsters
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                            if a.type == "monster"
+                                .asset_card(model=a.name)
+                                    img(src="/images/models/"+a.name+".png", alt=a.name)
+                                    span=a.name
 
                     div.collapsible
                         i.fa-solid.fa-lightbulb
@@ -100,6 +113,18 @@ html
                     .collapsible_content
                         each a in assets
                                 if a.type == "object"
+                                    .asset_card(model=a.name)
+                                        img(src="/images/models/"+a.name+".png", alt=a.name)
+                                        span=a.name
+
+                    div.collapsible
+                        i.fa-solid.fa-swords
+                        | &nbsp;&nbsp;
+                        span Weapons
+                        i.fa-solid.fa-plus.icon_collapse
+                    .collapsible_content
+                        each a in assets
+                                if a.type == "weapon"
                                     .asset_card(model=a.name)
                                         img(src="/images/models/"+a.name+".png", alt=a.name)
                                         span=a.name

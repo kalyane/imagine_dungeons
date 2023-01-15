@@ -25,6 +25,7 @@ export default class Camera
         } else {
             // when editing, user can use orbit controls
             this.setControls()
+            this.setAxis()
         }
 
         // wait until all models are classified
@@ -38,9 +39,33 @@ export default class Camera
         
     }
 
+    setAxis(){
+        // Create the axis indicator
+        this.axisIndicator = new THREE.Object3D();
+
+        // Add the axis indicator to the scene
+        this.scene.add(this.axisIndicator);
+
+        // Create the x-axis arrow
+        var xArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0), 0.015, 0xff0000);
+
+        // Create the y-axis arrow
+        var yArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 0.015, 0x00ff00);
+
+        // Create the z-axis arrow
+        var zArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0), 0.015, 0x0000ff);
+
+        // Add the axis lines to the indicator
+        this.axisIndicator.add(xArrow);
+        this.axisIndicator.add(yArrow);
+        this.axisIndicator.add(zArrow);
+
+        //this.axisIndicator.position.set(0.9, 0.9, 0);
+    }
+
     setInstance()
     {
-        this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 1000)
+        this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100000)
         this.instance.position.set(30, 30, 30)
         this.scene.add(this.instance)
     }
@@ -98,6 +123,33 @@ export default class Camera
             }
         } else {
             this.controls.update()
+
+            // Get the camera's forward direction vector
+            const cameraDirection = new THREE.Vector3();
+            cameraDirection.set( 0, 0, -1 ).applyMatrix4( this.instance.matrixWorld );
+            cameraDirection.sub( this.instance.position ).normalize();
+
+            // Position the object a fixed distance in front of the camera
+            const distance = 0.2;
+
+            const viewSize = this.calculateViewSize(distance)
+            const pixelInUnits = viewSize.width*100/this.sizes.width
+            //console.log(viewSize.width/2 - tenPixelInUnits)
+            //console.log(viewSize.height/2 - tenPixelInUnits)
+
+            const offset = new THREE.Vector3(viewSize.width/2 - pixelInUnits,viewSize.height/2 - pixelInUnits,0);
+            offset.applyQuaternion(this.instance.quaternion);
+
+            this.axisIndicator.position.copy(cameraDirection).multiplyScalar(distance).add(this.instance.position).add(offset);
+
         }
+    }
+
+    calculateViewSize(distance) {
+        // convert fov from degrees to radians
+        let fov = this.instance.fov * (Math.PI / 180);
+        const height = 2 * Math.tan(fov / 2) * distance;
+        const width = height * this.instance.aspect;
+        return { width, height };
     }
 }
