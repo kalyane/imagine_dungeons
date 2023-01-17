@@ -27,6 +27,8 @@ experience.world.on('ready', () => {
     });
 });
 
+
+
 size_x.addEventListener('change', (event) => {
     updateGridSize()
 })
@@ -54,22 +56,56 @@ for (var i = 0; i < assets.length; i++) {
 
 const addedAssetsCont = document.querySelector('.added_assets');
 
+experience.world.on('start_transform', () => {
+    // select only the object transform
+    var added_assets = document.getElementsByClassName("added_asset");
+
+    for (let i = 0; i < added_assets.length; i++) {
+        if (added_assets[i].textContent == experience.world.transformControls.object.userData){
+            added_assets[i].classList.add('border');
+        }else{
+            added_assets[i].classList.remove('border');
+        }
+    }
+});
+
+experience.world.on('stop_transform', () => {
+    // deselect all assets
+    var added_assets = document.getElementsByClassName("added_asset");
+
+    for (let i = 0; i < added_assets.length; i++) {
+        added_assets[i].classList.remove('border');
+    }
+});
+
 function updateAddedAssets(){
     const models = experience.world.assets
   
     addedAssetsCont.innerHTML = ""
   
     for (let i = 0; i < models.length; i++) {
-      let model = models[i];
-      let div = document.createElement('div');
-      div.classList.add('added_asset');
-      div.setAttribute("pos", i)
-      let img = document.createElement('img');
-      img.src = "/images/models/"+model.modelName+".png"
-      div.appendChild(img)
-      let text = document.createTextNode(model.name);
-      div.appendChild(text);
-      addedAssetsCont.appendChild(div)
+        let model = models[i];
+        let div = document.createElement('div');
+        div.classList.add('added_asset');
+        div.setAttribute("pos", i)
+        let img = document.createElement('img');
+        img.src = "/images/models/"+model.modelName+".png"
+        div.appendChild(img)
+        let text = document.createTextNode(model.name);
+        div.appendChild(text);
+        let divDel = document.createElement('div');
+        divDel.classList.add('asset_delete');
+        let icon = document.createElement('i');
+        icon.classList.add("fa-solid");
+        icon.classList.add("fa-trash-can");
+        divDel.appendChild(icon);
+        div.appendChild(divDel);
+        addedAssetsCont.appendChild(div);
+
+        divDel.addEventListener("click", function(){
+            experience.world.deleteModel(model.name);
+            updateAddedAssets()
+        })
     }
 }
 

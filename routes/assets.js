@@ -19,6 +19,21 @@ router
         let id_game = request.params.id_game;
         let assets = request.body.assets;
 
+
+        // create a set of asset names from the request
+        let assetNames = new Set(assets.map(asset => asset.name));
+
+        // find all assets with the given game ID
+        let existingAssets = await InGameAsset.find({game: id_game});
+
+        // filter out the assets that are not present in the request
+        let assetsToDelete = existingAssets.filter(existingAsset => !assetNames.has(existingAsset.name));
+
+        // delete the filtered assets
+        for (let asset of assetsToDelete) {
+            await InGameAsset.deleteOne({_id: asset._id});
+        }
+
         for (var i=0; i < assets.length; i++){
             let position_x = request.body.assets[i].position_x;
             let position_z = request.body.assets[i].position_z;

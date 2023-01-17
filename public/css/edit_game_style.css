@@ -174,12 +174,28 @@ body, html {
     display: inline-table;
     text-align: center;
     font-size: small;
+    position: relative;
 }
 
 .asset_card img, .added_asset img{
     height: 80px;
     width: 80px;
     display: block;
+}
+
+.border{
+    border: 2px solid #B15328;
+}
+
+.asset_delete{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+}
+
+.asset_delete:hover{
+    color:#B15328;
 }
 
 .added_assets{

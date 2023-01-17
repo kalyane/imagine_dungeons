@@ -47,13 +47,13 @@ export default class Camera
         this.scene.add(this.axisIndicator);
 
         // Create the x-axis arrow
-        var xArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0), 0.015, 0xff0000);
+        var xArrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0), 0.01, 0xff0000);
 
         // Create the y-axis arrow
-        var yArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 0.015, 0x00ff00);
+        var yArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 0.01, 0x00ff00);
 
         // Create the z-axis arrow
-        var zArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0), 0.015, 0x0000ff);
+        var zArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0), 0.01, 0x0000ff);
 
         // Add the axis lines to the indicator
         this.axisIndicator.add(xArrow);
@@ -123,7 +123,7 @@ export default class Camera
             }
         } else {
             this.controls.update()
-
+            
             // Get the camera's forward direction vector
             const cameraDirection = new THREE.Vector3();
             cameraDirection.set( 0, 0, -1 ).applyMatrix4( this.instance.matrixWorld );

@@ -48,6 +48,7 @@ export default class Modular
     {
         // the model copies the modelDragBox position
         this.model.position.copy(this.modelDragBox.position)
+        this.model.rotation.copy(this.modelDragBox.rotation)
         this.boxHelper.update()
     }
 

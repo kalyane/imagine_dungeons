@@ -7,6 +7,7 @@ import Rogue from './Models/Rogue.js'
 import Wall from './Models/Modular/Wall.js'
 
 import { DragControls } from '/jsm/controls/DragControls.js'
+import { TransformControls } from '/jsm/controls/TransformControls.js'
 
 export default class World extends EventEmitter
 {
@@ -16,6 +17,7 @@ export default class World extends EventEmitter
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.canvas = this.experience.canvas
 
         this.player;
         this.enemies = [];
@@ -23,6 +25,7 @@ export default class World extends EventEmitter
         this.assets = []
         this.assetsDragBox = []
         this.dictModels = {}
+
         // this should change by the user
         this.gridSize = gridSize
         // grid helper, needs to change based on world size
@@ -56,7 +59,6 @@ export default class World extends EventEmitter
 
         this.floorMesh.scale.set(this.gridSize.x, this.gridSize.z)
 
-
         // Wait for resources
         this.resources.on('ready', () =>
         {
@@ -70,12 +72,95 @@ export default class World extends EventEmitter
 
             // if not playing user can drag objects
             if (!this.experience.playing){
-                this.setDragControl()
+                //this.setDragControl()
+                this.setTransformControl()
             }
             
             this.trigger("ready")
         })
         
+    }
+
+    setTransformControl(){
+        // creating transform controls to use when editing the assets
+        this.transformControls = new TransformControls(this.experience.camera.instance, this.canvas);
+        this.scene.add(this.transformControls);
+
+        this.setTranslate()
+
+
+        this.transformControls.addEventListener('change', () => {
+            if (this.transformControls.object) {
+                // stop orbitControls
+                this.experience.camera.controls.enabled = false;
+                this.trigger("start_transform");
+            } else {
+                this.experience.camera.controls.enabled = true;
+                this.trigger("stop_transform");
+            }
+        });
+
+        window.addEventListener('keydown', (event) => {
+            switch (event.code) {
+                case 'KeyG':
+                    this.setTranslate()
+                    break
+                case 'KeyR':
+                    this.setRotate()
+                    break
+            }
+        })
+
+        this.canvas.addEventListener('mousedown', (event) => this.onMouseDown(event), false);
+    }
+
+    setTranslate(){
+        this.transformControls.setMode('translate')
+        this.transformControls.setTranslationSnap(1)
+        this.transformControls.showY = false;
+        this.transformControls.showZ = true;
+        this.transformControls.showX = true;
+    }
+
+    setRotate(){
+        this.transformControls.setMode('rotate')
+        this.transformControls.setRotationSnap((90 * Math.PI) / 180);
+        this.transformControls.showY = true;
+        this.transformControls.showZ = false;
+        this.transformControls.showX = false;
+    }
+
+    onMouseDown(event) {
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
+        //this.transformControls.attach(this.assetsDragBox[0]);
+        // update the mouse variable
+        var rect = this.canvas.getBoundingClientRect();
+        mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
+        mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
+    
+        // update the picking ray with the camera and mouse position
+        raycaster.setFromCamera(mouse, this.experience.camera.instance);
+    
+        // calculate objects intersecting the picking ray
+        var intersects = raycaster.intersectObjects(this.assetsDragBox);
+    
+        if (intersects.length === 0 && !this.transformControls.dragging) {
+            for (var key in this.dictModels){
+                this.dictModels[key].boxHelper.visible = false
+            }
+            this.transformControls.detach();
+        }
+        if (intersects.length > 0) {
+            for (var key in this.dictModels){
+                this.dictModels[key].boxHelper.visible = false
+            }
+            this.dictModels[intersects[0].object.userData].boxHelper.visible = true
+            // detach the previous object
+            this.transformControls.detach();
+            // attach the newly selected object
+            this.transformControls.attach(intersects[0].object);
+        }
     }
 
     setDragControl(){
@@ -166,6 +251,16 @@ export default class World extends EventEmitter
         this.dictModels[name] = new model(modelName, name)
         this.assetsDragBox.push(this.dictModels[name].modelDragBox)
         this.assets.push(this.dictModels[name])
+    }
+
+    deleteModel(name){
+        const index = this.assets.indexOf(this.dictModels[name]);
+        if (index > -1) { // only splice array when item is found
+            this.assets.splice(index, 1); // 2nd parameter means remove one item only
+            this.assetsDragBox.splice(index, 1); 
+        }
+        this.dictModels[name].delete()
+        delete this.dictModels[name]
     }
 
     generateSolidMatrix(){
