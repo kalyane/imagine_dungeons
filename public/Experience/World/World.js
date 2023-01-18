@@ -4,7 +4,11 @@ import * as THREE from '/build/three.module.js'
 import Cleric from './Models/Cleric.js'
 import Ranger from './Models/Ranger.js'
 import Rogue from './Models/Rogue.js'
+// modular
 import Wall from './Models/Modular/Wall.js'
+import Fence90 from './Models/Modular/Fence90.js'
+import FenceEnd from './Models/Modular/FenceEnd.js'
+import FenceStraight from './Models/Modular/FenceStraight.js'
 
 import { DragControls } from '/jsm/controls/DragControls.js'
 import { TransformControls } from '/jsm/controls/TransformControls.js'
@@ -65,6 +69,9 @@ export default class World extends EventEmitter
             // Setup
             this.modelClasses = {
                 "wall" : Wall,
+                "fence_90" : Fence90,
+                "fence_end" : FenceEnd,
+                "fence_straight" : FenceStraight,
                 "cleric": Cleric,
                 "ranger": Ranger,
                 "rogue": Rogue
@@ -72,7 +79,7 @@ export default class World extends EventEmitter
 
             // if not playing user can drag objects
             if (!this.experience.playing){
-                //this.setDragControl()
+                this.setDragControl()
                 this.setTransformControl()
             }
             
@@ -86,8 +93,7 @@ export default class World extends EventEmitter
         this.transformControls = new TransformControls(this.experience.camera.instance, this.canvas);
         this.scene.add(this.transformControls);
 
-        this.setTranslate()
-
+        this.setRotate()
 
         this.transformControls.addEventListener('change', () => {
             if (this.transformControls.object) {
@@ -114,9 +120,13 @@ export default class World extends EventEmitter
         this.canvas.addEventListener('mousedown', (event) => this.onMouseDown(event), false);
     }
 
+    roundToNearest90(rad) {
+        return (Math.round(rad / (Math.PI / 2)) * (Math.PI / 2));
+    }
+
     setTranslate(){
         this.transformControls.setMode('translate')
-        this.transformControls.setTranslationSnap(1)
+        this.transformControls.setTranslationSnap(0.5)
         this.transformControls.showY = false;
         this.transformControls.showZ = true;
         this.transformControls.showX = true;
@@ -124,7 +134,7 @@ export default class World extends EventEmitter
 
     setRotate(){
         this.transformControls.setMode('rotate')
-        this.transformControls.setRotationSnap((90 * Math.PI) / 180);
+        this.transformControls.setRotationSnap(Math.PI/2);
         this.transformControls.showY = true;
         this.transformControls.showZ = false;
         this.transformControls.showX = false;
@@ -168,23 +178,12 @@ export default class World extends EventEmitter
 
         this.dragControls.addEventListener('dragstart', (event) =>
         {
-            // stop orbitControls
-            this.experience.camera.controls.enabled = false
-
-            // make all box helped invisible, except the one that is being dragged
-            for (var key in this.dictModels){
-                this.dictModels[key].boxHelper.visible = false
-            }
-            this.dictModels[event.object.userData].boxHelper.visible = true
-            
             // change opacity to make it evident that asset is being dragged
             event.object.material.opacity = 0.33
         })
 
         this.dragControls.addEventListener('dragend', (event) =>
         {
-            // allow orbit control
-            this.experience.camera.controls.enabled = true
             // change opacity to indicate drag stopped
             event.object.material.opacity = 0
         })
@@ -193,17 +192,18 @@ export default class World extends EventEmitter
         this.dragControls.addEventListener('drag', (event) =>
         {
             // make object position in a discrete space, only intergers
-            event.object.position.x = Math.floor(event.object.position.x)
-            event.object.position.z = Math.floor(event.object.position.z)
+            event.object.position.x = this.roundToHalf(event.object.position.x)
+            event.object.position.z = this.roundToHalf(event.object.position.z)
             // the y direction is fixed
             event.object.position.y = 0
 
             this.checkBoundaries(event.object)
             
         })
+    }
 
-        // maybe add this in the future?
-        //this.dragControls.addEventListener('hoveron')
+    roundToHalf(num) {
+        return Math.round(num * 2) / 2;
     }
 
     checkBoundaries(object){
@@ -219,8 +219,6 @@ export default class World extends EventEmitter
         if(bb.min.z < this.gridSize['z']/-2) object.position.z = this.gridSize['z']/-2 - subtractZ
         if(bb.max.z > this.gridSize['z']/2) object.position.z = this.gridSize['z']/2 + subtractZ
     }
-
-    
 
     classifyAssets(){
         for (var i=0; i < this.assets.length; i++){

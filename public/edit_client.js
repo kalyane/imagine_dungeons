@@ -21,7 +21,8 @@ experience.world.on('ready', () => {
             experience.world.addModel(assets[i].asset.name, assets[i].name);
             experience.world.dictModels[assets[i].name].modelDragBox.position.x = assets[i].position_x
             experience.world.dictModels[assets[i].name].modelDragBox.position.z = assets[i].position_z
-            experience.world.dictModels[assets[i].name].modelDragBox.rotation.y = assets[i].rotation_y
+            experience.world.dictModels[assets[i].name].modelDragBox.quaternion.y = assets[i].quaternion_y
+            experience.world.dictModels[assets[i].name].modelDragBox.quaternion.w = assets[i].quaternion_w
         }
         updateAddedAssets()
     });
@@ -146,7 +147,8 @@ function saveAssets(){
         let assetData = {
             position_x: assets[i].model.position.x,
             position_z: assets[i].model.position.z,
-            rotation_y: assets[i].model.rotation.y,
+            quaternion_y: assets[i].model.quaternion.y,
+            quaternion_w: assets[i].model.quaternion.w,
             name: assets[i].name,
             model_name: assets[i].modelName,
         };

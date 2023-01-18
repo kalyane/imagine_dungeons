@@ -133,7 +133,7 @@ export default class Camera
             const distance = 0.2;
 
             const viewSize = this.calculateViewSize(distance)
-            const pixelInUnits = viewSize.width*100/this.sizes.width
+            const pixelInUnits = viewSize.width*80/this.sizes.width
             //console.log(viewSize.width/2 - tenPixelInUnits)
             //console.log(viewSize.height/2 - tenPixelInUnits)
 

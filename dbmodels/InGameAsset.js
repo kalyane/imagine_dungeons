@@ -8,7 +8,8 @@ const inGameAssetSchema = new Schema({
    game: {type: ObjectId, ref: 'Game'},
    position_x: Number,
    position_z: Number,
-   rotation_y: Number
+   quaternion_y: Number,
+   quaternion_w: Number
 });
 
 const InGameAsset = mongoose.model('InGameAsset', inGameAssetSchema);
