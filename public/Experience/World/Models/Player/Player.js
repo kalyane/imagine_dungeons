@@ -1,9 +1,9 @@
 import * as THREE from '/build/three.module.js'
-import Experience from '../Experience.js'
+import Experience from '../../../Experience.js'
 import * as SkeletonUtils from '/jsm/utils/SkeletonUtils.js'
-import PlayerControl from '../Utils/PlayerControl.js'
+import PlayerControl from './PlayerControl.js'
 
-export default class Character
+export default class Player
 {
     /**
      * 

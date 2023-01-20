@@ -10,13 +10,11 @@ html
                 "imports": {
                     "three": "https://cdn.skypack.dev/three@0.139.2/build/three.module",
                         "three/": "https://cdn.skypack.dev/three@0.139.2/",      
-                        "dat.gui": "https://cdn.skypack.dev/dat.gui",
-                        "drag-controls": "https://cdn.skypack.dev/three-dragcontrols",
-                        "cannon-es": "https://cdn.skypack.dev/cannon-es"
+                        "dat.gui": "https://cdn.skypack.dev/dat.gui"
                 }
             }
     body 
-        .play_game(id_game=game.id_game)
+        .play_game(id_game=game._id size_x=game.size_x size_z=game.size_z )
             .canva.box
                 .header GAME PLAYING
                 .canva_container

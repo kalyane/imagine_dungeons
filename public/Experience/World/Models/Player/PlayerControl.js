@@ -1,6 +1,6 @@
 import * as THREE from '/build/three.module.js'
-import EventEmitter from './EventEmitter.js'
-import Experience from '../Experience.js'
+import EventEmitter from '../../../Utils/EventEmitter.js'
+import Experience from '../../../Experience.js'
 import { GUI } from 'dat.gui'
 
 /**
@@ -125,13 +125,16 @@ export default class PlayerControl extends EventEmitter
     // Function to check if the square can move to the new position
     checkMovement(box) {
         let bb = box.geometry.boundingBox
+        
         var maxX = Math.round(box.position.x+bb.max.x+this.experience.world.gridSize.x/2)
         var minX = Math.round(box.position.x+bb.min.x+this.experience.world.gridSize.x/2)
-        var maxZ = Math.round(box.position.z+bb.max.z+this.experience.world.gridSize.x/2)
-        var minZ = Math.round(box.position.z+bb.min.z+this.experience.world.gridSize.x/2)
+        var maxZ = Math.round(box.position.z+bb.max.z+this.experience.world.gridSize.z/2)
+        var minZ = Math.round(box.position.z+bb.min.z+this.experience.world.gridSize.z/2)
+
         // Nested loop to iterate over the cells in the bounding box
-        for (let x = minX*2; x <= maxX*2; x++) {
-            for (let z = minZ*2; z <= maxZ*2; z++) {
+        for (let x = minX*2; x <= Math.min(maxX*2, this.experience.world.gridSize.x*2-1); x++) {
+            for (let z = minZ*2; z <= Math.min(maxZ*2, this.experience.world.gridSize.z*2-1); z++) {
+                console.log(x,z, this.experience.world.matrix)
                 // Check if the cell value is 0
                 if (this.experience.world.matrix[x][z] === 0) {
                     // The square cannot move to the new position

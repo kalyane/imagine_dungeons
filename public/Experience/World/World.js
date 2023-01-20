@@ -1,14 +1,14 @@
 import Experience from '../Experience.js'
 import EventEmitter from '../Utils/EventEmitter.js'
 import * as THREE from '/build/three.module.js'
-import Cleric from './Models/Cleric.js'
-import Ranger from './Models/Ranger.js'
-import Rogue from './Models/Rogue.js'
 // modular
 import Wall from './Models/Modular/Wall.js'
 import Fence90 from './Models/Modular/Fence90.js'
 import FenceEnd from './Models/Modular/FenceEnd.js'
 import FenceStraight from './Models/Modular/FenceStraight.js'
+
+// player
+import Rogue from './Models/Player/Rogue.js'
 
 import { DragControls } from '/jsm/controls/DragControls.js'
 import { TransformControls } from '/jsm/controls/TransformControls.js'
@@ -72,9 +72,7 @@ export default class World extends EventEmitter
                 "fence_90" : Fence90,
                 "fence_end" : FenceEnd,
                 "fence_straight" : FenceStraight,
-                "cleric": Cleric,
-                "ranger": Ranger,
-                "rogue": Rogue
+                "rogue" : Rogue
             }
 
             // if not playing user can drag objects
@@ -228,7 +226,7 @@ export default class World extends EventEmitter
             if (this.assets[i].type == "enemy"){
                 this.enemies.push(this.assets[i])
             }
-            if (this.assets[i].type == "solid"){
+            if (this.assets[i].type == "modular"){
                 this.solids.push(this.assets[i])
             }
         }
@@ -276,12 +274,14 @@ export default class World extends EventEmitter
 
         // loop through each square in the array
         for (let solid of this.solids) {
-            let bb = solid.modelDragBox.geometry.boundingBox
-            var maxX = Math.round(solid.modelDragBox.position.x+bb.max.x+this.experience.world.gridSize.x/2)
-            var minX = Math.round(solid.modelDragBox.position.x+bb.min.x+this.experience.world.gridSize.x/2)
-            var maxZ = Math.round(solid.modelDragBox.position.z+bb.max.z+this.experience.world.gridSize.x/2)
-            var minZ = Math.round(solid.modelDragBox.position.z+bb.min.z+this.experience.world.gridSize.x/2)
-
+            solid.modelDragBox.updateMatrixWorld( true );
+            var bb = new THREE.Box3().setFromObject(solid.modelDragBox);
+            
+            var maxX = Math.round(this.roundToHalf(bb.max.x)+this.experience.world.gridSize.x/2)
+            var minX = Math.round(this.roundToHalf(bb.min.x)+this.experience.world.gridSize.x/2)
+            var maxZ = Math.round(this.roundToHalf(bb.max.z)+this.experience.world.gridSize.x/2)
+            var minZ = Math.round(this.roundToHalf(bb.min.z)+this.experience.world.gridSize.x/2)
+            console.log(bb, maxX, minX, maxZ, minZ)
             // loop through the x-coordinates in the bounding box
             for (let x = minX*2; x <= maxX*2; x++) {
                 // loop through the y-coordinates in the bounding box

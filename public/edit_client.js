@@ -61,12 +61,36 @@ experience.world.on('start_transform', () => {
     // select only the object transform
     var added_assets = document.getElementsByClassName("added_asset");
 
+    var asset_name = experience.world.transformControls.object.userData;
+
     for (let i = 0; i < added_assets.length; i++) {
-        if (added_assets[i].textContent == experience.world.transformControls.object.userData){
+        if (added_assets[i].textContent == asset_name){
             added_assets[i].classList.add('border');
         }else{
             added_assets[i].classList.remove('border');
         }
+    }
+
+    // show info
+
+    // get instance of asset
+    var selected_asset = experience.world.dictModels[asset_name]
+
+    document.getElementsByClassName("selected")[0].removeAttribute("hidden");
+    document.getElementById('asset_name').value = selected_asset.name;
+    document.getElementById('selected_img').setAttribute('src',"/images/models/"+selected_asset.modelName+".png");
+
+    if ('life' in selected_asset){
+        // make life visible
+        document.getElementsByClassName("properties_life")[0].removeAttribute("hidden");
+        // include current value of life to asset
+        document.getElementById('life').value = selected_asset.life;
+    }
+    if ('strength' in selected_asset){
+        // make strength visible
+        document.getElementsByClassName("properties_strength")[0].removeAttribute("hidden");
+        // include current value of strength to asset
+        document.getElementById('strength').value = selected_asset.strength;
     }
 });
 
@@ -77,6 +101,12 @@ experience.world.on('stop_transform', () => {
     for (let i = 0; i < added_assets.length; i++) {
         added_assets[i].classList.remove('border');
     }
+
+    // hide asset properties
+    document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
+    
 });
 
 function updateAddedAssets(){

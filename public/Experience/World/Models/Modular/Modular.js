@@ -31,7 +31,7 @@ export default class Modular
 
         // creates a box to help positioning when editing
         this.boxHelper = new THREE.BoxHelper(this.modelDragBox, 0xffff00)
-        this.boxHelper.visible = false
+        this.boxHelper.visible = true
 
         // saves an argument referencing the name of the model for easy access later
         this.model.userData = this.name

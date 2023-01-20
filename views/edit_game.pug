@@ -10,9 +10,7 @@ html
                 "imports": {
                     "three": "https://cdn.skypack.dev/three@0.139.2/build/three.module",
                         "three/": "https://cdn.skypack.dev/three@0.139.2/",      
-                        "dat.gui": "https://cdn.skypack.dev/dat.gui",
-                        "drag-controls": "https://cdn.skypack.dev/three-dragcontrols",
-                        "cannon-es": "https://cdn.skypack.dev/cannon-es"
+                        "dat.gui": "https://cdn.skypack.dev/dat.gui"
                 }
             }
     body 
@@ -36,11 +34,20 @@ html
                 .properties.box
                     .header ASSET PROPERTIES
                     .content 
-                        img#selected_img
-                        label(for="game_name") Object name  
-                        br
-                        input(type="text" id="object_name" name="object_name")
-
+                        .selected(hidden)
+                            .container_selected_img
+                                img#selected_img
+                            label(for="asset_name") Object name  
+                            br
+                            input(type="text" id="asset_name" name="asset_name" readonly)
+                        .properties_life(hidden)
+                            label(for="life") Life
+                            br
+                            input(type="number" id="life" name="life" min="1")
+                        .properties_strength(hidden)
+                            label(for="strength") Strength
+                            br
+                            input(type="number" id="strength" name="strength" min="1")
 
             .middle
                 .canva.box

@@ -1,9 +1,9 @@
 import * as THREE from '/build/three.module.js'
 import * as SkeletonUtils from '/jsm/utils/SkeletonUtils.js'
-import Character from '../Player.js'
-import KeyboardInput from '../../Utils/KeyboardInput.js'
+import Player from './Player.js'
+import KeyboardInput from '../../../Utils/KeyboardInput.js'
 
-export default class Rogue extends Character
+export default class Rogue extends Player
 {
     constructor(model, name)
     {

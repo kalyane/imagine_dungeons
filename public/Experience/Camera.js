@@ -119,7 +119,7 @@ export default class Camera
     {
         if (this.experience.playing){
             if (this.player){
-                //this.followPlayer()
+                this.followPlayer()
             }
         } else {
             this.controls.update()

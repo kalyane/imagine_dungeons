@@ -9,7 +9,9 @@ const inGameAssetSchema = new Schema({
    position_x: Number,
    position_z: Number,
    quaternion_y: Number,
-   quaternion_w: Number
+   quaternion_w: Number,
+   life: { type: Number, default: 0 },
+   strength: { type: Number, default: 0 }
 });
 
 const InGameAsset = mongoose.model('InGameAsset', inGameAssetSchema);
