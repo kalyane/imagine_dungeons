@@ -19,20 +19,13 @@ experience.world.on('ready', () => {
         return response.json();
     }).then(function(assets) {
         for (var i = 0; i < assets.length; i++){
-            experience.world.addModel(assets[i].asset.name, assets[i].name);
-            let object = experience.world.dictModels[assets[i].name].modelDragBox
+            experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
+            let object = experience.world.dictModels[assets[i].unique_name].modelDragBox
             object.position.x = assets[i].position_x
             object.position.z = assets[i].position_z
-
-            
             object.quaternion.y = assets[i].quaternion_y
             object.quaternion.w = assets[i].quaternion_w
 
-            /*
-            var quaternion = new THREE.Quaternion(0, assets[i].quaternion_y, 0, assets[i].quaternion_w);
-            var euler = new THREE.Euler().setFromQuaternion(quaternion, 'YZX');
-            
-            object.rotateY(euler.y);*/
         }
 
         experience.startPlaying()

@@ -9,8 +9,6 @@ import Resources from './Utils/Resources.js'
 
 import sources from './sources.js'
 
-import { GUI } from 'dat.gui'
-
 let instance = null
 
 export default class Experience
@@ -33,27 +31,11 @@ export default class Experience
         this.time = new Time()
         this.scene = new THREE.Scene()
 
-        //this.scene.background = new THREE.Color('#222222');
+        this.gridSize = gridSize
 
         // this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 1, 10);
 
         this.scene.background = new THREE.Color(0xb0b16);
-
-        /*
-
-        var params = {
-            color: 0xb0b16
-        };
-        
-        var gui = new GUI();
-        
-        var folder = gui.addFolder( 'MATERIAL' );
-        
-        folder.addColor(params, 'color')
-            .onChange(() => this.scene.background.set(params.color));
-        
-        folder.open();
-        */
 
         let light = new THREE.AmbientLight( 0x444444 , 2);
         this.scene.add(light);
@@ -79,8 +61,11 @@ export default class Experience
 
     startPlaying(){
         this.world.classifyAssets()
-        this.world.generateSolidMatrix()
-        this.world.player.setPlayerControl()
+        this.world.map.generateSolidMatrix()
+        this.world.player.setControl()
+        for (let monster of this.world.monsters){
+            monster.setControl()
+        }
     }
 
     resize()

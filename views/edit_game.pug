@@ -15,7 +15,12 @@ html
             }
     body 
         nav
-            button#save SAVE GAME
+            button#play(onclick="location.href='/games/play/"+game._id+"';")
+                i.fa-solid.fa-play(style="margin-right: 10px;")
+                span PLAY
+            button#save
+                i.fa-solid.fa-cloud-arrow-up(style="margin-right: 10px;")
+                span SAVE GAME
         .edit_game(id_game=game._id)
             .left
                 .settings.box
@@ -69,72 +74,42 @@ html
                         | &nbsp;&nbsp;
                         span Modular
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                                if a.type == "modular"
-                                    .asset_card(model=a.name)
-                                        img(src="/images/models/"+a.name+".png", alt=a.name)
-                                        span=a.name
+                    .collapsible_content#modular
                                         
                     div.collapsible
                         i.fa-solid.fa-person 
                         | &nbsp;&nbsp;
                         span Players
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                            if a.type == "player"
-                                .asset_card(model=a.name)
-                                    img(src="/images/models/"+a.name+".png", alt=a.name)
-                                    span=a.name
+                    .collapsible_content#player
 
                     div.collapsible
                         i.fa-solid.fa-ghost 
                         | &nbsp;&nbsp;
                         span Monsters
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                            if a.type == "monster"
-                                .asset_card(model=a.name)
-                                    img(src="/images/models/"+a.name+".png", alt=a.name)
-                                    span=a.name
+                    .collapsible_content#monster
 
                     div.collapsible
                         i.fa-solid.fa-lightbulb
                         | &nbsp;&nbsp;
-                        span Light
+                        span Lights
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                                if a.type == "light"
-                                    .asset_card(model=a.name)
-                                        img(src="/images/models/"+a.name+".png", alt=a.name)
-                                        span=a.name
+                    .collapsible_content#light
 
                     div.collapsible
                         i.fa-solid.fa-coins
                         | &nbsp;&nbsp;
                         span Objects
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                                if a.type == "object"
-                                    .asset_card(model=a.name)
-                                        img(src="/images/models/"+a.name+".png", alt=a.name)
-                                        span=a.name
+                    .collapsible_content#object
 
                     div.collapsible
                         i.fa-solid.fa-shield
                         | &nbsp;&nbsp;
                         span Weapons
                         i.fa-solid.fa-plus.icon_collapse
-                    .collapsible_content
-                        each a in assets
-                                if a.type == "weapon"
-                                    .asset_card(model=a.name)
-                                        img(src="/images/models/"+a.name+".png", alt=a.name)
-                                        span=a.name
+                    .collapsible_content#weapon
                         
     script(type="module" src="/edit_client.js")
     script. 

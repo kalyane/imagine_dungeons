@@ -21,6 +21,63 @@ export default [
         path: '/models/players/warrior.glb'
     },
 
+    // monsters
+    {
+        name: 'alien_tall',
+        type: 'gltfModel',
+        path: '/models/monsters/Alien_Tall.gltf'
+    },
+    {
+        name: 'alien',
+        type: 'gltfModel',
+        path: '/models/monsters/Alien.gltf'
+    },
+    {
+        name: 'bat',
+        type: 'gltfModel',
+        path: '/models/monsters/Bat.gltf'
+    },
+    {
+        name: 'cthulhu',
+        type: 'gltfModel',
+        path: '/models/monsters/Cthulhu.gltf'
+    },
+    {
+        name: 'cyclops',
+        type: 'gltfModel',
+        path: '/models/monsters/Cyclops.gltf'
+    },
+    {
+        name: 'demon',
+        type: 'gltfModel',
+        path: '/models/monsters/Demon.gltf'
+    },
+    {
+        name: 'ghost',
+        type: 'gltfModel',
+        path: '/models/monsters/Ghost.gltf'
+    },
+    {
+        name: 'green_demon',
+        type: 'gltfModel',
+        path: '/models/monsters/GreenDemon.gltf'
+    },
+    {
+        name: 'skull',
+        type: 'gltfModel',
+        path: '/models/monsters/Skull.gltf'
+    },
+    {
+        name: 'yellow_dragon',
+        type: 'gltfModel',
+        path: '/models/monsters/YellowDragon.gltf'
+    },
+    {
+        name: 'yeti',
+        type: 'gltfModel',
+        path: '/models/monsters/Yeti.gltf'
+    },
+
     // modular
     {
         name: 'wall',

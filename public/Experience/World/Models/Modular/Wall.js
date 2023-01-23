@@ -3,9 +3,15 @@ import * as THREE from '/build/three.module.js'
 
 export default class Wall extends Modular
 {
-    constructor(model, name)
+    static asset_name = 'wall'
+    constructor(unique_name)
     {
-        super(model, name)
+        super()
+
+        this.unique_name = unique_name
+
+        // Resource
+        this.resource = this.resources.items[this.constructor.asset_name]
 
         this.preSetModel()
     }

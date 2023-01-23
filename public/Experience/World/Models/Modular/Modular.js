@@ -3,19 +3,13 @@ import Experience from '../../../Experience.js'
 
 export default class Modular
 {
-    constructor(model, name)
+    static type = "modular";
+    constructor()
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.time = this.experience.time
-
-        this.type = "modular"
-        this.modelName = model
-        this.name = name
-
-        // getting model source
-        this.resource = this.resources.items[model]
     }
 
     setModel()
@@ -31,12 +25,12 @@ export default class Modular
 
         // creates a box to help positioning when editing
         this.boxHelper = new THREE.BoxHelper(this.modelDragBox, 0xffff00)
-        this.boxHelper.visible = true
+        this.boxHelper.visible = false
 
         // saves an argument referencing the name of the model for easy access later
-        this.model.userData = this.name
-        this.modelDragBox.userData = this.name
-        this.boxHelper.userData = this.name
+        this.model.userData = this.unique_name
+        this.modelDragBox.userData = this.unique_name
+        this.boxHelper.userData = this.unique_name
 
         // adds objects to the scene
         this.scene.add(this.modelDragBox)

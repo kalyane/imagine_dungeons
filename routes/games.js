@@ -1,6 +1,5 @@
 const express = require('express');
 const Game = require('../dbmodels/Game');
-const Asset = require('../dbmodels/Asset');
 
 let router = express.Router();
 
@@ -44,8 +43,7 @@ router
             try {
                 const game = await Game.findOne({ _id: id_game, user: id_user });
                 if (game) {
-                    const assets = await Asset.find({});
-                    response.render('edit_game', {game: game, assets: assets});
+                    response.render('edit_game', {game: game});
                 } else {
                     response.redirect('/login')
                 }
@@ -59,8 +57,7 @@ router
         try {
             const game = await Game.findOne({ _id: id_game});
             if (game) {
-                const assets = await Asset.find({});
-                response.render('edit_game', {game: game, assets: assets});
+                response.render('edit_game', {game: game});
             } else {
                 response.redirect('/login')
             }
@@ -111,6 +108,7 @@ router
         var size_z = request.body.size_z
         try {
             await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z });
+            response.status(200).send({message: "Game updated successfully"})
         } catch (error) {
             throw error;
         }

@@ -44,6 +44,3 @@ const games = require("./routes/games")
 app.use("/games", games)
 const assets = require("./routes/assets")
 app.use("/assets", assets)
-
-// exporting the connection to access in the routers
-//exports.mongoose = mongoose;

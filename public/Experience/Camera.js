@@ -19,9 +19,6 @@ export default class Camera
         if (this.experience.playing){
             this.currentPosition = new THREE.Vector3()
             this.currentLookat = new THREE.Vector3()
-
-            //this.instance.position.set(-2, 10, 6)
-            
         } else {
             // when editing, user can use orbit controls
             this.setControls()
@@ -34,9 +31,18 @@ export default class Camera
             this.player = this.experience.world.player.model
         });
 
-        this.idealOffset = new THREE.Vector3(-3, 8, -12)
-        this.idealLookat = new THREE.Vector3(-3, 0, 9)
-        
+        this.idealOffset = new THREE.Vector3(-1, 14, 15)
+        this.idealLookat = new THREE.Vector3(0, 5, 0)
+
+        /*
+        var gui = new GUI();
+        gui.add(this.idealOffset, 'x', -20, 20);
+        gui.add(this.idealOffset, 'y', -20, 20);
+        gui.add(this.idealOffset, 'z', -20, 20);
+        gui.add(this.idealLookat, 'x', -20, 20);
+        gui.add(this.idealLookat, 'y', -20, 20);
+        gui.add(this.idealLookat, 'z', -20, 20);
+        */
     }
 
     setAxis(){
@@ -134,8 +140,6 @@ export default class Camera
 
             const viewSize = this.calculateViewSize(distance)
             const pixelInUnits = viewSize.width*80/this.sizes.width
-            //console.log(viewSize.width/2 - tenPixelInUnits)
-            //console.log(viewSize.height/2 - tenPixelInUnits)
 
             const offset = new THREE.Vector3(viewSize.width/2 - pixelInUnits,viewSize.height/2 - pixelInUnits,0);
             offset.applyQuaternion(this.instance.quaternion);

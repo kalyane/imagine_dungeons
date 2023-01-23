@@ -1,17 +1,18 @@
 import * as THREE from '/build/three.module.js'
 import Experience from '../../../Experience.js'
-import PlayerControl from './PlayerControl.js'
+import MonsterControl from './MonsterControl.js'
 
-export default class Player
+export default class Monster
 {
-    static type = "player";
+    static type = "monster";
     constructor()
     {
+        // general experience
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.time = this.experience.time
-        this.life = 100
+
     }
 
     setModel()
@@ -52,33 +53,24 @@ export default class Player
         this.animation.mixer = new THREE.AnimationMixer(this.model)
         
         //order is:
-        //attack, death, idle, impact, run backward, run forward, t-pose, walk backward, walk forward
+        // Bite_Front, Bite_InPlace, Dance, Death, HitRecieve, Idle, Jump, No, Walk, Yes
         
         // Actions
         this.animation.actions = {} 
-        this.animation.actions.attack = this.animation.mixer.clipAction(animations[0])
-        //this.animation.actions.attack.setLoop(THREE.LoopOnce);
-        this.animation.actions.death = this.animation.mixer.clipAction(animations[1])
-        this.animation.actions.death.setLoop(THREE.LoopOnce);
-        this.animation.actions.death.clampWhenFinished = true
-        this.animation.actions.idle = this.animation.mixer.clipAction(animations[2])
-        this.animation.actions.impact = this.animation.mixer.clipAction(animations[3])
-        this.animation.actions.run_backward = this.animation.mixer.clipAction(animations[4])
-        this.animation.actions.run_forward = this.animation.mixer.clipAction(animations[5])
-        this.animation.actions.t_pose = this.animation.mixer.clipAction(animations[6])
-        this.animation.actions.walk_backward = this.animation.mixer.clipAction(animations[7])
-        this.animation.actions.walk_forward = this.animation.mixer.clipAction(animations[8])
+        this.animation.actions.bite_front = this.animation.mixer.clipAction(animations[0])
+        this.animation.actions.bite_inplace = this.animation.mixer.clipAction(animations[1])
+        this.animation.actions.dance = this.animation.mixer.clipAction(animations[2])
+        this.animation.actions.death = this.animation.mixer.clipAction(animations[3])
+        this.animation.actions.hit_recieve = this.animation.mixer.clipAction(animations[4])
+        this.animation.actions.idle = this.animation.mixer.clipAction(animations[5])
+        this.animation.actions.jump = this.animation.mixer.clipAction(animations[6])
+        this.animation.actions.no = this.animation.mixer.clipAction(animations[7])
+        this.animation.actions.walk = this.animation.mixer.clipAction(animations[8])
+        this.animation.actions.yes = this.animation.mixer.clipAction(animations[9])
 
         // initial animation
         this.animation.actions.current = this.animation.actions.idle
         this.animation.actions.current.play()
-
-        this.animation.mixer.addEventListener('loop', (e) =>
-        {
-            if (this.animation.actions.attack == e.action){
-                this.endAttack()
-            }
-        })
     }
 
     // Play the action
@@ -149,6 +141,6 @@ export default class Player
     }
 
     setControl(){
-        this.controls = new PlayerControl(this)
+        this.controls = new MonsterControl(this)
     }
 }

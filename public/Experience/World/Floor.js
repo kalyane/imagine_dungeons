@@ -1,56 +1,47 @@
-import * as THREE from '/build/three.module.js'
 import Experience from '../Experience.js'
+import * as THREE from '/build/three.module.js'
 
-// not used anymore, but keep for reference
 export default class Floor
 {
     constructor()
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
-        this.resources = this.experience.resources
 
-        this.setGeometry()
-        this.setTextures()
-        this.setMaterial()
-        this.setMesh()
+        this.gridSize = this.experience.gridSize
+
+        // grid helper, needs to change based on world size
+        //this.gridHelper = new THREE.GridHelper(50, 10, 0x000000, 0xffffff)
+        //this.scene.add(this.gridHelper)
+
+        // creates floor with initial size 1,1, so it scales perfectly
+        this.floorGeo = new THREE.PlaneGeometry(1, 1);
+
+        // setting texture
+        const textureLoader = new THREE.TextureLoader();
+        this.floorTexture = textureLoader.load( '/images/texture/floor.png' );
+        const normalMap = textureLoader.load( '/images/texture/floor_normal.png' );
+        const bumpMap = textureLoader.load( '/images/texture/floor_bump.png' );
+
+        this.floorTexture.wrapS = THREE.RepeatWrapping;
+        this.floorTexture.wrapT = THREE.RepeatWrapping;
+        this.floorTexture.repeat.set(this.gridSize.x/2, this.gridSize.z/2);
+
+        const material = new THREE.MeshStandardMaterial({
+            map: this.floorTexture,
+            normalMap: normalMap,
+            bumpMap: bumpMap,
+            bumpScale: 0.05
+        });
+
+        // setting mesh
+        this.floorMesh = new THREE.Mesh(this.floorGeo, material);
+        this.floorMesh.rotateX( - Math.PI / 2 );
+        this.floorMesh.material.side = THREE.DoubleSide;
+        this.floorMesh.scale.set(this.gridSize.x, this.gridSize.z)
+
+        // add to scene
+        this.scene.add(this.floorMesh);
     }
 
-    setGeometry()
-    {
-        this.geometry = new THREE.PlaneGeometry(5000, 5000, 10, 10)
-    }
-
-    setTextures()
-    {
-        this.textures = {}
-
-        this.textures.color = this.resources.items.grassColorTexture
-        this.textures.color.encoding = THREE.sRGBEncoding
-        this.textures.color.repeat.set(1000, 1000)
-        this.textures.color.wrapS = THREE.RepeatWrapping
-        this.textures.color.wrapT = THREE.RepeatWrapping
-
-        this.textures.normal = this.resources.items.grassNormalTexture
-        this.textures.normal.repeat.set(1000, 1000)
-        this.textures.normal.wrapS = THREE.RepeatWrapping
-        this.textures.normal.wrapT = THREE.RepeatWrapping
-    }
-
-    setMaterial()
-    {
-        this.material = new THREE.MeshStandardMaterial({
-            map: this.textures.color,
-            normalMap: this.textures.normal
-        })
-    }
-
-    setMesh()
-    {
-        this.mesh = new THREE.Mesh(this.geometry, this.material)
-        this.mesh.rotation.x = - Math.PI * 0.5
-        this.mesh.receiveShadow = true
-        this.mesh.castShadow = true
-        this.scene.add(this.mesh)
-    }
 }

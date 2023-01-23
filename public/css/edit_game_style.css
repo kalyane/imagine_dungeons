@@ -48,10 +48,12 @@ body, html {
 
 .left .properties{
     height: 60%;
+    overflow: auto;
 }
 
 .left .settings{
     height: 40%;
+    overflow: auto;
 }
 
 .left .settings .content, .left .properties .content{
@@ -232,4 +234,16 @@ nav{
     border: none;
     margin: 5px 30px;
     font-size: 15px;
+    cursor: pointer;
+}
+
+#play{
+    padding: 7px 20px;
+    color: #3E3E42 !important;
+    background-color: #C7B386;
+    border-radius: 5px;
+    border: none;
+    margin: 5px 0;
+    font-size: 15px;
+    cursor: pointer;
 }

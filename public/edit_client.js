@@ -4,31 +4,56 @@ const experience = new Experience(document.querySelector('canvas#editCanvas'))
 
 window.experience = experience;
 
-// get model that were saved in the database
 var id_game = document.getElementsByClassName("edit_game")[0].getAttributeNode("id_game").value;
-var size_x = document.getElementById('size_x');
-var size_z = document.getElementById('size_z');
 
-updateGridSize()
-
+// get assets saved on database to populate the game
 var url = "/assets/" + id_game
-
 experience.world.on('ready', () => {
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(assets) {
         for (var i = 0; i < assets.length; i++){
-            experience.world.addModel(assets[i].asset.name, assets[i].name);
-            experience.world.dictModels[assets[i].name].modelDragBox.position.x = assets[i].position_x
-            experience.world.dictModels[assets[i].name].modelDragBox.position.z = assets[i].position_z
-            experience.world.dictModels[assets[i].name].modelDragBox.quaternion.y = assets[i].quaternion_y
-            experience.world.dictModels[assets[i].name].modelDragBox.quaternion.w = assets[i].quaternion_w
+            experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
+            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.x = assets[i].position_x
+            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.z = assets[i].position_z
+            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.y = assets[i].quaternion_y
+            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.w = assets[i].quaternion_w
         }
+        // update assets card on the project tab
         updateAddedAssets()
     });
+
+    // gets all possible assets to use and add to edit page
+    for (var key in experience.world.modelClasses){
+        let asset = experience.world.modelClasses[key];
+        let container = document.getElementById(asset.type);
+
+        let div = document.createElement('div');
+        div.classList.add('asset_card');
+        div.setAttribute("model", asset.asset_name);
+
+        let img = document.createElement('img');
+        img.src = "/images/models/"+asset.type+"/"+asset.asset_name+".png";
+        div.appendChild(img);
+
+        let text = document.createTextNode(asset.asset_name);
+        div.appendChild(text);
+
+        container.appendChild(div);
+
+        div.addEventListener("click", function() {
+            const asset_name = this.getAttributeNode("model").value;
+            experience.world.addModel(asset_name);
+            updateAddedAssets()
+        });
+    }
 });
 
+// grid size configuration
+var size_x = document.getElementById('size_x');
+var size_z = document.getElementById('size_z');
 
+updateGridSize()
 
 size_x.addEventListener('change', (event) => {
     updateGridSize()
@@ -41,28 +66,18 @@ size_z.addEventListener('change', (event) => {
 function updateGridSize(){
     experience.world.gridSize.x = size_x.value * 2;
     experience.world.gridSize.z = size_z.value * 2;
-    experience.world.floorMesh.scale.set(experience.world.gridSize.x, experience.world.gridSize.z, 1);
-    experience.world.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
+    experience.world.floor.floorMesh.scale.set(experience.world.gridSize.x, experience.world.gridSize.z, 1);
+    experience.world.floor.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
 }
 
-var assets = document.getElementsByClassName("asset_card");
-
-for (var i = 0; i < assets.length; i++) {
-    assets[i].addEventListener("click", function() {
-        const modelName = this.getAttributeNode("model").value;
-        experience.world.addModel(modelName);
-        updateAddedAssets()
-    });
-}
-
-const addedAssetsCont = document.querySelector('.added_assets');
-
+// keep listening to when an asset is being transformed
 experience.world.on('start_transform', () => {
-    // select only the object transform
+    // select only the object being transformed
     var added_assets = document.getElementsByClassName("added_asset");
 
-    var asset_name = experience.world.transformControls.object.userData;
+    var unique_name = experience.world.transformControls.object.userData;
 
+    // adds the border to the asset selected
     for (let i = 0; i < added_assets.length; i++) {
         if (added_assets[i].textContent == asset_name){
             added_assets[i].classList.add('border');
@@ -71,21 +86,25 @@ experience.world.on('start_transform', () => {
         }
     }
 
-    // show info
+    // show asset settings
 
     // get instance of asset
-    var selected_asset = experience.world.dictModels[asset_name]
+    var selected_asset = experience.world.dictModels[unique_name]
 
+    // show image and asset unique name
     document.getElementsByClassName("selected")[0].removeAttribute("hidden");
-    document.getElementById('asset_name').value = selected_asset.name;
-    document.getElementById('selected_img').setAttribute('src',"/images/models/"+selected_asset.modelName+".png");
+    document.getElementById('asset_name').value = selected_asset.unique_name;
+    document.getElementById('selected_img').setAttribute('src',"/images/models/"+selected_asset.constructor.type+"/"+selected_asset.constructor.asset_name+".png");
 
+    // check if asset has life
     if ('life' in selected_asset){
         // make life visible
         document.getElementsByClassName("properties_life")[0].removeAttribute("hidden");
         // include current value of life to asset
         document.getElementById('life').value = selected_asset.life;
     }
+
+    // check if asset has strength
     if ('strength' in selected_asset){
         // make strength visible
         document.getElementsByClassName("properties_strength")[0].removeAttribute("hidden");
@@ -94,35 +113,40 @@ experience.world.on('start_transform', () => {
     }
 });
 
+// when no asset is being transformed
 experience.world.on('stop_transform', () => {
     // deselect all assets
     var added_assets = document.getElementsByClassName("added_asset");
-
     for (let i = 0; i < added_assets.length; i++) {
         added_assets[i].classList.remove('border');
     }
 
-    // hide asset properties
+    // hide asset settings
     document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
-    
 });
 
+// update the asset cards in the project to be the same as in the game
 function updateAddedAssets(){
+    // added assets container
+    const addedAssetsCont = document.getElementsByClassName("added_assets")[0];
+    // remove all cards from the container
+    addedAssetsCont.innerHTML = ""
+
+    // get all assets in the game
     const models = experience.world.assets
   
-    addedAssetsCont.innerHTML = ""
-  
+    // create card for each game asset
     for (let i = 0; i < models.length; i++) {
         let model = models[i];
         let div = document.createElement('div');
         div.classList.add('added_asset');
         div.setAttribute("pos", i)
         let img = document.createElement('img');
-        img.src = "/images/models/"+model.modelName+".png"
+        img.src = "/images/models/"+model.constructor.type+"/"+model.constructor.asset_name+".png"
         div.appendChild(img)
-        let text = document.createTextNode(model.name);
+        let text = document.createTextNode(model.unique_name);
         div.appendChild(text);
         let divDel = document.createElement('div');
         divDel.classList.add('asset_delete');
@@ -133,8 +157,9 @@ function updateAddedAssets(){
         div.appendChild(divDel);
         addedAssetsCont.appendChild(div);
 
+        // watch when the delete button is clicked
         divDel.addEventListener("click", function(){
-            experience.world.deleteModel(model.name);
+            experience.world.deleteModel(model.unique_name);
             updateAddedAssets()
         })
     }
@@ -146,49 +171,51 @@ document.getElementById("save").addEventListener("click", function() {
     saveAssets()
 });
 
-
+// save only game general details
 function saveGameDetails(){
-    // for now game just has name
     const input = document.getElementById('game_name');
     let data = {
         name: input.value,
         size_x: size_x.value,
         size_z: size_z.value
     };
-    console.log(data)
 
+    // send request
     fetch("/games/update/"+id_game, {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
     }).then(function(response) {
-        return response.json();
-    }).then(function(data) {
-        console.log(data);
+        console.log(response);
     });
 }
 
+// save all game assets in database
 function saveAssets(){
     const assets = experience.world.assets;
 
+    // creates an array with all the assets data
     var data = []
-
     for (var i = 0; i < assets.length; i++){
         let assetData = {
+            unique_name: assets[i].unique_name,
+            asset_name: assets[i].constructor.asset_name,
             position_x: assets[i].model.position.x,
             position_z: assets[i].model.position.z,
             quaternion_y: assets[i].model.quaternion.y,
             quaternion_w: assets[i].model.quaternion.w,
-            name: assets[i].name,
-            model_name: assets[i].modelName,
+            life: (assets[i].model.life) ? assets[i].model.life  : 0,
+            strength: (assets[i].model.strength) ? assets[i].model.strength  : 0
         };
-
         data.push(assetData)
     }
 
+    // send request
     fetch("/assets/"+id_game, {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({assets: data})
+    }).then(function(response) {
+        console.log(response);
     });
 }

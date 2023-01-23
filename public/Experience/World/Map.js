@@ -1,120 +1,91 @@
 import Experience from '../Experience.js'
-import EventEmitter from '../Utils/EventEmitter.js'
 import * as THREE from '/build/three.module.js'
-import Fox from './Fox.js'
-import Warrior from './Warrior.js'
-import Zombie from './Zombie.js'
-import Wall from './Wall.js'
-import KeyboardInput from '../Utils/KeyboardInput.js'
-import AIInput from '../Utils/AIInput.js'
-import RandomInput from '../Utils/RandomInput.js'
-
-import { DragControls } from 'three/examples/jsm/controls/DragControls'
-
 
 export default class Map
 {
     constructor()
     {
         this.experience = new Experience()
-        this.scene = this.experience.scene
-
-        // size of the map is a rectangle
-        // deafault is 50 x 50
-        this.sizeX = 50
-        this.sizeZ = 50
-
-        // create empty map
-        this.generateMap()
+        this.gridSize = this.experience.gridSize
+        this.world = this.experience.world
     }
 
-    generateMap(){
-        // the map is a grid
-        this.grid = []
-        // the size of the grid is twice the map units
-        // or each unit in the grid represents 0.5 unit in the scene
-        var highX = this.sizeX*2 + 2 // increment an extra unit to represent border
-        var highZ = this.sizeZ*2 + 2
+    // constrain object to be inside the map
+    checkBoundaries(object){
+        // get bounding box with rith rotation
+        let copy = object.clone()
+        copy.updateMatrixWorld( true );
+        var bb = new THREE.Box3().setFromObject(copy);
+        
+        // values to subtract position because the position is at the center of the box
+        var subtractX = (bb.max.x - bb.min.x)/2
+        var subtractZ = (bb.max.z - bb.min.z)/2
 
-        for(var x=0; x<highX; x++) {
-            this.grid[x] = [];
-            for(var z=0; z<highZ; z++) {
-                if (x==0 || z==0 || x==highX || z==highZ){
-                    this.grid[x][z] = true;
-                }
-                this.grid[x][z] = false;
-            }
-        }
+        // check if outside the grid, if yes, put at last possible position
+        if(bb.min.x < this.gridSize['x']/-2) object.position.x = this.gridSize['x']/-2 + subtractX
+        if(bb.max.x > this.gridSize['x']/2) object.position.x = this.gridSize['x']/2 - subtractX
+
+        if(bb.min.z < this.gridSize['z']/-2) object.position.z = this.gridSize['z']/-2 + subtractZ
+        if(bb.max.z > this.gridSize['z']/2) object.position.z = this.gridSize['z']/2 - subtractZ
     }
 
-    boundingBoxToPosition(bb){
-        var x = (bb.min.x+(bb.max.x-bb.min.x))/2-this.gridSize.x/2-1
-        var z = (bb.min.z+(bb.max.z-bb.min.z))/2-this.gridSize.z/2-1
-        return {'x':x,'z':z}
-    }
+    // creates a matrix to represent the world map
+    generateSolidMatrix(){
+        // gets solid models
+        this.solids = this.experience.world.solids
 
-    checkValidPosition(pos){
-        // check all posible places it covers and they need to be free
-        var position = {...pos}
-        if (position.min.x<0 || position.min.z<0){
-            return false
-        }
-        var maxX = this.gridSize.x*2+2
-        var maxZ = this.gridSize.z*2+2
-        if (position.max.x>maxX || position.max.z>maxZ){
-            return false
-        }
-        for(var x=Math.round(position.min.x); x<Math.round(position.max.x); x++) {
-            for(var z=Math.round(position.min.z); z<Math.round(position.max.z); z++) {
-                if (this.matrix[x][z]){
-                    return false
-                }
-            }
-        }
-        return true
-    }
-
-    generateBoundaries(){
+        // the matrix has double the size of the map to get to 0.5 increments
         this.matrix = []
-        var highX = this.gridSize.x*2+2
-        var highZ = this.gridSize.z*2+2
-        for(var x=0; x<highX; x++) {
-            this.matrix[x] = [];
-            for(var z=0; z<highZ; z++) {
-                if (x==0 || z==0 || x==highX || z==highZ){
-                    this.matrix[x][z] = true;
+
+        // loop through the rows in the matrix
+        for (let i = 0; i < this.gridSize.x*2; i++) {
+            // loop through the columns in the matrix
+            this.matrix.push([])
+            for (let j = 0; j < this.gridSize.z*2; j++) {
+                // set the cell in the matrix to 1 (free)
+                this.matrix[i][j] = 1;
+            }
+        }
+
+        // loop through each solid model
+        for (let solid of this.solids) {
+            // get bounding box with rith rotation
+            solid.modelDragBox.updateMatrixWorld( true );
+            var bb = new THREE.Box3().setFromObject(solid.modelDragBox);
+            
+            var maxX = Math.round(this.roundToHalf(bb.max.x)+this.experience.world.gridSize.x/2)
+            var minX = Math.round(this.roundToHalf(bb.min.x)+this.experience.world.gridSize.x/2)
+            var maxZ = Math.round(this.roundToHalf(bb.max.z)+this.experience.world.gridSize.x/2)
+            var minZ = Math.round(this.roundToHalf(bb.min.z)+this.experience.world.gridSize.x/2)
+            // loop through the x-coordinates in the bounding box
+            for (let x = minX*2; x <= maxX*2; x++) {
+                // loop through the y-coordinates in the bounding box
+                for (let z = minZ*2; z <= maxZ*2; z++) {
+                    // set the cell in the matrix to 0
+                    this.matrix[x][z] = 0;
                 }
-                this.matrix[x][z] = false;
             }
         }
     }
 
-    // calculateBoundaries()
-    // {
-    //     this.matrix = [];
-    //     for(var i=0; i<100; i++) {
-    //         this.matrix[i] = [];
-    //         for(var j=0; j<100; j++) {
-    //             this.matrix[i][j] = 0;
-    //         }
-    //     }
-    //     var bounding = this.solid[0].modelDragBox.geometry.boundingBox
-    //     var newX = this.solid[0].modelDragBox.position.x+25
-    //     var newZ = this.solid[0].modelDragBox.position.z+25
-    //     var maxX = Math.max(newX+bounding.max.x, newX+bounding.min.x)
-    //     var minX = Math.min(newX+bounding.max.x, newX+bounding.min.x)
-    //     var maxZ = Math.max(newZ+bounding.max.z, newZ+bounding.min.z)
-    //     var minZ = Math.min(newZ+bounding.max.z, newZ+bounding.min.z)
-
-    //     for(var i=minX*2; i<maxX*2; i++) {
-    //         for(var j=minZ*2; j<maxZ*2; j++) {
-    //             this.matrix[i][j] = 1;
-    //         }
-    //     }
-
-    // }
+    checkCollision(asset1, asset2) {
+        // Get the bounding box of each square using Three.js
+        const bb1 = asset1.modelDragBox.geometry.boundingBox
+        const bb2 = asset2.modelDragBox.geometry.boundingBox
+      
+        // Check if the bounding boxes overlap in the x and y directions
+        if (bb1.min.x < bb2.max.x && bb1.max.x > bb2.min.x &&
+            bb1.min.y < bb2.max.y && bb1.max.y > bb2.min.y) {
+          // There is a collision
+          return true;
+        } else {
+          // There is no collision
+          return false;
+        }
+    }
 
     calculateExactBoundingBox(box){
+        // calculates bounding box relative to the world position
         var bounding = {...box.geometry.boundingBox}
         
         var maxX = box.position.x+bounding.max.x
@@ -125,13 +96,7 @@ export default class Map
         return {'max':{'x':maxX, 'z':maxZ}, 'min':{'x':minX, 'z':minZ}}
     }
 
-    translatePositionToGrid(position){
-        var pos = {...position}
-        pos.max.x = (pos.max.x+this.gridSize.x/2)*2 + 1
-        pos.max.z = (pos.max.z+this.gridSize.z/2)*2 + 1
-        pos.min.x = (pos.min.x+this.gridSize.x/2)*2 + 1
-        pos.min.z = (pos.min.z+this.gridSize.z/2)*2 + 1
-        
-        return pos
+    roundToHalf(num) {
+        return Math.round(num * 2) / 2;
     }
 }
