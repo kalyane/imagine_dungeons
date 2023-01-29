@@ -11,6 +11,7 @@ export default class Alien extends Monster
 
         this.unique_name = unique_name
         this.life = 100
+        this.maxLife = 100
 
         // Resource
         this.resource = this.resources.items[this.constructor.asset_name]
@@ -21,7 +22,7 @@ export default class Alien extends Monster
         // Bite_Front, Bite_InPlace, Dance, Death, HitRecieve, Idle, Jump, No, Walk, Yes
         this.setAnimation(this.resource.animations)
 
-        this.strength = 50
+        this.strength = 10
     }
 
     preSetModel(){

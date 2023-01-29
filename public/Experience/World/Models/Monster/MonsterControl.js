@@ -10,6 +10,7 @@ export default class MonsterControl
     {
         this.experience = new Experience()
         this.time = this.experience.time
+        this.world = this.experience.world
 
         // constants
         this.fadeDuration = 0.2;
@@ -21,45 +22,83 @@ export default class MonsterControl
         // use modelDragBox to change position
         this.modelDragBox = this.model.modelDragBox;
 
+        this.dead = false
+
         this.attackStartTime = 0;
 
+        this.states = {
+            IDLE: 'IDLE',
+            WALKING: 'WALKING',
+            ATTACKING: 'ATTACKING',
+            DANCING: 'DANCING',
+            DYING: 'DYING'
+        }
     }
-  
-      checkCollisions()
-      {
-          let modelBox = new THREE.Box3();
-          modelBox.copy(this.modelDragBox.geometry.boundingBox);
-          modelBox.applyMatrix4(this.modelDragBox.matrixWorld);
-  
-          var otherModel = this.experience.world.player
-          let otherBox = new THREE.Box3();
-          otherBox.copy(otherModel.modelDragBox.geometry.boundingBox);
-          otherBox.applyMatrix4(otherModel.modelDragBox.matrixWorld);
-          if (modelBox.intersectsBox(otherBox)){
-              return true
-          }
-          return false
-      }
 
-    update(delta) {
-        var play = this.model.animation.actions.idle;
-
+    playerNear(){
         // get position characters
         let monsterPos = this.modelDragBox.position
-        let playerPos = this.experience.world.player.modelDragBox.position
-  
+        let playerPos = this.world.player.modelDragBox.position
+
         var raycaster = new THREE.Raycaster()
         var direction = new THREE.Vector3()
         this.model.model.getWorldDirection(direction)
-  
+
         raycaster.set(monsterPos, direction.normalize());
         
         // find distance from player
-        let distance = monsterPos.distanceTo(playerPos)
-        
-        if (distance < this.shortestDistance){
-            if (this.checkCollisions()){
-                // attack
+        var distance = monsterPos.distanceTo(playerPos)
+        if (distance <= this.shortestDistance){
+            return true
+        }
+        return false
+    }
+
+    checkState(){
+        if (this.model.life <= 0){
+            this.currentState = this.states.DYING;
+        } else if (this.world.player.life <= 0) {
+            this.currentState = this.states.DANCING;
+        } else if (this.world.checkCollision(this, this.world.player)) {
+            this.currentState = this.states.ATTACKING;
+        } else if (this.playerNear()) {
+            this.currentState = this.states.WALKING;
+        } else {
+            this.currentState = this.states.IDLE;
+        }
+    }
+
+    stateActions(){
+        switch(this.currentState) {
+            case this.states.IDLE:
+                this.playAnimation(this.model.animation.actions.idle);
+                break;
+
+            case this.states.DANCING:
+                this.playAnimation(this.model.animation.actions.dance);
+                break;
+
+            case this.states.WALKING:
+                this.modelDragBox.lookAt(this.world.player.modelDragBox.position);
+                // make a copy of the model drag box
+                let copyBox = new THREE.Mesh()
+                copyBox.copy(this.modelDragBox)
+                
+                // move the model drag box
+                this.modelDragBox.translateZ(this.velocity * this.delta);
+
+                // check if the new position is valid
+                if(!this.checkMovement(this.modelDragBox)){
+                    this.modelDragBox.copy(copyBox)
+                } else {
+                    // world boundaries
+                    this.experience.world.map.checkBoundaries(this.modelDragBox)
+                }
+                this.playAnimation(this.model.animation.actions.walk);
+                break;
+
+            case this.states.ATTACKING:
+                this.modelDragBox.lookAt(this.world.player.modelDragBox.position);
                 play = this.model.animation.actions.bite_front;
 
                 if (!play.isRunning()) {
@@ -67,44 +106,42 @@ export default class MonsterControl
                 } else {
                     let elapsedTime = this.time.current - this.attackStartTime;
                     if (elapsedTime > play._clip.duration * 1000) {
-                        this.experience.world.player.life -= 10;
+                        this.experience.world.player.life -= this.model.strength;
                         this.attackStartTime = this.time.current;
                     }
                 }
-            }else{
-                var intersect = raycaster.intersectObject(this.experience.world.player.modelDragBox);
-                // if player in same direction go ahead
-                if (intersect.length == 1){
-                    // walk animation
-                    play = this.model.animation.actions.walk;
-                    // make a copy of the model drag box
-                    let copyBox = new THREE.Mesh()
-                    copyBox.copy(this.modelDragBox)
-                    
-                    // move the model drag box
-                    this.modelDragBox.translateZ(this.velocity * delta);
 
-                    // check if the new position is valid
-                    if(!this.checkMovement(this.modelDragBox)){
-                        this.modelDragBox.copy(copyBox)
-                    } else {
-                        // world boundaries
-                        this.experience.world.map.checkBoundaries(this.modelDragBox)
+                this.playAnimation(play)
+                break;
+
+            case this.states.DYING:
+                var play = this.model.animation.actions.death;
+                
+                setTimeout(() => {
+                    if (!this.dead){
+                        this.dead = true
+                        this.world.deleteModel(this.model.unique_name)
                     }
-                }else{
-                    // turn a little
-                    this.modelDragBox.rotateY(0.025);
-                }
-            }
+                 }, (play._clip.duration+0.5) * 1000);
+                this.playAnimation(play)
+                break;
         }
-    
+    }
+
+    update(delta) {
+        this.delta = delta
+        this.checkState()
+        this.stateActions()
+    }
+
+    playAnimation(play){
         if (this.model.animation.actions.current != play) {
             this.model.animation.actions.current.fadeOut(this.fadeDuration);
             play.reset().fadeIn(this.fadeDuration).play();
             this.model.animation.actions.current = play;
         }
     
-        this.model.animation.mixer.update(delta);
+        this.model.animation.mixer.update(this.delta);
     }
 
     // Function to check if the square can move to the new position

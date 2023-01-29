@@ -176,18 +176,34 @@ export default class World extends EventEmitter
 
     classifyAssets(){
         for (var i=0; i < this.assets.length; i++){
-            if (this.assets[i].type == "player"){
+            if (this.assets[i].constructor.type == "player"){
                 this.player = this.assets[i]
             }
-            if (this.assets[i].type == "monster"){
+            if (this.assets[i].constructor.type == "monster"){
                 this.monsters.push(this.assets[i])
             }
-            if (this.assets[i].type == "modular"){
+            if (this.assets[i].constructor.type == "modular"){
                 this.solids.push(this.assets[i])
             }
         }
 
         this.trigger("classified")
+    }
+
+    checkCollision(model1, model2)
+    {
+        // manually calculate intersection
+        let modelBox = new THREE.Box3();
+        modelBox.copy(model1.modelDragBox.geometry.boundingBox);
+        modelBox.applyMatrix4(model1.modelDragBox.matrixWorld);
+
+        let otherBox = new THREE.Box3();
+        otherBox.copy(model2.modelDragBox.geometry.boundingBox);
+        otherBox.applyMatrix4(model2.modelDragBox.matrixWorld);
+        if (modelBox.intersectsBox(otherBox)){
+            return true
+        } 
+        return false
     }
     
     addModel(asset_name, name = null)
@@ -212,6 +228,9 @@ export default class World extends EventEmitter
         if (index > -1) { // only splice array when item is found
             this.assets.splice(index, 1); // 2nd parameter means remove one item only
             this.assetsDragBox.splice(index, 1); 
+        }
+        if (this.dictModels[name].constructor.type == "monster"){
+            this.monsters.splice(this.monsters.indexOf(this.dictModels[name]), 1);
         }
         this.dictModels[name].delete()
         delete this.dictModels[name]

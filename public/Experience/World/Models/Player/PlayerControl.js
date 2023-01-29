@@ -10,28 +10,42 @@ export default class PlayerControl
     {
         this.experience = new Experience()
         this.time = this.experience.time
-
-        // state
-        this.toggleRun = true;
-
-        // keys
-        this.directions = ['w', 'a', 'd']
-
-        // temporary data
-        this.walkDirection = new THREE.Vector3();
-        this.rotateAngle = new THREE.Vector3(0, 1, 0);
-        this.rotateQuarternion = new THREE.Quaternion();
-        this.idealOffset = new THREE.Vector3(-3, 8, -12)
+        this.world = this.experience.world
 
         // constants
         this.fadeDuration = 0.2;
-        this.runVelocity = 20;
-        this.walkVelocity = 5;
+        this.runVelocity = 25;
+        this.walkVelocity = 15;
+        this.rotation = 0.025;
 
         // use model to change animation
         this.model = model;
         // use modelDragBox to change position
         this.modelDragBox = this.model.modelDragBox;
+
+        // state machine
+        // enumeration of all the possible states
+        this.states = {
+            IDLE: 'IDLE',
+            WALKING: 'WALKING',
+            RUNNING: 'RUNNING',
+            ROTATING_LEFT: 'ROTATING_LEFT',
+            ROTATING_RIGHT: 'ROTATING_RIGHT',
+            WALKING_AND_ROTATING_LEFT: 'WALKING_AND_ROTATING_LEFT',
+            WALKING_AND_ROTATING_RIGHT: 'WALKING_AND_ROTATING_RIGHT',
+            RUNNING_AND_ROTATING_LEFT: 'RUNNING_AND_ROTATING_LEFT',
+            RUNNING_AND_ROTATING_RIGHT: 'RUNNING_AND_ROTATING_RIGHT',
+            ATTACKING: 'ATTACKING',
+            DYING: 'DYING'
+        }
+
+        this.isAttaking = false
+        this.dead = false
+
+        // state
+        this.toggleRun = true;
+
+        this.currentState =  this.states.IDLE;
 
         // check if key was pressed or released
         this.keysPressed = {};
@@ -54,75 +68,148 @@ export default class PlayerControl
       this.toggleRun = !this.toggleRun;
     }
 
-    update(delta) {
-        var play;
-
+    checkState(){
         // check if player died
         if (this.model.life <= 0){
-            play = this.model.animation.actions.death;
-            if (!play.isRunning()) {
-                this.deathStartTime = this.time.current;
-            } 
-            let elapsedTime = this.time.current - this.deathStartTime;
-            if (elapsedTime > play._clip.duration * 1000) {
-                console.log("died")
-            }
+            this.currentState = this.states.DYING;
+        } else if (this.keysPressed[' '] || this.isAttaking) {
+            this.currentState = this.states.ATTACKING;
+        } else if (this.keysPressed['w'] && this.keysPressed['a'] && this.toggleRun) {
+            this.currentState = this.states.RUNNING_AND_ROTATING_LEFT;
+        } else if (this.keysPressed['w'] && this.keysPressed['d'] && this.toggleRun) {
+            this.currentState = this.states.RUNNING_AND_ROTATING_RIGHT;
+        } else if (this.keysPressed['w'] && this.keysPressed['a']) {
+            this.currentState = this.states.WALKING_AND_ROTATING_LEFT;
+        } else if (this.keysPressed['w'] && this.keysPressed['d']) {
+            this.currentState = this.states.WALKING_AND_ROTATING_RIGHT;
+        } else if (this.keysPressed['w'] && this.toggleRun) {
+            this.currentState = this.states.RUNNING;
+        } else if (this.keysPressed['w']) {
+            this.currentState = this.states.WALKING;
+        } else if (this.keysPressed['a']) {
+            this.currentState = this.states.ROTATING_LEFT;
+        } else if (this.keysPressed['d']) {
+            this.currentState = this.states.ROTATING_RIGHT;
+        } else {
+            this.currentState = this.states.IDLE;
         }
+    }
 
-        else {
-            // check if any of the movement keys are pressed
-            var directionPressed = this.directions.some( (key) => {return this.keysPressed[key] == true;});
-            let velocity;
-            if (this.toggleRun) {
-                velocity = this.runVelocity;
-            } else {
-                velocity = this.walkVelocity;
-            }
-        
-            // update the animation based on the keys pressed
-            if (directionPressed && this.toggleRun) {
-                play = this.model.animation.actions.run_forward;
-            }
-            else if (directionPressed) {
-                play = this.model.animation.actions.walk_forward;
-            }
-            else {
-                play = this.model.animation.actions.idle;
-            }
+    stateActions(){
+        switch(this.currentState) {
+            case this.states.IDLE:
+                this.playAnimation(this.model.animation.actions.idle);
+                break;
 
-            // update the player's position based on the keys pressed
-            if (this.keysPressed['w']) {
-                // make a copy of the model drag box
-                let copyBox = new THREE.Mesh()
-                copyBox.copy(this.modelDragBox)
-                
-                // move the model drag box
-                this.modelDragBox.translateZ(-velocity * delta);
+            case this.states.WALKING:
+                this.move(this.walkVelocity)
+                this.playAnimation(this.model.animation.actions.walk_forward);
+                break;
 
-                // check if the new position is valid
-                if(!this.checkMovement(this.modelDragBox)){
-                    this.modelDragBox.copy(copyBox)
-                } else {
-                    // world boundaries
-                    this.experience.world.map.checkBoundaries(this.modelDragBox)
+            case this.states.RUNNING:
+                this.move(this.runVelocity)
+                this.playAnimation(this.model.animation.actions.run_forward);
+                break;
+
+            case this.states.ROTATING_LEFT:
+                this.modelDragBox.rotateY(this.rotation);
+                this.playAnimation(this.model.animation.actions.walk_forward);
+                break;
+
+            case this.states.ROTATING_RIGHT:
+                this.modelDragBox.rotateY(-this.rotation);
+                this.playAnimation(this.model.animation.actions.walk_forward);
+                break;
+
+            case this.states.WALKING_AND_ROTATING_LEFT:
+                this.move(this.walkVelocity)
+                this.modelDragBox.rotateY(this.rotation);
+                this.playAnimation(this.model.animation.actions.walk_forward);
+                break;
+
+            case this.states.WALKING_AND_ROTATING_RIGHT:
+                this.move(this.walkVelocity)
+                this.modelDragBox.rotateY(-this.rotation);
+                this.playAnimation(this.model.animation.actions.walk_forward);
+                break;
+
+            case this.states.RUNNING_AND_ROTATING_LEFT:
+                this.move(this.runVelocity)
+                this.modelDragBox.rotateY(this.rotation);
+                this.playAnimation(this.model.animation.actions.run_forward);
+                break;
+
+            case this.states.RUNNING_AND_ROTATING_RIGHT:
+                this.move(this.runVelocity)
+                this.modelDragBox.rotateY(-this.rotation);
+                this.playAnimation(this.model.animation.actions.run_forward);
+                break;
+
+            case this.states.ATTACKING:
+                var play = this.model.animation.actions.attack;
+                if (!play.isRunning()) {
+                    this.attackStartTime = this.time.current;
+                    this.isAttaking = true
+                } 
+                var elapsedTime = this.time.current - this.attackStartTime;
+                if (elapsedTime > play._clip.duration/play.timeScale * 1000) {
+                    this.endAttack()
+                    play = this.model.animation.actions.idle;
+                    this.isAttaking = false
                 }
-            }
-        
-            if (this.keysPressed['a']) {
-                this.modelDragBox.rotateY(0.025);
-            }
-            else if (this.keysPressed['d']) {
-                this.modelDragBox.rotateY(-0.025);
+                this.playAnimation(play)
+                break;
+
+            case this.states.DYING:
+                var play = this.model.animation.actions.death;
+                
+                setTimeout(() => {
+                    if (!this.dead){
+                        this.dead = true
+                        console.log("dead")
+                        //this.world.deleteModel(this.model.unique_name)
+                    }
+                 }, (play._clip.duration+0.5) * 1000);
+                this.playAnimation(play)
+                break;
+        }
+    }
+
+    endAttack()
+    {
+        for (var i=0; i<this.world.monsters.length; i++){
+            if (this.world.checkCollision(this, this.world.monsters[i])){
+                this.world.monsters[i].life -= this.model.strength
+                break;
             }
         }
-        
+    }
+
+    playAnimation(play){
         if (this.model.animation.actions.current != play) {
             this.model.animation.actions.current.fadeOut(this.fadeDuration);
             play.reset().fadeIn(this.fadeDuration).play();
             this.model.animation.actions.current = play;
         }
     
-        this.model.animation.mixer.update(delta);
+        this.model.animation.mixer.update(this.delta);
+    }
+
+    update(delta) {
+        this.delta = delta
+        this.checkState()
+        this.stateActions()
+    }
+
+    move(velocity){
+        var copyBox = new THREE.Mesh()
+        copyBox.copy(this.modelDragBox)
+        this.modelDragBox.translateZ(-velocity * this.delta);
+        if(!this.checkMovement(this.modelDragBox)){
+            this.modelDragBox.copy(copyBox)
+        } else {
+            this.experience.world.map.checkBoundaries(this.modelDragBox)
+        }
     }
 
     // Function to check if the square can move to the new position

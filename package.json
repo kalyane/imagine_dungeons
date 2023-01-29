@@ -25,7 +25,8 @@
     "serve-favicon": "^2.5.0",
     "three": "^0.146.0",
     "three-dragcontrols": "^0.88.2",
-    "three-orbitcontrols": "^2.110.3"
+    "three-orbitcontrols": "^2.110.3",
+    "xstate": "^4.35.3"
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.7",

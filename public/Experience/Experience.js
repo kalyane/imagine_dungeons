@@ -33,6 +33,8 @@ export default class Experience
 
         this.gridSize = gridSize
 
+        this.gameOver = false
+
         // this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 1, 10);
 
         this.scene.background = new THREE.Color(0xb0b16);

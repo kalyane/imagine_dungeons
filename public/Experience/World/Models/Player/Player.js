@@ -12,6 +12,8 @@ export default class Player
         this.resources = this.experience.resources
         this.time = this.experience.time
         this.life = 100
+        this.world = this.experience.world
+        this.strength = 50
     }
 
     setModel()
@@ -57,6 +59,7 @@ export default class Player
         // Actions
         this.animation.actions = {} 
         this.animation.actions.attack = this.animation.mixer.clipAction(animations[0])
+        this.animation.actions.attack.timeScale = 2;
         //this.animation.actions.attack.setLoop(THREE.LoopOnce);
         this.animation.actions.death = this.animation.mixer.clipAction(animations[1])
         this.animation.actions.death.setLoop(THREE.LoopOnce);
@@ -72,13 +75,6 @@ export default class Player
         // initial animation
         this.animation.actions.current = this.animation.actions.idle
         this.animation.actions.current.play()
-
-        this.animation.mixer.addEventListener('loop', (e) =>
-        {
-            if (this.animation.actions.attack == e.action){
-                this.endAttack()
-            }
-        })
     }
 
     // Play the action
@@ -112,41 +108,7 @@ export default class Player
         this.scene.remove(this.boxHelper)
     }
 
-    endAttack()
-    {
-        let modelBox = new THREE.Box3();
-        modelBox.copy(this.modelDragBox.geometry.boundingBox);
-        modelBox.applyMatrix4(this.modelDragBox.matrixWorld);
-
-        for(var i=0; i<this.enemies.length; i++) {
-            var otherModel = this.enemies[i]
-            let otherBox = new THREE.Box3();
-            otherBox.copy(otherModel.modelDragBox.geometry.boundingBox);
-            otherBox.applyMatrix4(otherModel.modelDragBox.matrixWorld);
-            if (modelBox.intersectsBox(otherBox)){
-                this.enemies[i].life -= this.attackPower
-            }
-        }
-    }
-
-    checkCollisions(objects)
-    {
-        // manually calculate intersection
-        let modelBox = new THREE.Box3();
-        modelBox.copy(this.modelDragBox.geometry.boundingBox);
-        modelBox.applyMatrix4(this.modelDragBox.matrixWorld);
-
-        for(var i=0; i<objects.length; i++) {
-            var otherModel = objects[i]
-            let otherBox = new THREE.Box3();
-            otherBox.copy(otherModel.modelDragBox.geometry.boundingBox);
-            otherBox.applyMatrix4(otherModel.modelDragBox.matrixWorld);
-            if (modelBox.intersectsBox(otherBox)){
-                return true
-            }
-        }
-        return false
-    }
+    
 
     setControl(){
         this.controls = new PlayerControl(this)
