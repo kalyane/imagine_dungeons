@@ -36,21 +36,18 @@ export default class MonsterControl
     }
 
     playerNear(){
-        // get position characters
-        let monsterPos = this.modelDragBox.position
-        let playerPos = this.world.player.modelDragBox.position
+        const raycaster = new THREE.Raycaster();
 
-        var raycaster = new THREE.Raycaster()
-        var direction = new THREE.Vector3()
-        this.model.model.getWorldDirection(direction)
+        for (var i=0; i<this.world.directions.length; i++){
+            raycaster.set(this.modelDragBox.position, this.world.directions[i], 0, this.shortestDistance);
 
-        raycaster.set(monsterPos, direction.normalize());
-        
-        // find distance from player
-        var distance = monsterPos.distanceTo(playerPos)
-        if (distance <= this.shortestDistance){
-            return true
+            const intersects = raycaster.intersectObjects(this.world.assetsDragBox)
+
+            if (intersects.length > 0 && intersects[0].distance < this.shortestDistance && intersects[0].object == this.world.player.modelDragBox){
+                return true
+            }
         }
+
         return false
     }
 
@@ -80,20 +77,7 @@ export default class MonsterControl
 
             case this.states.WALKING:
                 this.modelDragBox.lookAt(this.world.player.modelDragBox.position);
-                // make a copy of the model drag box
-                let copyBox = new THREE.Mesh()
-                copyBox.copy(this.modelDragBox)
-                
-                // move the model drag box
-                this.modelDragBox.translateZ(this.velocity * this.delta);
-
-                // check if the new position is valid
-                if(!this.checkMovement(this.modelDragBox)){
-                    this.modelDragBox.copy(copyBox)
-                } else {
-                    // world boundaries
-                    this.experience.world.map.checkBoundaries(this.modelDragBox)
-                }
+                this.move(this.velocity)
                 this.playAnimation(this.model.animation.actions.walk);
                 break;
 
@@ -128,6 +112,17 @@ export default class MonsterControl
         }
     }
 
+    move(velocity){
+        var copyBox = new THREE.Mesh()
+        copyBox.copy(this.modelDragBox)
+        this.modelDragBox.translateZ(velocity * this.delta);
+        if(!this.world.canMove(this.modelDragBox)){
+            this.modelDragBox.copy(copyBox)
+        } else {
+            this.experience.world.checkBoundaries(this.modelDragBox)
+        }
+    }
+
     update(delta) {
         this.delta = delta
         this.checkState()
@@ -142,29 +137,5 @@ export default class MonsterControl
         }
     
         this.model.animation.mixer.update(this.delta);
-    }
-
-    // Function to check if the square can move to the new position
-    checkMovement(box) {
-        let bb = box.geometry.boundingBox
-        
-        var maxX = Math.round(box.position.x+bb.max.x+this.experience.world.gridSize.x/2)
-        var minX = Math.round(box.position.x+bb.min.x+this.experience.world.gridSize.x/2)
-        var maxZ = Math.round(box.position.z+bb.max.z+this.experience.world.gridSize.z/2)
-        var minZ = Math.round(box.position.z+bb.min.z+this.experience.world.gridSize.z/2)
-
-        // Nested loop to iterate over the cells in the bounding box
-        for (let x = minX*2; x <= Math.min(maxX*2, this.experience.world.gridSize.x*2-1); x++) {
-            for (let z = minZ*2; z <= Math.min(maxZ*2, this.experience.world.gridSize.z*2-1); z++) {
-                // Check if the cell value is 0
-                if (this.experience.world.map.matrix[x][z] === 0) {
-                    // The square cannot move to the new position
-                    return false;
-                }
-            }
-        }
-    
-        // The square can move to the new position
-        return true;
     }
 }

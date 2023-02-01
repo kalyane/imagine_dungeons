@@ -1,7 +1,6 @@
 import Experience from '../Experience.js'
 import EventEmitter from '../Utils/EventEmitter.js'
 import * as THREE from '/build/three.module.js'
-import Map from './Map.js'
 import Floor from './Floor.js'
 
 // modular
@@ -9,6 +8,8 @@ import Wall from './Models/Modular/Wall.js'
 import Fence90 from './Models/Modular/Fence90.js'
 import FenceEnd from './Models/Modular/FenceEnd.js'
 import FenceStraight from './Models/Modular/FenceStraight.js'
+import ColumnSquare from './Models/Modular/ColumnSquare.js'
+import ColumnCircle from './Models/Modular/ColumnCircle.js'
 // player
 import Rogue from './Models/Player/Rogue.js'
 // monster
@@ -31,11 +32,18 @@ export default class World extends EventEmitter
         this.player;
         this.monsters = [];
         this.solids = []
+        this.solidModels = []
         this.assets = []
         this.assetsDragBox = []
         this.dictModels = {}
 
         this.gridSize = this.experience.gridSize
+
+        // direction vectors 360 degrees
+        this.directions = []
+        for (let i = 0; i < 360; i += 3) {
+            this.directions.push(new THREE.Vector3(Math.cos(i), 0, Math.sin(i)));
+        }
 
         this.map = new Map()
         this.floor = new Floor()
@@ -49,6 +57,8 @@ export default class World extends EventEmitter
                 "fence_90" : Fence90,
                 "fence_end" : FenceEnd,
                 "fence_straight" : FenceStraight,
+                "column_square" : ColumnSquare,
+                "column_circle" : ColumnCircle,
                 "rogue" : Rogue,
                 "alien" : Alien
             }
@@ -136,7 +146,7 @@ export default class World extends EventEmitter
             // the y direction is fixed
             event.object.position.y = 0
 
-            this.map.checkBoundaries(event.object)
+            this.checkBoundaries(event.object)
             
         })
     }
@@ -184,6 +194,7 @@ export default class World extends EventEmitter
             }
             if (this.assets[i].constructor.type == "modular"){
                 this.solids.push(this.assets[i])
+                this.solidModels.push(this.assets[i].modelDragBox)
             }
         }
 
@@ -234,6 +245,41 @@ export default class World extends EventEmitter
         }
         this.dictModels[name].delete()
         delete this.dictModels[name]
+    }
+
+    checkBoundaries(object){
+        // get bounding box with rith rotation
+        let copy = object.clone()
+        copy.updateMatrixWorld( true );
+        var bb = new THREE.Box3().setFromObject(copy);
+        
+        // values to subtract position because the position is at the center of the box
+        var subtractX = (bb.max.x - bb.min.x)/2
+        var subtractZ = (bb.max.z - bb.min.z)/2
+
+        // check if outside the grid, if yes, put at last possible position
+        if(bb.min.x < this.gridSize['x']/-2) object.position.x = this.gridSize['x']/-2 + subtractX
+        if(bb.max.x > this.gridSize['x']/2) object.position.x = this.gridSize['x']/2 - subtractX
+
+        if(bb.min.z < this.gridSize['z']/-2) object.position.z = this.gridSize['z']/-2 + subtractZ
+        if(bb.max.z > this.gridSize['z']/2) object.position.z = this.gridSize['z']/2 - subtractZ
+    }
+
+    canMove(model){
+        const raycaster = new THREE.Raycaster();
+        var radius = 1
+
+        for (var i=0; i<this.directions.length; i++){
+            raycaster.set(model.position, this.directions[i], 0, 10);
+
+            const intersects = raycaster.intersectObjects(this.solidModels)
+
+            // if there is a solid distance less than radius, player can't move
+            if (intersects.length > 0 && intersects[0].distance < radius){
+                return false
+            }
+        }
+        return true
     }
 
     update()

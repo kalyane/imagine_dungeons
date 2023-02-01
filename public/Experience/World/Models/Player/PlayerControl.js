@@ -122,26 +122,26 @@ export default class PlayerControl
                 break;
 
             case this.states.WALKING_AND_ROTATING_LEFT:
-                this.move(this.walkVelocity)
                 this.modelDragBox.rotateY(this.rotation);
+                this.move(this.walkVelocity)
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
             case this.states.WALKING_AND_ROTATING_RIGHT:
-                this.move(this.walkVelocity)
                 this.modelDragBox.rotateY(-this.rotation);
+                this.move(this.walkVelocity)
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
             case this.states.RUNNING_AND_ROTATING_LEFT:
-                this.move(this.runVelocity)
                 this.modelDragBox.rotateY(this.rotation);
+                this.move(this.runVelocity)
                 this.playAnimation(this.model.animation.actions.run_forward);
                 break;
 
             case this.states.RUNNING_AND_ROTATING_RIGHT:
-                this.move(this.runVelocity)
                 this.modelDragBox.rotateY(-this.rotation);
+                this.move(this.runVelocity)
                 this.playAnimation(this.model.animation.actions.run_forward);
                 break;
 
@@ -166,8 +166,7 @@ export default class PlayerControl
                 setTimeout(() => {
                     if (!this.dead){
                         this.dead = true
-                        console.log("dead")
-                        //this.world.deleteModel(this.model.unique_name)
+                        console.log("dead") // game ends when player dies
                     }
                  }, (play._clip.duration+0.5) * 1000);
                 this.playAnimation(play)
@@ -205,34 +204,10 @@ export default class PlayerControl
         var copyBox = new THREE.Mesh()
         copyBox.copy(this.modelDragBox)
         this.modelDragBox.translateZ(-velocity * this.delta);
-        if(!this.checkMovement(this.modelDragBox)){
+        if(!this.world.canMove(this.modelDragBox)){
             this.modelDragBox.copy(copyBox)
         } else {
-            this.experience.world.map.checkBoundaries(this.modelDragBox)
+            this.experience.world.checkBoundaries(this.modelDragBox)
         }
-    }
-
-    // Function to check if the square can move to the new position
-    checkMovement(box) {
-        let bb = box.geometry.boundingBox
-        
-        var maxX = Math.round(box.position.x+bb.max.x+this.experience.world.gridSize.x/2)
-        var minX = Math.round(box.position.x+bb.min.x+this.experience.world.gridSize.x/2)
-        var maxZ = Math.round(box.position.z+bb.max.z+this.experience.world.gridSize.z/2)
-        var minZ = Math.round(box.position.z+bb.min.z+this.experience.world.gridSize.z/2)
-
-        // Nested loop to iterate over the cells in the bounding box
-        for (let x = minX*2; x <= Math.min(maxX*2, this.experience.world.gridSize.x*2-1); x++) {
-            for (let z = minZ*2; z <= Math.min(maxZ*2, this.experience.world.gridSize.z*2-1); z++) {
-                // Check if the cell value is 0
-                if (this.experience.world.map.matrix[x][z] === 0) {
-                    // The square cannot move to the new position
-                    return false;
-                }
-            }
-        }
-    
-        // The square can move to the new position
-        return true;
     }
 }

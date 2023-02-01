@@ -48,9 +48,10 @@ router
 
             try {
                 // check if the asset is already in the database
-                const existingAsset = await Asset.findOne({id_game, unique_name});
+                const existingAsset = await Asset.findOne({game: id_game, unique_name: unique_name});
                 if (existingAsset) {
                     // update existing asset
+                    existingAsset.position_x = position_x;
                     existingAsset.position_z = position_z;
                     existingAsset.quaternion_y = quaternion_y;
                     existingAsset.quaternion_w = quaternion_w;

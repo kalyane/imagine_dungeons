@@ -63,7 +63,6 @@ export default class Experience
 
     startPlaying(){
         this.world.classifyAssets()
-        this.world.map.generateSolidMatrix()
         this.world.player.setControl()
         for (let monster of this.world.monsters){
             monster.setControl()
