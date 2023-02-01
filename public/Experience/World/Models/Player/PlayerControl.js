@@ -36,7 +36,8 @@ export default class PlayerControl
             RUNNING_AND_ROTATING_LEFT: 'RUNNING_AND_ROTATING_LEFT',
             RUNNING_AND_ROTATING_RIGHT: 'RUNNING_AND_ROTATING_RIGHT',
             ATTACKING: 'ATTACKING',
-            DYING: 'DYING'
+            DYING: 'DYING',
+            INTERACTING: 'INTERACTING'
         }
 
         this.isAttaking = false
@@ -72,6 +73,8 @@ export default class PlayerControl
         // check if player died
         if (this.model.life <= 0){
             this.currentState = this.states.DYING;
+        } else if (this.keysPressed['e']) {
+            this.currentState = this.states.INTERACTING;
         } else if (this.keysPressed[' '] || this.isAttaking) {
             this.currentState = this.states.ATTACKING;
         } else if (this.keysPressed['w'] && this.keysPressed['a'] && this.toggleRun) {
@@ -161,16 +164,34 @@ export default class PlayerControl
                 break;
 
             case this.states.DYING:
-                var play = this.model.animation.actions.death;
+                this.playAnimation(this.model.animation.actions.death)
+
+                this.dead = true
+                this.experience.gameOver = true // game ends when player dies
                 
-                setTimeout(() => {
-                    if (!this.dead){
-                        this.dead = true
-                        console.log("dead") // game ends when player dies
-                    }
-                 }, (play._clip.duration+0.5) * 1000);
-                this.playAnimation(play)
                 break;
+
+            case this.states.INTERACTING:
+                this.playAnimation(this.model.animation.actions.idle);
+                this.interact()
+                break;
+        }
+    }
+
+    interact(){
+        const raycaster = new THREE.Raycaster();
+        var radius = 2
+
+        for (var i=0; i<this.world.directions.length; i++){
+            raycaster.set(this.modelDragBox.position, this.world.directions[i], 0, 10);
+
+            const intersects = raycaster.intersectObjects(this.world.interactableModels);
+
+            // if there is a solid distance less than radius, player can't move
+            if (intersects.length > 0 && intersects[0].distance < radius){
+                this.world.dictModels[intersects[0].object.userData].interact()
+                return;
+            }
         }
     }
 

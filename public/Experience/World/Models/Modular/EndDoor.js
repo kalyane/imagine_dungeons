@@ -1,9 +1,9 @@
 import Modular from './Modular.js'
 import * as THREE from '/build/three.module.js'
 
-export default class Wall extends Modular
+export default class EndDoor extends Modular
 {
-    static asset_name = 'wall'
+    static asset_name = 'end_door'
     constructor(unique_name)
     {
         super()
@@ -20,11 +20,11 @@ export default class Wall extends Modular
         // creates a copy of the original model
         this.model = this.resource.scene.clone()
 
-        this.model.scale.set(1.35, 1.35, 1.35)
+        this.model.scale.set(2,2,2)
 
         // creates a box to cover the model
-        const boxGeo = new THREE.BoxGeometry(8, 8, 1.5)
-        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 4, 0 ) )
+        const boxGeo = new THREE.BoxGeometry(5, 6.5, 1)
+        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 2.5, 3.25, 0 ) )
         this.modelDragBox = new THREE.Mesh(
             boxGeo,
             new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
@@ -32,5 +32,10 @@ export default class Wall extends Modular
         this.modelDragBox.geometry.computeBoundingBox()
 
         this.setModel()
+    }
+
+    interact(){
+        this.modelDragBox.rotateY(0.05)
+        this.experience.gameOver = true
     }
 }

@@ -10,6 +10,10 @@ import FenceEnd from './Models/Modular/FenceEnd.js'
 import FenceStraight from './Models/Modular/FenceStraight.js'
 import ColumnSquare from './Models/Modular/ColumnSquare.js'
 import ColumnCircle from './Models/Modular/ColumnCircle.js'
+import Arch from './Models/Modular/Arch.js'
+import EndDoor from './Models/Modular/EndDoor.js'
+import ArchBars from './Models/Modular/ArchBars.js'
+
 // player
 import Rogue from './Models/Player/Rogue.js'
 // monster
@@ -48,6 +52,8 @@ export default class World extends EventEmitter
         this.solidModels = []
         this.assets = []
         this.assetsDragBox = []
+        this.interactables = []
+        this.interactableModels = []
         this.dictModels = {}
 
         this.gridSize = this.experience.gridSize
@@ -73,6 +79,9 @@ export default class World extends EventEmitter
                 "fence_straight" : FenceStraight,
                 "column_square" : ColumnSquare,
                 "column_circle" : ColumnCircle,
+                "arch" : Arch,
+                "end_door" : EndDoor,
+                "arch_bars" : ArchBars,
 
                 // object
                 "banner" : Banner,
@@ -224,8 +233,18 @@ export default class World extends EventEmitter
                 this.monsters.push(this.assets[i])
             }
             if (this.assets[i].constructor.type == "modular" || this.assets[i].constructor.type == "object"){
-                this.solids.push(this.assets[i])
-                this.solidModels.push(this.assets[i].modelDragBox)
+                if (this.assets[i].separateBoxes){
+                    for (var j = 0; j < this.assets[i].separateBoxes.length; j++){
+                        this.solidModels.push(this.assets[i].separateBoxes[j])
+                    }
+                } else {
+                    this.solidModels.push(this.assets[i].modelDragBox)
+                }
+            }
+
+            if (this.assets[i].interact){
+                this.interactables.push(this.assets[i])
+                this.interactableModels.push(this.assets[i].modelDragBox)
             }
         }
 

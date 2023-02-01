@@ -80,6 +80,21 @@ export default [
 
     // modular
     {
+        name: 'arch',
+        type: 'gltfModel',
+        path: '/models/modular/arch.glb'
+    },
+    {
+        name: 'end_door',
+        type: 'gltfModel',
+        path: '/models/modular/end_door.glb'
+    },
+    {
+        name: 'arch_bars',
+        type: 'gltfModel',
+        path: '/models/modular/arch_bars.glb'
+    },
+    {
         name: 'wall',
         type: 'gltfModel',
         path: '/models/modular/wall.glb'

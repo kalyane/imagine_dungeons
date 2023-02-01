@@ -44,6 +44,13 @@ export default class Modular
         this.model.position.copy(this.modelDragBox.position)
         this.model.rotation.copy(this.modelDragBox.rotation)
         this.boxHelper.update()
+
+        if (this.separateBoxes){
+            for (var i=0; i<this.separateBoxes.length; i++){
+                this.separateBoxes[i].position.copy(this.modelDragBox.position)
+                this.separateBoxes[i].rotation.copy(this.modelDragBox.rotation)
+            }
+        }
     }
 
     delete()

@@ -108,9 +108,17 @@ export default class Experience
         time.innerHTML = this.time.elapsed
 
         var over = document.getElementById("over");
-        if (this.world.player.controls.dead){
-            over.innerHTML = "lose"
+        if (this.gameOver) {
+            if (this.world.player.controls.dead){
+                over.innerHTML = "lose"
+            } else {
+                over.innerHTML = "win"
+            }
         }
+        else {
+            over.innerHTML = this.gameOver
+        }
+        
         // TODO: when player wins game
     }
 
