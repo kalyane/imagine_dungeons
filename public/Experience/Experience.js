@@ -35,7 +35,9 @@ export default class Experience
 
         this.gameOver = false
 
-        // this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 1, 10);
+        if (this.playing){
+            this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 10, 50);
+        }
 
         this.scene.background = new THREE.Color(0xb0b16);
 
@@ -80,6 +82,36 @@ export default class Experience
         this.camera.update()
         this.world.update()
         this.renderer.update()
+
+        if (this.playing && document.getElementById("ready").innerHTML == "true"){
+            this.updateMetrics()
+        }
+    }
+
+    updateMetrics(){
+        var health = document.getElementById("health");
+        health.innerHTML = this.world.player.life
+
+        var xp = document.getElementById("xp");
+        xp.innerHTML = this.world.player.xp
+
+        var level = document.getElementById("level");
+        level.innerHTML = this.world.player.level
+
+        var defense = document.getElementById("defense");
+        // TODO: add the defense from shields
+
+        var attack = document.getElementById("attack");
+        attack.innerHTML = this.world.player.strength
+
+        var time = document.getElementById("time");
+        time.innerHTML = this.time.elapsed
+
+        var over = document.getElementById("over");
+        if (this.world.player.controls.dead){
+            over.innerHTML = "lose"
+        }
+        // TODO: when player wins game
     }
 
     destroy()

@@ -14,6 +14,9 @@ export default class Player
         this.life = 100
         this.world = this.experience.world
         this.strength = 50
+        this.xp = 0
+        this.maxLife = this.life
+        this.level = 0
     }
 
     setModel()
@@ -99,6 +102,11 @@ export default class Player
         this.model.position.copy(this.modelDragBox.position)
         this.model.rotation.copy(this.modelDragBox.rotation)
         this.boxHelper.update()
+
+        if (this.xp/100 - (this.level/2 * (2 + (this.level-1))) > this.level){
+            this.level += 1
+            this.life = this.maxLife
+        }
     }
 
     delete()

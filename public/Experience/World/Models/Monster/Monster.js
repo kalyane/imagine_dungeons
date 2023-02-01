@@ -43,7 +43,13 @@ export default class Monster
         this.scene.add(this.boxHelper)
         this.scene.add(this.model)
 
+        if (this.experience.playing){
+            this.setLifeBar()
+        }
+        
+    }
 
+    setLifeBar(){
         // Create the canvas and context
         this.canvas = document.createElement('canvas');
         this.context = this.canvas.getContext('2d');
@@ -140,8 +146,11 @@ export default class Monster
         if (this.controls) this.controls.update(this.experience.time.delta * 0.001)
         this.model.position.copy(this.modelDragBox.position)
         this.model.rotation.copy(this.modelDragBox.rotation)
-        this.updateLifeBar()
         this.boxHelper.update()
+
+        if (this.experience.playing){
+            this.updateLifeBar()
+        }
     }
 
     delete()

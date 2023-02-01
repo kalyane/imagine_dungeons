@@ -1,5 +1,8 @@
 import Experience from './Experience/Experience.js'
 
+var ready = document.getElementById("ready");
+ready.innerHTML = false
+
 var size_x = document.getElementsByClassName("play_game")[0].getAttributeNode("size_x").value;
 var size_z = document.getElementsByClassName("play_game")[0].getAttributeNode("size_z").value;
 
@@ -28,6 +31,7 @@ experience.world.on('ready', () => {
 
         }
 
+        ready.innerHTML = true
         experience.startPlaying()
     });
 });

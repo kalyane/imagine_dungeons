@@ -22,8 +22,29 @@ html
             .metric.box
                 .header METRICS
                 .metrics_container 
-                    p TIME 
-                    p MONSTERS KILLED
-                    p LIFE 
-                    p COLLECTED ITEMS
+                    p 
+                        i.fa-solid.fa-heart-pulse
+                        | HEALTH: 
+                        span#health
+                    p 
+                        | XP: 
+                        span#xp
+                    p 
+                        | LEVEL: 
+                        span#level
+                    p 
+                        | DEFENSE: 
+                        span#defense
+                    p 
+                        | ATTACK: 
+                        span#attack
+                    p 
+                        | TIME: 
+                        span#time
+                    p 
+                        | GAME READY: 
+                        span#ready
+                    p 
+                        | GAME OVER: 
+                        span#over
     script(type="module" src="/play_client.js")

@@ -103,6 +103,7 @@ export default class MonsterControl
                 
                 setTimeout(() => {
                     if (!this.dead){
+                        this.world.player.xp += this.model.maxLife
                         this.dead = true
                         this.world.deleteModel(this.model.unique_name)
                     }
