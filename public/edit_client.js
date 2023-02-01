@@ -32,13 +32,31 @@ experience.world.on('ready', () => {
         div.classList.add('asset_card');
         div.setAttribute("model", asset.asset_name);
 
+        let divCont = document.createElement('div');
+
+        let divAdd = document.createElement('div');
+        divAdd.classList.add('add');
+        let divAddCont = document.createElement('div');
+        let insideDiv = document.createElement('div');
+        let icon = document.createElement('i');
+        icon.classList.add('fa-solid');
+        icon.classList.add('fa-plus');
+        insideDiv.appendChild(icon);
+        insideDiv.appendChild(document.createElement("br"));
+        let addText = document.createTextNode("Click to Add");
+        insideDiv.appendChild(addText);
+        divAddCont.appendChild(insideDiv);
+        divAdd.appendChild(divAddCont);
+        divCont.appendChild(divAdd);
+
         let img = document.createElement('img');
         img.src = "/images/models/"+asset.type+"/"+asset.asset_name+".png";
-        div.appendChild(img);
+        divCont.appendChild(img);
 
         let text = document.createTextNode(asset.asset_name);
-        div.appendChild(text);
+        divCont.appendChild(text);
 
+        div.appendChild(divCont);
         container.appendChild(div);
 
         div.addEventListener("click", function() {
@@ -79,7 +97,7 @@ experience.world.on('start_transform', () => {
 
     // adds the border to the asset selected
     for (let i = 0; i < added_assets.length; i++) {
-        if (added_assets[i].textContent == asset_name){
+        if (added_assets[i].textContent == unique_name){
             added_assets[i].classList.add('border');
         }else{
             added_assets[i].classList.remove('border');
@@ -143,18 +161,21 @@ function updateAddedAssets(){
         let div = document.createElement('div');
         div.classList.add('added_asset');
         div.setAttribute("pos", i)
+
+        let divCont = document.createElement('div');
         let img = document.createElement('img');
         img.src = "/images/models/"+model.constructor.type+"/"+model.constructor.asset_name+".png"
-        div.appendChild(img)
+        divCont.appendChild(img)
         let text = document.createTextNode(model.unique_name);
-        div.appendChild(text);
+        divCont.appendChild(text);
         let divDel = document.createElement('div');
         divDel.classList.add('asset_delete');
         let icon = document.createElement('i');
         icon.classList.add("fa-solid");
         icon.classList.add("fa-trash-can");
         divDel.appendChild(icon);
-        div.appendChild(divDel);
+        divCont.appendChild(divDel);
+        div.appendChild(divCont);
         addedAssetsCont.appendChild(div);
 
         // watch when the delete button is clicked

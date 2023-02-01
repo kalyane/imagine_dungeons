@@ -98,7 +98,7 @@ html
                     .collapsible_content#light
 
                     div.collapsible
-                        i.fa-solid.fa-coins
+                        i.fa-solid.fa-cube
                         | &nbsp;&nbsp;
                         span Objects
                         i.fa-solid.fa-plus.icon_collapse
@@ -121,14 +121,14 @@ html
                 this.classList.toggle("active");
                 var icon = this.getElementsByClassName("icon_collapse")[0];
                 var content = this.nextSibling;
-                if (content.style.display === "block") {
+                if (content.style.display === "flex") {
                     icon.classList.remove("fa-minus");
                     icon.classList.add("fa-plus");
                     content.style.display = "none";
                 } else {
                     icon.classList.remove("fa-plus");
                     icon.classList.add("fa-minus");
-                    content.style.display = "block";
+                    content.style.display = "flex";
                 }
             });
         }

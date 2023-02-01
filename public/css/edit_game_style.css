@@ -170,30 +170,55 @@ body, html {
 }
 
 .collapsible_content {
-    padding: 0 18px;
     display: none;
     overflow: hidden;
+    flex-wrap: wrap;
 }
 
 .icon_collapse{
     float: right;
 }
 
-.asset_card, .added_asset{
+.asset_card{
+    box-sizing: border-box;
+    padding: 10px;
+    flex: 0 0 33.3333%;
+    text-align: center;
+    font-size: small;
+    max-width: 33.3333%;
+    position: relative;
+}
+
+.asset_card div{
+    box-sizing: border-box;
     cursor: pointer;
     background-color: white;
     border-radius: 5px;
     padding: 10px;
-    margin: 10px;
-    display: inline-table;
+}
+
+.added_asset{
+    box-sizing: border-box;
+    padding: 10px;
+    flex: 0 0 16.6666%;
     text-align: center;
     font-size: small;
     position: relative;
+    max-width: 16.6666%;
+}
+
+.added_asset div{
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
 }
 
 .asset_card img, .added_asset img{
-    height: 80px;
-    width: 80px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    width: 100%;
+    height: 100%;
     display: block;
 }
 
@@ -206,6 +231,7 @@ body, html {
     top: 5px;
     right: 5px;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .asset_delete:hover{
@@ -216,6 +242,33 @@ body, html {
     height: calc(100% - 38px);
     max-height: calc(100% - 38px);
     overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.add {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    background-color: transparent !important;
+    width: 100%;
+    height: 100%;
+}
+
+.add i{
+    font-size: 40px;
+}
+
+.add div {
+    background: rgba(177, 83, 40, 0.8) !important;
+    width: 100%;
+    height: 100%;
+}
+
+.asset_card div:hover .add{
+    display: block;
 }
 
 .project_player,  .project_solid{

@@ -99,6 +99,16 @@ export default [
         type: 'gltfModel',
         path: '/models/modular/fence_straight.glb'
     },
+    {
+        name: 'column_circle',
+        type: 'gltfModel',
+        path: '/models/modular/column_circle.glb'
+    },
+    {
+        name: 'column_square',
+        type: 'gltfModel',
+        path: '/models/modular/column_square.glb'
+    },
 
     // objects
     {
@@ -115,16 +125,6 @@ export default [
         name: 'chair',
         type: 'gltfModel',
         path: '/models/objects/chair.glb'
-    },
-    {
-        name: 'column_circle',
-        type: 'gltfModel',
-        path: '/models/objects/column_circle.glb'
-    },
-    {
-        name: 'column_square',
-        type: 'gltfModel',
-        path: '/models/objects/column_square.glb'
     },
     {
         name: 'crate',
@@ -145,6 +145,18 @@ export default [
         name: 'table_small',
         type: 'gltfModel',
         path: '/models/objects/table_small.glb'
+    },
+
+    // lights
+    {
+        name: 'torch',
+        type: 'gltfModel',
+        path: '/models/lights/torch.glb'
+    },
+    {
+        name: 'woodfire',
+        type: 'gltfModel',
+        path: '/models/lights/woodfire.glb'
     },
 
     // weapons

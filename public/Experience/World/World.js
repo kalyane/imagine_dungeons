@@ -15,6 +15,19 @@ import Rogue from './Models/Player/Rogue.js'
 // monster
 import Alien from './Models/Monster/Alien.js'
 
+// lights
+import Torch from './Models/Light/Torch.js'
+import Woodfire from './Models/Light/Woodfire.js'
+
+// objects
+import Banner from './Models/Object/Banner.js'
+import Barrel from './Models/Object/Barrel.js'
+import Chair from './Models/Object/Chair.js'
+import Crate from './Models/Object/Crate.js'
+import StatueHorse from './Models/Object/StatueHorse.js'
+import TableBig from './Models/Object/TableBig.js'
+import TableSmall from './Models/Object/TableSmall.js'
+
 // controls
 import { DragControls } from '/jsm/controls/DragControls.js'
 import { TransformControls } from '/jsm/controls/TransformControls.js'
@@ -53,13 +66,31 @@ export default class World extends EventEmitter
         {
             // Setup
             this.modelClasses = {
+                // modular
                 "wall" : Wall,
                 "fence_90" : Fence90,
                 "fence_end" : FenceEnd,
                 "fence_straight" : FenceStraight,
                 "column_square" : ColumnSquare,
                 "column_circle" : ColumnCircle,
+
+                // object
+                "banner" : Banner,
+                "barrel" : Barrel,
+                "chair" : Chair,
+                "crate" : Crate,
+                "statue_horse" : StatueHorse,
+                "table_big" : TableBig,
+                "table_small" : TableSmall,
+
+                // light
+                "torch" : Torch,
+                "woodfire" : Woodfire,
+
+                // player
                 "rogue" : Rogue,
+
+                // monster
                 "alien" : Alien
             }
 
@@ -192,7 +223,7 @@ export default class World extends EventEmitter
             if (this.assets[i].constructor.type == "monster"){
                 this.monsters.push(this.assets[i])
             }
-            if (this.assets[i].constructor.type == "modular"){
+            if (this.assets[i].constructor.type == "modular" || this.assets[i].constructor.type == "object"){
                 this.solids.push(this.assets[i])
                 this.solidModels.push(this.assets[i].modelDragBox)
             }
