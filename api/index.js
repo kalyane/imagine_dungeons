@@ -4,7 +4,7 @@ const session = require('express-session');
 const path = require('path');
 
 const passport = require('passport');  // authentication
-const User = require('../dbmodels/user.js'); // User Model 
+const User = require('./dbmodels/user.js'); // User Model 
 
 const mongoose = require('mongoose');
 
