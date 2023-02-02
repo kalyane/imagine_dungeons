@@ -2,6 +2,9 @@
   "name": "imagine_dungeons",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "nodemon ./script.js",
     "start": "node ./script.js"
