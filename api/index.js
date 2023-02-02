@@ -22,11 +22,6 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.get('/index.js', function(req, res) {
-    res.set('Content-Type', 'application/javascript');
-    res.sendFile(__dirname + '/index.js');
-  });
-
 // defining public directories
 app.use(express.static(__dirname + '../../public', {extensions: ["js"]}));
   
