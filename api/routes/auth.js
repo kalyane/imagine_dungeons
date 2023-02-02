@@ -3,7 +3,7 @@ const passport = require('passport');
 
 let router = express.Router();
 
-const User = require('../../dbmodels/user.js'); // User Model 
+const User = require('../../dbmodels/User.js'); // User Model 
 
 passport.use(User.createStrategy());
 
