@@ -44,3 +44,7 @@ const games = require("./routes/games")
 app.use("/games", games)
 const assets = require("./routes/assets")
 app.use("/assets", assets)
+
+app.use(function (req, res) {
+    res.render('error');
+});
