@@ -25,6 +25,7 @@ experience.world.on('ready', () => {
         experience.world.trigger("everything_ready")
     });
 
+
     // gets all possible assets to use and add to edit page
     for (var key in experience.world.modelClasses){
         let asset = experience.world.modelClasses[key];

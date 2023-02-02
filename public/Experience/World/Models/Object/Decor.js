@@ -1,9 +1,9 @@
 import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../../../Experience.js'
 
-export default class Object
+export default class Decor
 {
-    static type = "object";
+    static type = "decor";
     constructor()
     {
         this.experience = new Experience()

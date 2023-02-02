@@ -1,7 +1,7 @@
-import Modular from './Object.js'
+import Decor from './Decor.js'
 import * as THREE from '/node_modules/three/build/three.module.js'
 
-export default class StatueHorse extends Modular
+export default class StatueHorse extends Decor
 {
     static asset_name = 'statue_horse'
     constructor(unique_name)

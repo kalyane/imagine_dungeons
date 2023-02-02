@@ -1,7 +1,7 @@
-import Modular from './Object.js'
+import Decor from './Decor.js'
 import * as THREE from '/node_modules/three/build/three.module.js'
 
-export default class Barrel extends Modular
+export default class Barrel extends Decor
 {
     static asset_name = 'barrel'
     constructor(unique_name)

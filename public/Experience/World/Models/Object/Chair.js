@@ -1,7 +1,7 @@
-import Modular from './Object.js'
+import Decor from './Decor.js'
 import * as THREE from '/node_modules/three/build/three.module.js'
 
-export default class Chair extends Modular
+export default class Chair extends Decor
 {
     static asset_name = 'chair'
     constructor(unique_name)

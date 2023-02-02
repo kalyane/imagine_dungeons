@@ -125,41 +125,41 @@ export default [
         path: '/models/modular/column_square.glb'
     },
 
-    // objects
+    // decor
     {
         name: 'banner',
         type: 'gltfModel',
-        path: '/models/objects/banner.glb'
+        path: '/models/decor/banner.glb'
     },
     {
         name: 'barrel',
         type: 'gltfModel',
-        path: '/models/objects/barrel.glb'
+        path: '/models/decor/barrel.glb'
     },
     {
         name: 'chair',
         type: 'gltfModel',
-        path: '/models/objects/chair.glb'
+        path: '/models/decor/chair.glb'
     },
     {
         name: 'crate',
         type: 'gltfModel',
-        path: '/models/objects/crate.glb'
+        path: '/models/decor/crate.glb'
     },
     {
         name: 'statue_horse',
         type: 'gltfModel',
-        path: '/models/objects/statue_horse.glb'
+        path: '/models/decor/statue_horse.glb'
     },
     {
         name: 'table_big',
         type: 'gltfModel',
-        path: '/models/objects/table_big.glb'
+        path: '/models/decor/table_big.glb'
     },
     {
         name: 'table_small',
         type: 'gltfModel',
-        path: '/models/objects/table_small.glb'
+        path: '/models/decor/table_small.glb'
     },
 
     // lights

@@ -83,15 +83,6 @@ export default class World extends EventEmitter
                 "end_door" : EndDoor,
                 "arch_bars" : ArchBars,
 
-                // object
-                "banner" : Banner,
-                "barrel" : Barrel,
-                "chair" : Chair,
-                "crate" : Crate,
-                "statue_horse" : StatueHorse,
-                "table_big" : TableBig,
-                "table_small" : TableSmall,
-
                 // light
                 "torch" : Torch,
                 "woodfire" : Woodfire,
@@ -100,7 +91,16 @@ export default class World extends EventEmitter
                 "rogue" : Rogue,
 
                 // monster
-                "alien" : Alien
+                "alien" : Alien,
+
+                // object
+                "banner" : Banner,
+                "barrel" : Barrel,
+                "chair" : Chair,
+                "crate" : Crate,
+                "statue_horse" : StatueHorse,
+                "table_big" : TableBig,
+                "table_small" : TableSmall
             }
 
             // if not playing user can drag objects
