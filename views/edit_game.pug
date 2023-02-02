@@ -16,6 +16,10 @@ html
                 }
             }
     body 
+        #loading
+            .loading-animation 
+            p Loading
+
         nav
             button#play(onclick="location.href='/games/play/"+game._id+"';")
                 i.fa-solid.fa-play(style="margin-right: 10px;")
@@ -136,56 +140,79 @@ html
             });
         }
 
-        introJs().setOptions({
-            showProgress: true,
-            exitOnOverlayClick: true,
-            steps: [
-            { 
-                title: "Welcome",
-                intro: "Unleash your creativity and bring your dungeon game vision to life! On this game editing page, you have the tools to create a customized 3D dungeon game that includes an architecture for training an AI agent."
-            },
-            {
-                element: '.settings',
-                title: "General Game Settings",
-                intro: 'Here you can customize the general game settings to your liking.',
-                position: 'right'
-            },
-            {
-                element: '.assets',
-                title: "Choose Your Game Assets",
-                intro: "This section is home to a diverse collection of assets, organized into categories for easy browsing. Simply click on your desired asset to add it to the center of your game.",
-                position: 'left'
-            },
-            {
-                element: '.canva',
-                title: "Game Layout",
-                intro: "Once you add an asset, it will appear in the center of the layout, but you have the power to rearrange it to your liking. Easily change the position of an asset by dragging it or by clicking 'G'. You can also adjust the rotation of an asset by dragging the green circle under it or by clicking 'R' if the circle is not already visible.",
-                position: 'bottom'
-            },
-            {
-                element: '.project',
-                title: "Manage Your Assets",
-                intro: "In this section, you can view all the assets that are currently in your game, including the ability to select and highlight specific assets. Additionally, you have the power to remove any unwanted assets.",
-                position: 'top'
-            },
-            {
-                element: '.properties',
-                title: "Asset properties",
-                intro: "Whenever you select an asset, this section will display its properties for you to review and adjust as needed. Take control of your game's look and feel and make it truly your own.",
-                position: 'right'
-            },
-            {
-                element: '#save',
-                title: "Save Your Game",
-                intro: "This game editing page doesn't save automatically, so be sure to click on the 'SAVE GAME' button to preserve your progress and ensure you don't lose any of your edits. Please note that it may take a few seconds to save.",
-                position: 'bottom'
-            },
-            {
-                element: '#play',
-                title: "Play Your Game",
-                intro: "Simply click the 'Play Your Game' button to enter the world you've created. This is also the page where your AI will have access, so you can see how it performs in the environment you've created.",
-                position: 'bottom'
+        function startIntro(){
+            introJs().setOptions({
+                showProgress: true,
+                exitOnOverlayClick: true,
+                steps: [
+                { 
+                    title: "Welcome",
+                    intro: "Unleash your creativity and bring your dungeon game vision to life! On this game editing page, you have the tools to create a customized 3D dungeon game that includes an architecture for training an AI agent."
+                },
+                {
+                    element: '.settings',
+                    title: "General Game Settings",
+                    intro: 'Here you can customize the general game settings to your liking.',
+                    position: 'right'
+                },
+                {
+                    element: '.assets',
+                    title: "Choose Your Game Assets",
+                    intro: "This section is home to a diverse collection of assets, organized into categories for easy browsing. Simply click on your desired asset to add it to the center of your game.",
+                    position: 'left'
+                },
+                {
+                    element: '.canva',
+                    title: "Game Layout",
+                    intro: "Once you add an asset, it will appear in the center of the layout, but you have the power to rearrange it to your liking. Easily change the position of an asset by dragging it or by clicking 'G'. You can also adjust the rotation of an asset by dragging the green circle under it or by clicking 'R' if the circle is not already visible.",
+                    position: 'bottom'
+                },
+                {
+                    element: '.project',
+                    title: "Manage Your Assets",
+                    intro: "In this section, you can view all the assets that are currently in your game, including the ability to select and highlight specific assets. Additionally, you have the power to remove any unwanted assets.",
+                    position: 'top'
+                },
+                {
+                    element: '.properties',
+                    title: "Asset properties",
+                    intro: "Whenever you select an asset, this section will display its properties for you to review and adjust as needed. Take control of your game's look and feel and make it truly your own.",
+                    position: 'right'
+                },
+                {
+                    element: '#save',
+                    title: "Save Your Game",
+                    intro: "This game editing page doesn't save automatically, so be sure to click on the 'SAVE GAME' button to preserve your progress and ensure you don't lose any of your edits. Please note that it may take a few seconds to save.",
+                    position: 'bottom'
+                },
+                {
+                    element: '#play',
+                    title: "Play Your Game",
+                    intro: "Simply click the 'Play Your Game' button to enter the world you've created. This is also the page where your AI will have access, so you can see how it performs in the environment you've created.",
+                    position: 'bottom'
+                }
+                
+                ]
+            }).start()
+        }
+
+        let loaded = false;
+        let ready = false;
+
+        window.addEventListener("load", function() {
+            loaded = true;
+            checkLoading();
+
+            window.experience.world.on('everything_ready', function() {
+                ready = true;
+                checkLoading();
+            });
+        });
+        
+        function checkLoading() {
+            if (loaded && ready) {
+                const loading = document.querySelector("#loading");
+                loading.style.display = "none";
+                startIntro()
             }
-            
-            ]
-        }).start();
+        }

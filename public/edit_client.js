@@ -21,6 +21,8 @@ experience.world.on('ready', () => {
         }
         // update assets card on the project tab
         updateAddedAssets()
+
+        experience.world.trigger("everything_ready")
     });
 
     // gets all possible assets to use and add to edit page
