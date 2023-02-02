@@ -48,3 +48,5 @@ app.use("/assets", assets)
 app.use(function (req, res) {
     res.render('error');
 });
+
+module.exports = app;
