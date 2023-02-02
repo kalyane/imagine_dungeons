@@ -22,7 +22,7 @@ experience.world.on('ready', () => {
         // update assets card on the project tab
         updateAddedAssets()
 
-        experience.world.trigger("everything_ready")
+        experience.trigger("ready")
     });
 
 

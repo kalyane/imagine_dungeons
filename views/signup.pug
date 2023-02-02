@@ -5,6 +5,10 @@ html
         link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
     body 
+        #loading
+            .loading-animation 
+            p Loading
+            
         if message
             .alert(class=message.type)= message.text
         .bg
@@ -31,3 +35,9 @@ html
 
                 div.link_question Already have an account? 
                     a(href="/login") Login now
+
+script.
+    window.addEventListener("load", function() {
+        const loading = document.querySelector("#loading");
+        loading.style.display = "none";
+    });

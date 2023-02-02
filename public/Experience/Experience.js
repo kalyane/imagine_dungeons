@@ -1,4 +1,5 @@
 import * as THREE from '/node_modules/three/build/three.module.js'
+import EventEmitter from './Utils/EventEmitter.js'
 
 import Sizes from './Utils/Sizes.js'
 import Time from './Utils/Time.js'
@@ -11,10 +12,11 @@ import sources from './sources.js'
 
 let instance = null
 
-export default class Experience
+export default class Experience extends EventEmitter
 {
     constructor(_canvas, gridSize = {'x':50,'z':50}, playing = false)
     {
+        super()
         // Singleton
         if(instance)
         {

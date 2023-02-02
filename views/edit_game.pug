@@ -21,12 +21,17 @@ html
             p Loading
 
         nav
-            button#play(onclick="location.href='/games/play/"+game._id+"';")
-                i.fa-solid.fa-play(style="margin-right: 10px;")
-                span PLAY
-            button#save
-                i.fa-solid.fa-cloud-arrow-up(style="margin-right: 10px;")
-                span SAVE GAME
+            .nav_left
+                button(onclick="location.href='/games'" style="color: #B15328; border: 2px solid #B15328;") YOUR GAMES 
+                button(onclick="startIntro()" style="color: #C7B386; border: 2px solid #C7B386;") TAKE A TOUR
+
+            .nav_right
+                button#play(onclick="location.href='/games/play/"+game._id+"';")
+                    i.fa-solid.fa-play(style="margin-right: 10px;")
+                    span PLAY
+                button#save
+                    i.fa-solid.fa-cloud-arrow-up(style="margin-right: 10px;")
+                    span SAVE GAME
         .edit_game(id_game=game._id)
             .left
                 .settings.box
@@ -117,8 +122,8 @@ html
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#weapon
                         
-    script(src="/static/dist/edit_client_bundle.js")
-    script(src="https://cdn.bootcdn.net/ajax/libs/intro.js/6.0.0/intro.js")
+    script(src="/static/bundles/edit_client_bundle.js")
+    script(src="/static/js/intro.js")
     script. 
         // collapsible
         var coll = document.getElementsByClassName("collapsible");
@@ -202,17 +207,17 @@ html
         window.addEventListener("load", function() {
             loaded = true;
             checkLoading();
+        });
 
-            window.experience.world.on('everything_ready', function() {
-                ready = true;
-                checkLoading();
-            });
+        window.experience.on('ready', function() {
+            ready = true;
+            checkLoading();
         });
 
         function checkLoading() {
             if (loaded && ready) {
                 const loading = document.querySelector("#loading");
                 loading.style.display = "none";
-                startIntro()
+                // startIntro() // when page loads start intro, maybe anoying
             }
         }

@@ -5,6 +5,10 @@ html
         link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
     body 
+        #loading
+            .loading-animation 
+            p Loading
+
         include includes/nav
         .home
             .banner
@@ -40,3 +44,9 @@ html
 
         include includes/footer 
             
+
+script.
+    window.addEventListener("load", function() {
+        const loading = document.querySelector("#loading");
+        loading.style.display = "none";
+    });

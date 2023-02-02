@@ -7,7 +7,7 @@ module.exports = {
         edit_client: './public/edit_client.js'
     },
     output: {
-        path: path.resolve(__dirname, 'public/dist/'),
+        path: path.resolve(__dirname, 'public/bundles/'),
         filename: '[name]_bundle.js'
     },
     module: {
