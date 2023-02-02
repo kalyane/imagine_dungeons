@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "nodemon ./script.js"
+    "dev": "nodemon ./script.js",
+    "start": "node ./script.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "express-favicon": "^2.0.1",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+    "intro.js": "^6.0.0",
     "moment": "^2.29.4",
     "mongoose": "^6.8.3",
     "morgan": "^1.10.0",
