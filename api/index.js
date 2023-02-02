@@ -39,7 +39,7 @@ app.set('view engine', 'pug');
 
 // importing and using routing files
 const auth = require("./routes/auth")
-app.use("/", auth)
+// app.use("/", auth)
 const games = require("./routes/games")
 app.use("/games", games)
 const assets = require("./routes/assets")
