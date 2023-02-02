@@ -22,10 +22,16 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+app.get('/index.js', function(req, res) {
+    res.set('Content-Type', 'application/javascript');
+    res.sendFile(__dirname + '/index.js');
+  });
+
 // defining public directories
-app.use(express.static(__dirname + '/public'));
-app.use('/build/', express.static(path.join(__dirname, '/node_modules/three/build')));
-app.use('/jsm/', express.static(path.join(__dirname, '/node_modules/three/examples/jsm')));
+app.use(express.static(__dirname + '../../public', {extensions: ["js"]}));
+  
+app.use('/build/', express.static(path.join(__dirname, '../node_modules/three/build'), {extensions: ["js"]}));
+app.use('/jsm/', express.static(path.join(__dirname, '../node_modules/three/examples/jsm'), {extensions: ["js"]}));
 
 // establish the server connection port
 const port = process.env.PORT || 8080;
@@ -34,7 +40,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch((err) => console.log(err));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 // importing and using routing files

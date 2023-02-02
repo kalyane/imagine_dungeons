@@ -1,5 +1,5 @@
 const express = require('express');
-const Game = require('../dbmodels/Game');
+const Game = require('../../dbmodels/Game');
 
 let router = express.Router();
 
