@@ -4,7 +4,6 @@ const session = require('express-session');
 const path = require('path');
 
 const passport = require('passport');  // authentication
-const User = require('./dbmodels/user.js'); // User Model 
 
 const mongoose = require('mongoose');
 
@@ -28,12 +27,6 @@ app.use(bodyparser.json())
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.use(User.createStrategy());
-
-// To use with sessions
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 // defining public directories
 app.use('/static', express.static(__dirname + '../../public'))

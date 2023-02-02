@@ -5,6 +5,12 @@ let router = express.Router();
 
 const User = require('../../dbmodels/user.js'); // User Model 
 
+passport.use(User.createStrategy());
+
+// To use with sessions
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 router
     .route("/")
     .get((request, response)=>{
