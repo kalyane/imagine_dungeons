@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/kalyane/imagine_dungeons/main/public/images/logo-icon.png)
+![Logo](https://raw.githubusercontent.com/kalyane/imagine_dungeons/main/public/static/images/logo-icon.png)
 # Imagine Dungeons: A platform for developing 3D dungeon games with an architecture that allows for the training of intelligent agents to play the game.
 
 

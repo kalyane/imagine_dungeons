@@ -4,33 +4,33 @@ import * as THREE from '/node_modules/three/build/three.module.js'
 import Floor from './Floor.js'
 
 // modular
-import Wall from './Models/Modular/Wall.js'
-import Fence90 from './Models/Modular/Fence90.js'
-import FenceEnd from './Models/Modular/FenceEnd.js'
-import FenceStraight from './Models/Modular/FenceStraight.js'
-import ColumnSquare from './Models/Modular/ColumnSquare.js'
-import ColumnCircle from './Models/Modular/ColumnCircle.js'
-import Arch from './Models/Modular/Arch.js'
-import EndDoor from './Models/Modular/EndDoor.js'
-import ArchBars from './Models/Modular/ArchBars.js'
+import Wall from './models/Modular/Wall.js'
+import Fence90 from './models/Modular/Fence90.js'
+import FenceEnd from './models/Modular/FenceEnd.js'
+import FenceStraight from './models/Modular/FenceStraight.js'
+import ColumnSquare from './models/Modular/ColumnSquare.js'
+import ColumnCircle from './models/Modular/ColumnCircle.js'
+import Arch from './models/Modular/Arch.js'
+import EndDoor from './models/Modular/EndDoor.js'
+import ArchBars from './models/Modular/ArchBars.js'
 
 // player
-import Rogue from './Models/Player/Rogue.js'
+import Rogue from './models/Player/Rogue.js'
 // monster
-import Alien from './Models/Monster/Alien.js'
+import Alien from './models/Monster/Alien.js'
 
 // lights
-import Torch from './Models/Light/Torch.js'
-import Woodfire from './Models/Light/Woodfire.js'
+import Torch from './models/Light/Torch.js'
+import Woodfire from './models/Light/Woodfire.js'
 
 // objects
-import Banner from './Models/Object/Banner.js'
-import Barrel from './Models/Object/Barrel.js'
-import Chair from './Models/Object/Chair.js'
-import Crate from './Models/Object/Crate.js'
-import StatueHorse from './Models/Object/StatueHorse.js'
-import TableBig from './Models/Object/TableBig.js'
-import TableSmall from './Models/Object/TableSmall.js'
+import Banner from './models/Object/Banner.js'
+import Barrel from './models/Object/Barrel.js'
+import Chair from './models/Object/Chair.js'
+import Crate from './models/Object/Crate.js'
+import StatueHorse from './models/Object/StatueHorse.js'
+import TableBig from './models/Object/TableBig.js'
+import TableSmall from './models/Object/TableSmall.js'
 
 // controls
 import { DragControls } from '/node_modules/three/examples/jsm/controls/DragControls.js'

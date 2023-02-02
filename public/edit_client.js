@@ -53,7 +53,7 @@ experience.world.on('ready', () => {
         divCont.appendChild(divAdd);
 
         let img = document.createElement('img');
-        img.src = "/images/models/"+asset.type+"/"+asset.asset_name+".png";
+        img.src = "/static/images/models/"+asset.type+"/"+asset.asset_name+".png";
         divCont.appendChild(img);
 
         let text = document.createTextNode(asset.asset_name);
@@ -115,7 +115,7 @@ experience.world.on('start_transform', () => {
     // show image and asset unique name
     document.getElementsByClassName("selected")[0].removeAttribute("hidden");
     document.getElementById('asset_name').value = selected_asset.unique_name;
-    document.getElementById('selected_img').setAttribute('src',"/images/models/"+selected_asset.constructor.type+"/"+selected_asset.constructor.asset_name+".png");
+    document.getElementById('selected_img').setAttribute('src',"/static/images/models/"+selected_asset.constructor.type+"/"+selected_asset.constructor.asset_name+".png");
 
     // check if asset has life
     if ('life' in selected_asset){
@@ -167,7 +167,7 @@ function updateAddedAssets(){
 
         let divCont = document.createElement('div');
         let img = document.createElement('img');
-        img.src = "/images/models/"+model.constructor.type+"/"+model.constructor.asset_name+".png"
+        img.src = "/static/images/models/"+model.constructor.type+"/"+model.constructor.asset_name+".png"
         divCont.appendChild(img)
         let text = document.createTextNode(model.unique_name);
         divCont.appendChild(text);

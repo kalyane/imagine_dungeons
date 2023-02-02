@@ -19,9 +19,9 @@ export default class Floor
 
         // setting texture
         const textureLoader = new THREE.TextureLoader();
-        this.floorTexture = textureLoader.load( '/images/texture/floor.png' );
-        const normalMap = textureLoader.load( '/images/texture/floor_normal.png' );
-        const bumpMap = textureLoader.load( '/images/texture/floor_bump.png' );
+        this.floorTexture = textureLoader.load( '/static/images/texture/floor.png' );
+        const normalMap = textureLoader.load( '/static/images/texture/floor_normal.png' );
+        const bumpMap = textureLoader.load( '/static/images/texture/floor_bump.png' );
 
         this.floorTexture.wrapS = THREE.RepeatWrapping;
         this.floorTexture.wrapT = THREE.RepeatWrapping;

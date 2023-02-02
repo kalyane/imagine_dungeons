@@ -2,8 +2,8 @@ doctype html
 html 
     head 
         title Your Games - Imagine Dungeons 
-        link(rel="stylesheet" href="/css/style.css")
-        link(rel="icon" type="image/x-icon" href="/images/favicon.ico")
+        link(rel="stylesheet" href="/static/css/style.css")
+        link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
     body 
         include includes/nav
@@ -29,7 +29,7 @@ html
                 each game in games 
                     div.game-card
                         .content
-                            img(src="/images/wall.png")
+                            img(src="/static/images/wall.png")
                             .icons 
                                 a(href="/games/edit/"+game._id)
                                     i.fa-solid.fa-pen-to-square
