@@ -1,5 +1,5 @@
-import * as THREE from '/build/three.module.js'
-import * as SkeletonUtils from '/jsm/utils/SkeletonUtils.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
+import * as SkeletonUtils from '/node_modules/three/examples/jsm/utils/SkeletonUtils.js'
 import Monster from './Monster.js'
 
 export default class Alien extends Monster

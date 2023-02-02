@@ -1,6 +1,6 @@
 import Experience from '../Experience.js'
 import EventEmitter from '../Utils/EventEmitter.js'
-import * as THREE from '/build/three.module.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
 import Floor from './Floor.js'
 
 // modular
@@ -33,8 +33,8 @@ import TableBig from './Models/Object/TableBig.js'
 import TableSmall from './Models/Object/TableSmall.js'
 
 // controls
-import { DragControls } from '/jsm/controls/DragControls.js'
-import { TransformControls } from '/jsm/controls/TransformControls.js'
+import { DragControls } from '/node_modules/three/examples/jsm/controls/DragControls.js'
+import { TransformControls } from '/node_modules/three/examples/jsm/controls/TransformControls.js'
 
 export default class World extends EventEmitter
 {

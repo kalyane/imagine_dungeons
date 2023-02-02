@@ -1,4 +1,4 @@
-import * as THREE from '/build/three.module.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../Experience.js'
 
 // still needs to figure how a dungeon environment is

@@ -1,6 +1,6 @@
-import * as THREE from '/build/three.module.js'
-import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js'
-import { FBXLoader } from '/jsm/loaders/FBXLoader.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
+import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js'
+import { FBXLoader } from '/node_modules/three/examples/jsm/loaders/FBXLoader.js'
 import EventEmitter from './EventEmitter.js'
 
 /**

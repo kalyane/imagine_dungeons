@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "scripts": {
-    "dev": "nodemon ./api/index.js",
-    "start": "node ./index.js"
+    "dev": "nodemon --watch api -e js,pug ./api/index.js & webpack --watch",
+    "start": "node ./index.js",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -34,6 +35,8 @@
     "xstate": "^4.35.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
     "@types/dat.gui": "^0.7.7",
     "babel-loader": "^9.1.0",
     "clean-webpack-plugin": "^4.0.0",
@@ -45,16 +48,7 @@
     "path-browserify": "^1.0.1",
     "portfinder-sync": "^0.0.2",
     "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "presets": [
-          "@babel/preset-env"
-        ]
-      }
-    }
   }
 }

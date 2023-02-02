@@ -25,8 +25,7 @@ app.use(session({
 // defining public directories
 app.use(express.static(__dirname + '../../public', {extensions: ["js"]}));
   
-app.use('/build/', express.static(path.join(__dirname, '../node_modules/three/build'), {extensions: ["js"]}));
-app.use('/jsm/', express.static(path.join(__dirname, '../node_modules/three/examples/jsm'), {extensions: ["js"]}));
+//app.use('/dist/', express.static(path.join(__dirname, '../../dist/'), {extensions: ["js"]}));
 
 // establish the server connection port
 const port = process.env.PORT || 8080;

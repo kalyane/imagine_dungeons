@@ -10,7 +10,7 @@ html
         script(type="importmap").
             {
                 "imports": {
-                    "three": "https://cdn.skypack.dev/three@0.139.2/build/three.module",
+                    "three": "https://cdn.skypack.dev/three@0.139.2/node_modules/three/build/three.module",
                         "three/": "https://cdn.skypack.dev/three@0.139.2/",      
                         "dat.gui": "https://cdn.skypack.dev/dat.gui"
                 }
@@ -117,7 +117,7 @@ html
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#weapon
                         
-    script(type="module" src="/edit_client.js")
+    script(src="/dist/edit_client_bundle.js")
     script(src="https://cdn.bootcdn.net/ajax/libs/intro.js/6.0.0/intro.js")
     script. 
         // collapsible
@@ -208,7 +208,7 @@ html
                 checkLoading();
             });
         });
-        
+
         function checkLoading() {
             if (loaded && ready) {
                 const loading = document.querySelector("#loading");
