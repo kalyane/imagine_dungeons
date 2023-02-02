@@ -18,6 +18,7 @@ var url = "/assets/" + id_game
 // includes all assets from the database into the experience
 
 experience.world.on('ready', () => {
+    console.log(experience.resources)
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(assets) {

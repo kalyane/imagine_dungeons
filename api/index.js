@@ -23,7 +23,7 @@ app.use(session({
 }));
 
 // defining public directories
-app.use(express.static(__dirname + '../../public', {extensions: ["js"]}));
+app.use(express.static(__dirname + '../../public'));
   
 //app.use('/dist/', express.static(path.join(__dirname, '../../dist/'), {extensions: ["js"]}));
 
