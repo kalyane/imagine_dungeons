@@ -44,3 +44,6 @@ app.use("/assets", assets)
 app.all('*', (req, res) => {
     res.render('404');
 })
+
+
+module.exports = app;
