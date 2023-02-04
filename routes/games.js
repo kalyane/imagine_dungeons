@@ -1,22 +1,21 @@
 const express = require('express');
-const Game = require('../../dbmodels/Game');
-const connectEnsureLogin = require('connect-ensure-login'); //authorization
-// app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+const Game = require('../dbmodels/Game');
+const passport = require('passport');
+
+require('./jwt_strategy');
 
 let router = express.Router();
 
-// TODO: guarantee only the owner can access edit pages
-
 router
     .route("/")
-    .get(connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response) => {
         const games = await Game.find({ user: request.user._id }).populate("user", "name");
         response.render('games', {user: request.user, games: games});
     });
 
 router
     .route("/create")
-    .get(connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response) => {
         const game = new Game({ user: request.user._id, size_x: 50, size_z: 50 });
         await game.save();
         response.redirect(`/games/edit/${game._id}`);
@@ -24,7 +23,7 @@ router
 
 router
     .route("/edit/:id_game")
-    .get(async (request, response)=>{
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response)=>{
         // TODO: make sure only user -----
         var id_game = request.params.id_game;
         try {
@@ -56,8 +55,7 @@ router
 
 router
     .route("/delete/:id_game")
-    .get(connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
-        console.log("here")
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response) => {
         try {
             const game = await Game.findOneAndDelete({ _id: request.params.id_game, user: request.user._id });
             if (!game) {
@@ -71,7 +69,7 @@ router
 
 router
     .route("/update/:id_game")
-    .post(async (request, response)=>{
+    .post(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response)=>{
         var id_game = request.params.id_game;
         var name = request.body.name;
         var size_x = request.body.size_x

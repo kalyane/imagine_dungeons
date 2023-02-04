@@ -1,7 +1,7 @@
 const express = require('express');
 
 let router = express.Router();
-const Asset = require('../../dbmodels/Asset');
+const Asset = require('../dbmodels/Asset');
 
 router
     .route("/:id_game")
