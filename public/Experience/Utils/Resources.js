@@ -19,10 +19,8 @@ export default class Resources extends EventEmitter
         this.loaded = 0
 
         this.setLoaders()
-
-        window.addEventListener("load", function() {
-            this.startLoading()
-        });
+        
+        this.startLoading()
     }
 
     setLoaders()

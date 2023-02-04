@@ -19,6 +19,8 @@ app.use(cookieParser())
 // defining public directories
 app.use('/static', express.static(path.join(__dirname, '../public')))
 
+mongoose.set('strictQuery', false);
+
 // establish the server connection port
 const port = process.env.PORT || 8080;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
