@@ -107,21 +107,34 @@ export default class Monster
         
         // Actions
         this.animation.actions = {} 
-        this.animation.actions.bite_front = this.animation.mixer.clipAction(animations[0])
-        this.animation.actions.bite_inplace = this.animation.mixer.clipAction(animations[1])
-        this.animation.actions.dance = this.animation.mixer.clipAction(animations[2])
-        this.animation.actions.death = this.animation.mixer.clipAction(animations[3])
+        this.animation.actions.idle = null
+        this.animation.actions.dance = null
+
+        for (var i=0; i < animations.length; i++){
+            if (animations[i].name == "Walk" || animations[i].name == "Flying"){
+                this.animation.actions.move = this.animation.mixer.clipAction(animations[i])
+                if (this.animation.actions.idle == null){
+                    this.animation.actions.idle = this.animation.mixer.clipAction(animations[i])
+                    this.animation.actions.dance = this.animation.mixer.clipAction(animations[i])
+                }
+            } else if (animations[i].name == "Idle"){
+                this.animation.actions.idle = this.animation.mixer.clipAction(animations[i])
+            } else if (animations[i].name == "Bite_Front"){
+                this.animation.actions.attack = this.animation.mixer.clipAction(animations[i])
+            } else if (animations[i].name == "HitRecieve"){
+                this.animation.actions.hit = this.animation.mixer.clipAction(animations[i])
+            } else if (animations[i].name == "Death"){
+                this.animation.actions.death = this.animation.mixer.clipAction(animations[i])
+            } else if (animations[i].name == "Dance"){
+                this.animation.actions.dance = this.animation.mixer.clipAction(animations[i])
+            }
+        }
+
         this.animation.actions.death.setLoop(THREE.LoopOnce);
         this.animation.actions.death.clampWhenFinished = true
-        this.animation.actions.hit_recieve = this.animation.mixer.clipAction(animations[4])
-        this.animation.actions.idle = this.animation.mixer.clipAction(animations[5])
-        this.animation.actions.jump = this.animation.mixer.clipAction(animations[6])
-        this.animation.actions.no = this.animation.mixer.clipAction(animations[7])
-        this.animation.actions.walk = this.animation.mixer.clipAction(animations[8])
-        this.animation.actions.yes = this.animation.mixer.clipAction(animations[9])
-
+        
         // initial animation
-        this.animation.actions.current = this.animation.actions.idle
+        this.animation.actions.current = this.animation.actions.move
         this.animation.actions.current.play()
     }
 

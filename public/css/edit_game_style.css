@@ -215,6 +215,7 @@ body, html {
     background-color: white;
     border-radius: 5px;
     padding: 10px;
+    cursor: pointer;
 }
 
 .asset_card img{
@@ -255,6 +256,7 @@ body, html {
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
 }
 
 .add {

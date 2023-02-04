@@ -66,13 +66,6 @@ experience.world.on('ready', () => {
             const asset_name = this.getAttributeNode("model").value;
             experience.world.addModel(asset_name);
             updateAddedAssets()
-            experience.world.transformControls.detach();
-            experience.world.transformControls.attach(experience.world.assets[experience.world.assets.length - 1].modelDragBox);
-            for (var key in experience.world.dictModels){
-                experience.world.dictModels[key].boxHelper.visible = false
-            }
-            experience.world.assets[experience.world.assets.length - 1].boxHelper.visible = true
-            selectAssetCard()
         });
     }
 });
@@ -98,7 +91,8 @@ function updateGridSize(){
     experience.world.floor.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
 }
 
-function selectAssetCard(){
+// keep listening to when an asset is being transformed
+experience.world.on('start_transform', () => {
     // select only the object being transformed
     var added_assets = document.getElementsByClassName("added_asset");
 
@@ -138,9 +132,10 @@ function selectAssetCard(){
         // include current value of strength to asset
         document.getElementById('strength').value = selected_asset.strength;
     }
-}
+});
 
-function unselect(){
+// when no asset is being transformed
+experience.world.on('stop_transform', () => {
     // deselect all assets
     var added_assets = document.getElementsByClassName("added_asset");
     for (let i = 0; i < added_assets.length; i++) {
@@ -151,16 +146,6 @@ function unselect(){
     document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
-}
-
-// keep listening to when an asset is being transformed
-experience.world.on('start_transform', () => {
-    selectAssetCard()
-});
-
-// when no asset is being transformed
-experience.world.on('stop_transform', () => {
-    unselect()
 });
 
 // update the asset cards in the project to be the same as in the game
@@ -196,21 +181,12 @@ function updateAddedAssets(){
         div.appendChild(divCont);
         addedAssetsCont.appendChild(div);
 
-        // 
-        divCont.addEventListener("click", () => {
-
-            for (var key in experience.world.dictModels){
-                experience.world.dictModels[key].boxHelper.visible = false
-            }
-
+        // watch when card is clicked
+        div.addEventListener("click", function(){
+            console.log(experience.world.dictModels[model.unique_name])
             experience.world.dictModels[model.unique_name].boxHelper.visible = true
-
-            // detach the previous object
             experience.world.transformControls.detach();
-            // attach the newly selected object
-            experience.world.transformControls.attach(experience.world.dictModels[model.unique_name].modelDragBox);
-
-            selectAssetCard()
+            experience.world.transformControls.attach(experience.world.dictModels[model.unique_name]);
         })
 
         // watch when the delete button is clicked

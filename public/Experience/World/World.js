@@ -16,8 +16,18 @@ import ArchBars from './models/Modular/ArchBars.js'
 
 // player
 import Rogue from './models/Player/Rogue.js'
+
 // monster
 import Alien from './models/Monster/Alien.js'
+import AlienTall from './models/Monster/AlienTall.js'
+import Bat from './models/Monster/Bat.js'
+import Cthulhu from './models/Monster/Cthulhu.js'
+import Cyclops from './models/Monster/Cyclops.js'
+import Demon from './models/Monster/Demon.js'
+import Ghost from './models/Monster/Ghost.js'
+import GreenDemon from './models/Monster/GreenDemon.js'
+import YellowDragon from './models/Monster/YellowDragon.js'
+import Yeti from './models/Monster/Yeti.js'
 
 // lights
 import Torch from './models/Light/Torch.js'
@@ -92,6 +102,15 @@ export default class World extends EventEmitter
 
                 // monster
                 "alien" : Alien,
+                "alien_tall" : AlienTall,
+                "bat" : Bat,
+                "cthulhu" : Cthulhu,
+                "cyclops" : Cyclops,
+                "demon" : Demon,
+                "ghost" : Ghost,
+                "green_demon" : GreenDemon,
+                "yellow_dragon" : YellowDragon,
+                "yeti" : Yeti,
 
                 // object
                 "banner" : Banner,

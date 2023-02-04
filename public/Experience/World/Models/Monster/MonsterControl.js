@@ -78,12 +78,12 @@ export default class MonsterControl
             case this.states.WALKING:
                 this.modelDragBox.lookAt(this.world.player.modelDragBox.position);
                 this.move(this.velocity)
-                this.playAnimation(this.model.animation.actions.walk);
+                this.playAnimation(this.model.animation.actions.move);
                 break;
 
             case this.states.ATTACKING:
                 this.modelDragBox.lookAt(this.world.player.modelDragBox.position);
-                play = this.model.animation.actions.bite_front;
+                play = this.model.animation.actions.attack;
 
                 if (!play.isRunning()) {
                     this.attackStartTime = this.time.current;

@@ -35,12 +35,12 @@ export default [
     {
         name: 'bat',
         type: 'gltfModel',
-        path: '/static/models/monsters/Bat.gltf'
+        path: '/static/models/monsters/Bat.glb'
     },
     {
         name: 'cthulhu',
         type: 'gltfModel',
-        path: '/static/models/monsters/Cthulhu.gltf'
+        path: '/static/models/monsters/Cthulhu.glb'
     },
     {
         name: 'cyclops',
