@@ -6,7 +6,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "dev": "nodemon --watch api -e js,pug ./index.js & webpack --watch",
+    "dev": "nodemon --watch api -e js,pug ./api/index.js & webpack --watch",
     "start": "node ./index.js",
     "build": ""
   },

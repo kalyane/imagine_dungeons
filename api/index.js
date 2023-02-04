@@ -17,7 +17,7 @@ app.use(bodyparser.json())
 app.use(cookieParser())
 
 // defining public directories
-app.use('/static', express.static(path.join(__dirname, './public')))
+app.use('/static', express.static(path.join(__dirname, '../public')))
 
 // establish the server connection port
 const port = process.env.PORT || 8080;
@@ -29,7 +29,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 require('./routes/jwt_strategy');
 
 // view engine setup
-app.set('views', path.join(__dirname, './views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 const auth = require("./routes/auth")
