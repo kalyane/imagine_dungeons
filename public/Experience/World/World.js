@@ -16,6 +16,9 @@ import ArchBars from './models/Modular/ArchBars.js'
 
 // player
 import Rogue from './models/Player/Rogue.js'
+import Cleric from './models/Player/Cleric.js'
+import Ranger from './models/Player/Ranger.js'
+import Warrior from './models/Player/Warrior.js'
 
 // monster
 import Alien from './models/Monster/Alien.js'
@@ -33,14 +36,18 @@ import Yeti from './models/Monster/Yeti.js'
 import Torch from './models/Light/Torch.js'
 import Woodfire from './models/Light/Woodfire.js'
 
-// objects
-import Banner from './models/Object/Banner.js'
-import Barrel from './models/Object/Barrel.js'
-import Chair from './models/Object/Chair.js'
-import Crate from './models/Object/Crate.js'
-import StatueHorse from './models/Object/StatueHorse.js'
-import TableBig from './models/Object/TableBig.js'
-import TableSmall from './models/Object/TableSmall.js'
+// decor
+import Banner from './Models/Decor/Banner.js'
+import Barrel from './Models/Decor/Barrel.js'
+import Chair from './Models/Decor/Chair.js'
+import Crate from './Models/Decor/Crate.js'
+import StatueHorse from './Models/Decor/StatueHorse.js'
+import TableBig from './Models/Decor/TableBig.js'
+import TableSmall from './Models/Decor/TableSmall.js'
+
+// weapons
+import Sword from './Models/Weapon/Sword.js'
+import Axe from './Models/Weapon/Axe.js'
 
 // controls
 import { DragControls } from '/node_modules/three/examples/jsm/controls/DragControls.js'
@@ -58,6 +65,7 @@ export default class World extends EventEmitter
 
         this.player;
         this.monsters = [];
+        this.weapons = [];
         this.solids = []
         this.solidModels = []
         this.assets = []
@@ -99,6 +107,9 @@ export default class World extends EventEmitter
 
                 // player
                 "rogue" : Rogue,
+                "cleric" : Cleric,
+                "ranger" : Ranger,
+                "warrior" : Warrior,
 
                 // monster
                 "alien" : Alien,
@@ -119,7 +130,11 @@ export default class World extends EventEmitter
                 "crate" : Crate,
                 "statue_horse" : StatueHorse,
                 "table_big" : TableBig,
-                "table_small" : TableSmall
+                "table_small" : TableSmall,
+
+                // weapon
+                "sword" : Sword,
+                "axe" : Axe
             }
 
             // if not playing user can drag objects
@@ -250,6 +265,9 @@ export default class World extends EventEmitter
             }
             if (this.assets[i].constructor.type == "monster"){
                 this.monsters.push(this.assets[i])
+            }
+            if (this.assets[i].constructor.type == "weapon"){
+                this.weapons.push(this.assets[i])
             }
             if (this.assets[i].constructor.type == "modular" || this.assets[i].constructor.type == "object"){
                 if (this.assets[i].separateBoxes){

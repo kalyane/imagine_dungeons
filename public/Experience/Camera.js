@@ -15,8 +15,10 @@ export default class Camera
         this.resources = this.experience.resources
 
         this.setInstance()
+
+        this.test = false
         
-        if (this.experience.playing){
+        if (this.test && this.experience.playing){
             this.currentPosition = new THREE.Vector3()
             this.currentLookat = new THREE.Vector3()
         } else {
@@ -123,7 +125,7 @@ export default class Camera
 
     update()
     {
-        if (this.experience.playing){
+        if (this.test && this.experience.playing){
             if (this.player){
                 this.followPlayer()
             }

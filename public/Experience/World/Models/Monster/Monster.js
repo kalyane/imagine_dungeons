@@ -134,7 +134,7 @@ export default class Monster
         this.animation.actions.death.clampWhenFinished = true
         
         // initial animation
-        this.animation.actions.current = this.animation.actions.move
+        this.animation.actions.current = this.animation.actions.idle
         this.animation.actions.current.play()
     }
 

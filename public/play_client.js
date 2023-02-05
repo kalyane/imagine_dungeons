@@ -24,12 +24,23 @@ experience.world.on('ready', () => {
     }).then(function(assets) {
         for (var i = 0; i < assets.length; i++){
             experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
-            let object = experience.world.dictModels[assets[i].unique_name].modelDragBox
-            object.position.x = assets[i].position_x
-            object.position.z = assets[i].position_z
-            object.quaternion.y = assets[i].quaternion_y
-            object.quaternion.w = assets[i].quaternion_w
-
+            var curr_asset = experience.world.dictModels[assets[i].unique_name]
+            curr_asset.modelDragBox.position.x = assets[i].position_x
+            curr_asset.modelDragBox.position.z = assets[i].position_z
+            curr_asset.modelDragBox.quaternion.y = assets[i].quaternion_y
+            curr_asset.modelDragBox.quaternion.w = assets[i].quaternion_w
+            if (curr_asset.life){
+                curr_asset.life = assets[i].life
+            }
+            if (curr_asset.strength){
+                curr_asset.strength = assets[i].strength
+            }
+            if (curr_asset.attack_weapon){
+                curr_asset.attack_weapon = assets[i].attack_weapon
+            }
+            if (curr_asset.defense_weapon){
+                curr_asset.defense_weapon = assets[i].defense_weapon
+            }        
         }
 
         ready.innerHTML = true

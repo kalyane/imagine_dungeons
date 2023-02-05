@@ -23,7 +23,7 @@ router
 
 router
     .route("/edit/:id_game")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response)=>{
+    .get(async (request, response)=>{
         // TODO: make sure only user -----
         var id_game = request.params.id_game;
         try {

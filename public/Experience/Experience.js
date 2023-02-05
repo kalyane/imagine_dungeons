@@ -101,10 +101,10 @@ export default class Experience extends EventEmitter
         level.innerHTML = this.world.player.level
 
         var defense = document.getElementById("defense");
-        // TODO: add the defense from shields
+        defense.innerHTML = this.world.player.defense_weapon ? this.world.player.defense_weapon.strength : "none"
 
         var attack = document.getElementById("attack");
-        attack.innerHTML = this.world.player.strength
+        attack.innerHTML = this.world.player.attack_weapon ? this.world.player.attack_weapon.strength : "none"
 
         var time = document.getElementById("time");
         time.innerHTML = this.time.elapsed

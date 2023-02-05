@@ -44,6 +44,8 @@ router
             
             let life = request.body.assets[i].life;
             let strength = request.body.assets[i].strength;
+            let attack_weapon = request.body.assets[i].attack_weapon;
+            let defense_weapon = request.body.assets[i].defense_weapon;
             var id_asset;
 
             try {
@@ -57,6 +59,8 @@ router
                     existingAsset.quaternion_w = quaternion_w;
                     existingAsset.life = life;
                     existingAsset.strength = strength;
+                    existingAsset.attack_weapon = attack_weapon;
+                    existingAsset.defense_weapon = defense_weapon;
                     await existingAsset.save();
                 } else {
                     // create new asset
@@ -70,7 +74,9 @@ router
                         quaternion_y: quaternion_y,
                         quaternion_w: quaternion_w,
                         life: life,
-                        strength: strength
+                        strength: strength,
+                        attack_weapon: attack_weapon,
+                        defense_weapon: defense_weapon
                     });
                     await newAsset.save();
                 }

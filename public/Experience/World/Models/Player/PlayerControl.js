@@ -155,7 +155,7 @@ export default class PlayerControl
                     this.isAttaking = true
                 } 
                 var elapsedTime = this.time.current - this.attackStartTime;
-                if (elapsedTime > play._clip.duration/play.timeScale * 1000) {
+                if (elapsedTime > play._clip.duration/play.timeScale * 1000 && this.isAttaking) {
                     this.endAttack()
                     play = this.model.animation.actions.idle;
                     this.isAttaking = false
@@ -199,7 +199,7 @@ export default class PlayerControl
     {
         for (var i=0; i<this.world.monsters.length; i++){
             if (this.world.checkCollision(this, this.world.monsters[i])){
-                this.world.monsters[i].life -= this.model.strength
+                this.world.monsters[i].life -= this.model.attack_weapon.strength
                 break;
             }
         }

@@ -1,6 +1,8 @@
 import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../../../Experience.js'
 import PlayerControl from './PlayerControl.js'
+import Weapon from '../Weapon/Weapon.js'
+import {GUI} from 'dat.gui'
 
 export default class Player
 {
@@ -13,10 +15,12 @@ export default class Player
         this.time = this.experience.time
         this.life = 100
         this.world = this.experience.world
-        this.strength = 50
         this.xp = 0
         this.maxLife = this.life
         this.level = 0
+
+        this.attack_weapon = "placeholder"
+        this.defense_weapon = "placeholder"
     }
 
     setModel()
@@ -46,6 +50,8 @@ export default class Player
         this.scene.add(this.modelDragBox)
         this.scene.add(this.boxHelper)
         this.scene.add(this.model)
+
+        this.rightHand = this.model.getObjectByName("mixamorigRightHandIndex1")
     }
 
     setAnimation(animations)
@@ -55,26 +61,18 @@ export default class Player
         
         // Mixer
         this.animation.mixer = new THREE.AnimationMixer(this.model)
-        
-        //order is:
-        //attack, death, idle, impact, run backward, run forward, t-pose, walk backward, walk forward
-        
-        // Actions
+
         this.animation.actions = {} 
-        this.animation.actions.attack = this.animation.mixer.clipAction(animations[0])
-        this.animation.actions.attack.timeScale = 2;
-        //this.animation.actions.attack.setLoop(THREE.LoopOnce);
-        this.animation.actions.death = this.animation.mixer.clipAction(animations[1])
+
+        for (var i=0; i < animations.length; i++){
+            this.animation.actions[animations[i].name] = this.animation.mixer.clipAction(animations[i])
+        }
+
         this.animation.actions.death.setLoop(THREE.LoopOnce);
         this.animation.actions.death.clampWhenFinished = true
-        this.animation.actions.idle = this.animation.mixer.clipAction(animations[2])
-        this.animation.actions.impact = this.animation.mixer.clipAction(animations[3])
-        this.animation.actions.run_backward = this.animation.mixer.clipAction(animations[4])
-        this.animation.actions.run_forward = this.animation.mixer.clipAction(animations[5])
-        this.animation.actions.t_pose = this.animation.mixer.clipAction(animations[6])
-        this.animation.actions.walk_backward = this.animation.mixer.clipAction(animations[7])
-        this.animation.actions.walk_forward = this.animation.mixer.clipAction(animations[8])
 
+        this.animation.actions.attack.timeScale = 2;
+        
         // initial animation
         this.animation.actions.current = this.animation.actions.idle
         this.animation.actions.current.play()
@@ -116,9 +114,52 @@ export default class Player
         this.scene.remove(this.boxHelper)
     }
 
-    
-
     setControl(){
         this.controls = new PlayerControl(this)
+
+        this.setWeapon()
+        
+    }
+
+    setWeapon(){
+        if (this.world.dictModels[this.attack_weapon]){
+            this.attack_weapon = this.world.dictModels[this.attack_weapon]
+        } else {
+            this.attack_weapon = this.world.weapons[0]
+        }
+        this.useWeapon(this.attack_weapon)
+    }
+
+    useWeapon(weapon){
+        if (weapon.attack){
+            if (this.attack_weapon.using){
+                console.log("hey")
+                this.attack_weapon.using = false
+                this.attack_weapon.model.visible = true
+                this.attack_weapon.modelDragBox.position.copy(this.modelDragBox.position)
+                this.rightHand.remove(this.attack_model)
+            }
+
+            this.attack_weapon = weapon
+            this.attack_weapon.using = true
+            
+
+            this.attack_model = this.attack_weapon.model.clone()
+            this.attack_weapon.model.visible = false
+
+            this.attack_model.scale.set(this.attack_weapon.scale, this.attack_weapon.scale, this.attack_weapon.scale)
+            this.attack_model.position.set(this.attack_weapon.offsetPos.x, this.attack_weapon.offsetPos.y, this.attack_weapon.offsetPos.z)
+            this.attack_model.rotation.set(this.attack_weapon.offsetRot.x, this.attack_weapon.offsetRot.y, this.attack_weapon.offsetRot.z)
+            this.rightHand.add(this.attack_model)
+
+            var gui = new GUI();
+            gui.add(this.attack_model.rotation, 'x', -2*Math.PI, 2*Math.PI);
+            gui.add(this.attack_model.rotation, 'y', -2*Math.PI, 2*Math.PI);
+            gui.add(this.attack_model.rotation, 'z', -2*Math.PI, 2*Math.PI);
+
+            gui.add(this.attack_model.position, 'x', -100, 100);
+            gui.add(this.attack_model.position, 'y', -100, 100);
+            gui.add(this.attack_model.position, 'z', -100, 100);
+        }
     }
 }

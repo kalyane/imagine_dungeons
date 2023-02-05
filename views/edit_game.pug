@@ -64,6 +64,14 @@ html
                             label(for="strength") Strength
                             br
                             input(type="number" id="strength" name="strength" min="1")
+                        .properties_attack(hidden)
+                            label(for="attack") Initial Attack Weapon
+                            br
+                            select(name="attack" id="attack")
+                        .properties_defense(hidden)
+                            label(for="defense") Initial Defense Weapon
+                            br
+                            select(name="defense" id="defense")
 
             .middle
                 .canva.box

@@ -2,9 +2,9 @@ import * as THREE from '/node_modules/three/build/three.module.js'
 import * as SkeletonUtils from '/node_modules/three/examples/jsm/utils/SkeletonUtils.js'
 import Player from './Player.js'
 
-export default class Rogue extends Player
+export default class Cleric extends Player
 {
-    static asset_name = 'rogue'
+    static asset_name = 'cleric'
     constructor(unique_name)
     {
         super()

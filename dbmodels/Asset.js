@@ -12,7 +12,9 @@ const assetSchema = new Schema({
    quaternion_y: Number,
    quaternion_w: Number,
    life: { type: Number, default: 0 },
-   strength: { type: Number, default: 0 }
+   strength: { type: Number, default: 0 },
+   attack_weapon: { type: String, default: "" },
+   defense_weapon: { type: String, default: "" }
 });
 
 const Asset = mongoose.model('Asset', assetSchema);

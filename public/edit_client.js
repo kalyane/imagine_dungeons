@@ -6,6 +6,9 @@ window.experience = experience;
 
 var id_game = document.getElementsByClassName("edit_game")[0].getAttributeNode("id_game").value;
 
+var weapon_attack = []
+var weapon_defense = []
+
 // get assets saved on database to populate the game
 var url = "/assets/" + id_game
 experience.world.on('ready', () => {
@@ -14,10 +17,23 @@ experience.world.on('ready', () => {
     }).then(function(assets) {
         for (var i = 0; i < assets.length; i++){
             experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.x = assets[i].position_x
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.z = assets[i].position_z
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.y = assets[i].quaternion_y
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.w = assets[i].quaternion_w
+            var curr_asset = experience.world.dictModels[assets[i].unique_name]
+            curr_asset.modelDragBox.position.x = assets[i].position_x
+            curr_asset.modelDragBox.position.z = assets[i].position_z
+            curr_asset.modelDragBox.quaternion.y = assets[i].quaternion_y
+            curr_asset.modelDragBox.quaternion.w = assets[i].quaternion_w
+            if (curr_asset.life){
+                curr_asset.life = assets[i].life
+            }
+            if (curr_asset.strength){
+                curr_asset.strength = assets[i].strength
+            }
+            if (curr_asset.attack_weapon){
+                curr_asset.attack_weapon = assets[i].attack_weapon
+            }
+            if (curr_asset.defense_weapon){
+                curr_asset.defense_weapon = assets[i].defense_weapon
+            }
         }
         // update assets card on the project tab
         updateAddedAssets()
@@ -98,6 +114,32 @@ function updateGridSize(){
     experience.world.floor.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
 }
 
+var life = document.getElementById('life');
+var strength = document.getElementById('strength');
+var attack = document.getElementById('attack');
+var defense = document.getElementById('defense');
+
+life.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].life = life.value;
+})
+
+strength.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].strength = strength.value;
+})
+
+attack.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].attack_weapon = attack.value;
+})
+
+defense.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].defense_weapon = defense.value;
+})
+
+
 function selectAssetCard(){
     // select only the object being transformed
     var added_assets = document.getElementsByClassName("added_asset");
@@ -138,6 +180,42 @@ function selectAssetCard(){
         // include current value of strength to asset
         document.getElementById('strength').value = selected_asset.strength;
     }
+
+    if ('attack_weapon' in selected_asset){
+        // make strength visible
+        document.getElementsByClassName("properties_attack")[0].removeAttribute("hidden");
+        // include current value of strength to asset
+        var select = document.getElementById('attack');
+        select.innerHTML = "";
+        for (var i=0; i<weapon_attack.length; i++){
+            var option = document.createElement('option');
+            option.value = weapon_attack[i]
+            option.innerHTML = weapon_attack[i];
+            if(weapon_attack[i] == selected_asset.attack_weapon){
+                option.selected = true;
+            }
+            select.appendChild(option);
+        }
+        experience.world.dictModels[unique_name].attack_weapon = select.value;
+    }
+
+    if ('defense_weapon' in selected_asset){
+        // make strength visible
+        document.getElementsByClassName("properties_defense")[0].removeAttribute("hidden");
+        // include current value of strength to asset
+        var select = document.getElementById('defense')
+        select.innerHTML = "";
+        for (var i=0; i<weapon_defense.length; i++){
+            var option = document.createElement('option');
+            option.value = weapon_defense[i]
+            option.innerHTML = weapon_defense[i];
+            if(weapon_defense[i] == selected_asset.weapon_defense){
+                option.selected = true;
+            }
+            select.appendChild(option);
+        }
+        experience.world.dictModels[unique_name].defense_weapon = select.value;
+    }
 }
 
 function unselect(){
@@ -151,6 +229,8 @@ function unselect(){
     document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_attack")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_defense")[0].setAttribute("hidden", true);
 }
 
 // keep listening to when an asset is being transformed
@@ -172,6 +252,9 @@ function updateAddedAssets(){
 
     // get all assets in the game
     const models = experience.world.assets
+
+    weapon_attack = []
+    weapon_defense = []
   
     // create card for each game asset
     for (let i = 0; i < models.length; i++) {
@@ -195,6 +278,12 @@ function updateAddedAssets(){
         divCont.appendChild(divDel);
         div.appendChild(divCont);
         addedAssetsCont.appendChild(div);
+
+        if (experience.world.dictModels[model.unique_name].attack){
+            weapon_attack.push(model.unique_name)
+        } else if (experience.world.dictModels[model.unique_name].defense){
+            weapon_defense.push(model.unique_name)
+        }
 
         // 
         divCont.addEventListener("click", () => {
@@ -261,8 +350,10 @@ function saveAssets(){
             position_z: assets[i].model.position.z,
             quaternion_y: assets[i].model.quaternion.y,
             quaternion_w: assets[i].model.quaternion.w,
-            life: (assets[i].model.life) ? assets[i].model.life  : 0,
-            strength: (assets[i].model.strength) ? assets[i].model.strength  : 0
+            life: (assets[i].life) ? assets[i].life  : 0,
+            strength: (assets[i].strength) ? assets[i].strength  : 0,
+            attack_weapon: (assets[i].attack_weapon) ? assets[i].attack_weapon  : "",
+            defense_weapon: (assets[i].defense_weapon) ? assets[i].defense_weapon  : "",
         };
         data.push(assetData)
     }

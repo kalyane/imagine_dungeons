@@ -179,6 +179,11 @@ export default [
         name: 'sword',
         type: 'gltfModel',
         path: '/static/models/weapons/sword.glb'
+    },
+    {
+        name: 'axe',
+        type: 'gltfModel',
+        path: '/static/models/weapons/axe.glb'
     }
 ]
 
