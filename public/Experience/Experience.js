@@ -14,7 +14,7 @@ let instance = null
 
 export default class Experience extends EventEmitter
 {
-    constructor(_canvas, gridSize = {'x':50,'z':50}, playing = false)
+    constructor(_canvas, gridSize = {'x':50,'z':50}, fog = {'near': 10, 'far': 50}, playing = false)
     {
         super()
         // Singleton
@@ -38,7 +38,7 @@ export default class Experience extends EventEmitter
         this.gameOver = false
 
         if (this.playing){
-            this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), 10, 50);
+            this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), fog.near, fog.far);
         }
 
         this.scene.background = new THREE.Color(0xb0b16);

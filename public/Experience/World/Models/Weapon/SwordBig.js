@@ -1,9 +1,9 @@
 import Weapon from './Weapon.js'
 import * as THREE from '/node_modules/three/build/three.module.js'
 
-export default class Sword extends Weapon
+export default class SwordBig extends Weapon
 {
-    static asset_name = 'sword'
+    static asset_name = 'sword_big'
     constructor(unique_name)
     {
         super()
@@ -24,16 +24,16 @@ export default class Sword extends Weapon
         this.model = this.resource.scene.clone()
 
         // creates a box to cover the model
-        const boxGeo = new THREE.BoxGeometry(1, 5.5, 1)
-        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 2.75, 0 ) )
+        const boxGeo = new THREE.BoxGeometry(1, 6.5, 1)
+        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 3.25, 0 ) )
         this.modelDragBox = new THREE.Mesh(
             boxGeo,
             new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
         )
         this.modelDragBox.geometry.computeBoundingBox()
 
-        this.offsetRot = new THREE.Vector3(-0.7, 0.1, -1.1);
-        this.offsetPos = new THREE.Vector3(-22, -0.7, 23);
+        this.offsetRot = new THREE.Vector3(-3.9, -0.2, -2);
+        this.offsetPos = new THREE.Vector3(-20, -0.7, 25);
 
         this.setModel()
     }

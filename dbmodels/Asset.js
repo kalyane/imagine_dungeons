@@ -14,7 +14,8 @@ const assetSchema = new Schema({
    life: { type: Number, default: 0 },
    strength: { type: Number, default: 0 },
    attack_weapon: { type: String, default: "" },
-   defense_weapon: { type: String, default: "" }
+   defense_weapon: { type: String, default: "" },
+   attack_range: { type: Number, default: 0 }
 });
 
 const Asset = mongoose.model('Asset', assetSchema);

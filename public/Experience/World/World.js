@@ -18,7 +18,6 @@ import ArchBars from './models/Modular/ArchBars.js'
 import Rogue from './models/Player/Rogue.js'
 import Cleric from './models/Player/Cleric.js'
 import Ranger from './models/Player/Ranger.js'
-import Warrior from './models/Player/Warrior.js'
 
 // monster
 import Alien from './models/Monster/Alien.js'
@@ -47,7 +46,18 @@ import TableSmall from './Models/Decor/TableSmall.js'
 
 // weapons
 import Sword from './Models/Weapon/Sword.js'
+import SwordBig from './Models/Weapon/SwordBig.js'
+import SwordGolden from './Models/Weapon/SwordGolden.js'
 import Axe from './Models/Weapon/Axe.js'
+import AxeDouble from './Models/Weapon/AxeDouble.js'
+import AxeSmall from './Models/Weapon/AxeSmall.js'
+import Claymore from './Models/Weapon/Claymore.js'
+import Dagger from './Models/Weapon/Dagger.js'
+import Hammer from './Models/Weapon/Hammer.js'
+import Scythe from './Models/Weapon/Scythe.js'
+import ShieldCeltic from './Models/Weapon/ShieldCeltic.js'
+import ShieldHeater from './Models/Weapon/ShieldHeater.js'
+import ShieldRound from './Models/Weapon/ShieldRound.js'
 
 // controls
 import { DragControls } from '/node_modules/three/examples/jsm/controls/DragControls.js'
@@ -109,7 +119,6 @@ export default class World extends EventEmitter
                 "rogue" : Rogue,
                 "cleric" : Cleric,
                 "ranger" : Ranger,
-                "warrior" : Warrior,
 
                 // monster
                 "alien" : Alien,
@@ -134,7 +143,18 @@ export default class World extends EventEmitter
 
                 // weapon
                 "sword" : Sword,
-                "axe" : Axe
+                "sword_big" : SwordBig,
+                "sword_golden" : SwordGolden,
+                "axe" : Axe,
+                "axe_double" : AxeDouble,
+                "axe_small" : AxeSmall,
+                "claymore" : Claymore,
+                "dagger" : Dagger,
+                "hammer" : Hammer,
+                "scythe" : Scythe,
+                "shield_celtic" : ShieldCeltic,
+                "shield_heater" : ShieldHeater,
+                "shield_round" : ShieldRound
             }
 
             // if not playing user can drag objects

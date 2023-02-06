@@ -6,7 +6,10 @@ ready.innerHTML = false
 var size_x = document.getElementsByClassName("play_game")[0].getAttributeNode("size_x").value;
 var size_z = document.getElementsByClassName("play_game")[0].getAttributeNode("size_z").value;
 
-const experience = new Experience(document.querySelector('canvas#editCanvas'), {'x': size_x*2,'z': size_z*2} , true)
+var near = document.getElementsByClassName("play_game")[0].getAttributeNode("near").value;
+var far = document.getElementsByClassName("play_game")[0].getAttributeNode("far").value;
+
+const experience = new Experience(document.querySelector('canvas#editCanvas'), {'x': size_x*2,'z': size_z*2}, {'near': near, 'far': far} , true)
 
 window.experience = experience;
 
@@ -34,6 +37,9 @@ experience.world.on('ready', () => {
             }
             if (curr_asset.strength){
                 curr_asset.strength = assets[i].strength
+            }
+            if (curr_asset.attack_range){
+                curr_asset.attack_range = assets[i].attack_range
             }
             if (curr_asset.attack_weapon){
                 curr_asset.attack_weapon = assets[i].attack_weapon

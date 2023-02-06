@@ -46,6 +46,7 @@ router
             let strength = request.body.assets[i].strength;
             let attack_weapon = request.body.assets[i].attack_weapon;
             let defense_weapon = request.body.assets[i].defense_weapon;
+            let attack_range = request.body.assets[i].attack_range;
             var id_asset;
 
             try {
@@ -61,6 +62,7 @@ router
                     existingAsset.strength = strength;
                     existingAsset.attack_weapon = attack_weapon;
                     existingAsset.defense_weapon = defense_weapon;
+                    existingAsset.attack_range = attack_range;
                     await existingAsset.save();
                 } else {
                     // create new asset
@@ -76,7 +78,8 @@ router
                         life: life,
                         strength: strength,
                         attack_weapon: attack_weapon,
-                        defense_weapon: defense_weapon
+                        defense_weapon: defense_weapon,
+                        attack_range: attack_range
                     });
                     await newAsset.save();
                 }

@@ -34,7 +34,6 @@ export default class Axe extends Weapon
 
         this.offsetRot = new THREE.Vector3(-3.9, -0.2, -2);
         this.offsetPos = new THREE.Vector3(-42, -0.7, 32);
-        this.scale = 25;
 
         this.setModel()
     }

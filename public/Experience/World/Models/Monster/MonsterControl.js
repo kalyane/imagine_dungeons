@@ -15,7 +15,6 @@ export default class MonsterControl
         // constants
         this.fadeDuration = 0.2;
         this.velocity = 10;
-        this.shortestDistance = 10;
 
         // use model to change animation
         this.model = model;
@@ -39,11 +38,11 @@ export default class MonsterControl
         const raycaster = new THREE.Raycaster();
 
         for (var i=0; i<this.world.directions.length; i++){
-            raycaster.set(this.modelDragBox.position, this.world.directions[i], 0, this.shortestDistance);
+            raycaster.set(this.modelDragBox.position, this.world.directions[i], 0, this.model.attack_range);
 
             const intersects = raycaster.intersectObjects(this.world.assetsDragBox)
 
-            if (intersects.length > 0 && intersects[0].distance < this.shortestDistance && intersects[0].object == this.world.player.modelDragBox){
+            if (intersects.length > 0 && intersects[0].distance < this.model.attack_range && intersects[0].object == this.world.player.modelDragBox){
                 return true
             }
         }
@@ -90,7 +89,12 @@ export default class MonsterControl
                 } else {
                     let elapsedTime = this.time.current - this.attackStartTime;
                     if (elapsedTime > play._clip.duration * 1000) {
-                        this.experience.world.player.life -= this.model.strength;
+                        if (this.experience.world.player.defense_weapon.using){
+                            this.experience.world.player.life -= Math.max(this.model.strength*0.1, this.model.strength-this.experience.world.player.defense_weapon.strength);
+                        } else {
+                            this.experience.world.player.life -= this.model.strength;
+                        }
+                        
                         this.attackStartTime = this.time.current;
                     }
                 }

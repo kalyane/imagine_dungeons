@@ -13,6 +13,8 @@ export default class Monster
         this.resources = this.experience.resources
         this.time = this.experience.time
 
+        this.attack_range = 10;
+
     }
 
     setModel()

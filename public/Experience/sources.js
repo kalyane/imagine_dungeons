@@ -15,11 +15,6 @@ export default [
         type: 'gltfModel',
         path: '/static/models/players/rogue.glb'
     },
-    {
-        name: 'warrior',
-        type: 'gltfModel',
-        path: '/static/models/players/warrior.glb'
-    },
 
     // monsters
     {
@@ -175,15 +170,71 @@ export default [
     },
 
     // weapons
-    {
-        name: 'sword',
-        type: 'gltfModel',
-        path: '/static/models/weapons/sword.glb'
-    },
+
     {
         name: 'axe',
         type: 'gltfModel',
         path: '/static/models/weapons/axe.glb'
+    },
+    {
+        name: 'axe_double',
+        type: 'gltfModel',
+        path: '/static/models/weapons/axe_double.glb'
+    },
+    {
+        name: 'axe_small',
+        type: 'gltfModel',
+        path: '/static/models/weapons/axe_small.glb'
+    },
+    {
+        name: 'claymore',
+        type: 'gltfModel',
+        path: '/static/models/weapons/claymore.glb'
+    },
+    {
+        name: 'dagger',
+        type: 'gltfModel',
+        path: '/static/models/weapons/dagger.glb'
+    },
+    {
+        name: 'hammer',
+        type: 'gltfModel',
+        path: '/static/models/weapons/hammer.glb'
+    },
+    {
+        name: 'scythe',
+        type: 'gltfModel',
+        path: '/static/models/weapons/scythe.glb'
+    },
+    {
+        name: 'shield_celtic',
+        type: 'gltfModel',
+        path: '/static/models/weapons/shield_celtic.glb'
+    },
+    {
+        name: 'shield_heater',
+        type: 'gltfModel',
+        path: '/static/models/weapons/shield_heater.glb'
+    },
+    {
+        name: 'shield_round',
+        type: 'gltfModel',
+        path: '/static/models/weapons/shield_round.glb'
+    },
+    {
+        name: 'sword_big',
+        type: 'gltfModel',
+        path: '/static/models/weapons/sword_big.glb'
+    },
+    {
+        name: 'sword_golden',
+        type: 'gltfModel',
+        path: '/static/models/weapons/sword_golden.glb'
+    },
+    {
+        name: 'sword',
+        type: 'gltfModel',
+        path: '/static/models/weapons/sword.glb'
     }
 ]
 

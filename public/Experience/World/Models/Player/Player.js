@@ -2,7 +2,7 @@ import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../../../Experience.js'
 import PlayerControl from './PlayerControl.js'
 import Weapon from '../Weapon/Weapon.js'
-import {GUI} from 'dat.gui'
+//import {GUI} from 'dat.gui'
 
 export default class Player
 {
@@ -52,6 +52,7 @@ export default class Player
         this.scene.add(this.model)
 
         this.rightHand = this.model.getObjectByName("mixamorigRightHandIndex1")
+        this.leftForeArm = this.model.getObjectByName("mixamorigLeftForeArm")
     }
 
     setAnimation(animations)
@@ -124,16 +125,19 @@ export default class Player
     setWeapon(){
         if (this.world.dictModels[this.attack_weapon]){
             this.attack_weapon = this.world.dictModels[this.attack_weapon]
-        } else {
-            this.attack_weapon = this.world.weapons[0]
-        }
-        this.useWeapon(this.attack_weapon)
+            this.useWeapon(this.attack_weapon)
+        } 
+
+        if (this.world.dictModels[this.defense_weapon]){
+            this.defense_weapon = this.world.dictModels[this.defense_weapon]
+            this.useWeapon(this.defense_weapon)
+        } 
+        
     }
 
     useWeapon(weapon){
         if (weapon.attack){
             if (this.attack_weapon.using){
-                console.log("hey")
                 this.attack_weapon.using = false
                 this.attack_weapon.model.visible = true
                 this.attack_weapon.modelDragBox.position.copy(this.modelDragBox.position)
@@ -147,19 +151,42 @@ export default class Player
             this.attack_model = this.attack_weapon.model.clone()
             this.attack_weapon.model.visible = false
 
-            this.attack_model.scale.set(this.attack_weapon.scale, this.attack_weapon.scale, this.attack_weapon.scale)
+            this.attack_model.scale.set(30, 30, 30)
             this.attack_model.position.set(this.attack_weapon.offsetPos.x, this.attack_weapon.offsetPos.y, this.attack_weapon.offsetPos.z)
             this.attack_model.rotation.set(this.attack_weapon.offsetRot.x, this.attack_weapon.offsetRot.y, this.attack_weapon.offsetRot.z)
             this.rightHand.add(this.attack_model)
+        }
 
+        if (weapon.defense){
+            console.log(this.leftForeArm)
+            if (this.defense_weapon.using){
+                this.defense_weapon.using = false
+                this.defense_weapon.model.visible = true
+                this.defense_weapon.modelDragBox.position.copy(this.modelDragBox.position)
+                this.leftForeArm.remove(this.defense_model)
+            }
+
+            this.defense_weapon = weapon
+            this.defense_weapon.using = true
+
+            this.defense_model = this.defense_weapon.model.clone()
+            this.defense_weapon.model.visible = false
+
+            this.defense_model.scale.set(30, 30, 30)
+            this.defense_model.position.set(this.defense_weapon.offsetPos.x, this.defense_weapon.offsetPos.y, this.defense_weapon.offsetPos.z)
+            this.defense_model.rotation.set(this.defense_weapon.offsetRot.x, this.defense_weapon.offsetRot.y, this.defense_weapon.offsetRot.z)
+            this.leftForeArm.add(this.defense_model)
+
+            /*
             var gui = new GUI();
-            gui.add(this.attack_model.rotation, 'x', -2*Math.PI, 2*Math.PI);
-            gui.add(this.attack_model.rotation, 'y', -2*Math.PI, 2*Math.PI);
-            gui.add(this.attack_model.rotation, 'z', -2*Math.PI, 2*Math.PI);
+            gui.add(this.defense_model.rotation, 'x', -2*Math.PI, 2*Math.PI);
+            gui.add(this.defense_model.rotation, 'y', -2*Math.PI, 2*Math.PI);
+            gui.add(this.defense_model.rotation, 'z', -2*Math.PI, 2*Math.PI);
 
-            gui.add(this.attack_model.position, 'x', -100, 100);
-            gui.add(this.attack_model.position, 'y', -100, 100);
-            gui.add(this.attack_model.position, 'z', -100, 100);
+            gui.add(this.defense_model.position, 'x', -100, 100);
+            gui.add(this.defense_model.position, 'y', -100, 100);
+            gui.add(this.defense_model.position, 'z', -100, 100);
+            */
         }
     }
 }

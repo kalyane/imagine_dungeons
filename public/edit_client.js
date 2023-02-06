@@ -28,6 +28,9 @@ experience.world.on('ready', () => {
             if (curr_asset.strength){
                 curr_asset.strength = assets[i].strength
             }
+            if (curr_asset.attack_range){
+                curr_asset.attack_range = assets[i].attack_range
+            }
             if (curr_asset.attack_weapon){
                 curr_asset.attack_weapon = assets[i].attack_weapon
             }
@@ -116,6 +119,7 @@ function updateGridSize(){
 
 var life = document.getElementById('life');
 var strength = document.getElementById('strength');
+var attack_range = document.getElementById('attack_range');
 var attack = document.getElementById('attack');
 var defense = document.getElementById('defense');
 
@@ -127,6 +131,11 @@ life.addEventListener('change', (event) => {
 strength.addEventListener('change', (event) => {
     var unique_name = document.getElementById('asset_name').value;
     experience.world.dictModels[unique_name].strength = strength.value;
+})
+
+attack_range.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].attack_range = attack_range.value;
 })
 
 attack.addEventListener('change', (event) => {
@@ -181,6 +190,11 @@ function selectAssetCard(){
         document.getElementById('strength').value = selected_asset.strength;
     }
 
+    if ('attack_range' in selected_asset){
+        document.getElementsByClassName("properties_attack_range")[0].removeAttribute("hidden");
+        document.getElementById('attack_range').value = selected_asset.attack_range;
+    }
+
     if ('attack_weapon' in selected_asset){
         // make strength visible
         document.getElementsByClassName("properties_attack")[0].removeAttribute("hidden");
@@ -209,7 +223,7 @@ function selectAssetCard(){
             var option = document.createElement('option');
             option.value = weapon_defense[i]
             option.innerHTML = weapon_defense[i];
-            if(weapon_defense[i] == selected_asset.weapon_defense){
+            if(weapon_defense[i] == selected_asset.defense_weapon){
                 option.selected = true;
             }
             select.appendChild(option);
@@ -229,6 +243,7 @@ function unselect(){
     document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_attack_range")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_attack")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_defense")[0].setAttribute("hidden", true);
 }
@@ -320,10 +335,15 @@ document.getElementById("save").addEventListener("click", function() {
 // save only game general details
 function saveGameDetails(){
     const input = document.getElementById('game_name');
+    var near = document.getElementById('near');
+    var far = document.getElementById('far');
+
     let data = {
         name: input.value,
         size_x: size_x.value,
-        size_z: size_z.value
+        size_z: size_z.value,
+        near: near.value,
+        far: far.value
     };
 
     // send request
@@ -352,6 +372,7 @@ function saveAssets(){
             quaternion_w: assets[i].model.quaternion.w,
             life: (assets[i].life) ? assets[i].life  : 0,
             strength: (assets[i].strength) ? assets[i].strength  : 0,
+            attack_range: (assets[i].attack_range) ? assets[i].attack_range  : 0,
             attack_weapon: (assets[i].attack_weapon) ? assets[i].attack_weapon  : "",
             defense_weapon: (assets[i].defense_weapon) ? assets[i].defense_weapon  : "",
         };

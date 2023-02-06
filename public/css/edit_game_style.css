@@ -85,7 +85,7 @@ body, html {
     border: none;
     background-color: #3E3E42;
     color: white;
-    margin-right: 30px;
+    margin-right: 10%;
 }
 
 .container_selected_img{
@@ -102,6 +102,10 @@ body, html {
 
 .content .size {
     text-align: center;
+}
+
+.content .size label{
+    opacity: 0.5;
 }
 
 .content input:focus {

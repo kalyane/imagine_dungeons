@@ -16,7 +16,7 @@ router
 router
     .route("/create")
     .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (request, response) => {
-        const game = new Game({ user: request.user._id, size_x: 50, size_z: 50 });
+        const game = new Game({ user: request.user._id, size_x: 50, size_z: 50, near: 10, far: 50 });
         await game.save();
         response.redirect(`/games/edit/${game._id}`);
     });
@@ -74,8 +74,10 @@ router
         var name = request.body.name;
         var size_x = request.body.size_x
         var size_z = request.body.size_z
+        var near = request.body.near
+        var far = request.body.far
         try {
-            await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z });
+            await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z, near: near, far: far });
             response.status(200).send({message: "Game updated successfully"})
         } catch (error) {
             response.render('404');

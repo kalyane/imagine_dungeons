@@ -47,6 +47,14 @@ html
                             input(type="number" id="size_x" name="size_x" min="1" value=game.size_x)
                             label(for="size_z") z
                             input(type="number" id="size_z" name="size_z" min="1" value=game.size_z)
+
+                        label Fog
+                        .size
+                            label(for="near") Near
+                            input(type="number" id="near" name="near" min="1" value=game.near)
+                            label(for="far") Far
+                            input(type="number" id="far" name="far" min="10" value=game.far)
+
                 .properties.box
                     .header ASSET PROPERTIES
                     .content 
@@ -64,6 +72,10 @@ html
                             label(for="strength") Strength
                             br
                             input(type="number" id="strength" name="strength" min="1")
+                        .properties_attack_range(hidden)
+                            label(for="attack_range") Attack Range
+                            br
+                            input(type="number" id="attack_range" name="attack_range" min="1")
                         .properties_attack(hidden)
                             label(for="attack") Initial Attack Weapon
                             br

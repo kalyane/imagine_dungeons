@@ -1,9 +1,9 @@
 import Weapon from './Weapon.js'
 import * as THREE from '/node_modules/three/build/three.module.js'
 
-export default class Sword extends Weapon
+export default class Scythe extends Weapon
 {
-    static asset_name = 'sword'
+    static asset_name = 'scythe'
     constructor(unique_name)
     {
         super()
@@ -32,8 +32,8 @@ export default class Sword extends Weapon
         )
         this.modelDragBox.geometry.computeBoundingBox()
 
-        this.offsetRot = new THREE.Vector3(-0.7, 0.1, -1.1);
-        this.offsetPos = new THREE.Vector3(-22, -0.7, 23);
+        this.offsetRot = new THREE.Vector3(-3.9, -0.2, -2);
+        this.offsetPos = new THREE.Vector3(-42, -0.7, 32);
 
         this.setModel()
     }
