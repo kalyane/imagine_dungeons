@@ -1,6 +1,7 @@
 const express = require('express');
 const Game = require('../../dbmodels/Game');
 const passport = require('passport');
+const Asset = require('../../dbmodels/Asset');
 
 require('./jwt_strategy');
 
@@ -46,7 +47,8 @@ router
         try {
             const game = await Game.findOne({ _id: id_game });
         if (game) {
-            response.render('play_game', {game: game});
+            const assets = await Asset.find({game: id_game}, {_id:0, game: 0});
+            response.render('play_game', {game: game, assets: assets});
         }
         } catch (error) {
             response.render('404');
