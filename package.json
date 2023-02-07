@@ -40,6 +40,7 @@
     "three": "^0.146.0",
     "three-dragcontrols": "^0.88.2",
     "three-orbitcontrols": "^2.110.3",
+    "vercel": "^28.15.1",
     "xstate": "^4.35.3"
   },
   "devDependencies": {

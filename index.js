@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
 
 // password - Rzrv3IkKpEKsQh8j
-const dbURI = 'mongodb+srv://kalyane:Rzrv3IkKpEKsQh8j@cluster0.uoxqwvy.mongodb.net/?retryWrites=true&w=majority'
+const dbURI = 'mongodb+srv://vercel-admin-user:enaTQiikkj0InS3s@cluster0.uoxqwvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
 // creating express app
 var app = express();
