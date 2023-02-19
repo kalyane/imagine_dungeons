@@ -1,86 +1,119 @@
-@font-face {
-    font-family: Rye;
-    src: url(/static/fonts/Rye-Regular.ttf);
-}
-
-@font-face {
-    font-family: Lato-Regular;
-    src: url(/static/fonts/Lato-Regular.ttf);
-}
-
-@font-face {
-    font-family: Lato-Bold;
-    src: url(/static/fonts/Lato-Bold.ttf);
-}
-
-*{
-    margin: 0;
-    padding: 0;
-    font-family: Lato-Regular;
-}
-
-body, html {
-    height: 100%;
-}
-
 .play_game{
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: column;
     height: 100%;
     width: 100%;
+    background-color: #252526;
+    max-height: 100vh;
+}
+
+.train_agent_container{
+    flex: 0 0 20%;
+}
+
+.game_container{
+    flex: 0 0 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.game{
+    flex: 0 0 50%;
+}
+
+.metrics{
+    flex: 0 0 20%;
+}
+
+.box{
+    box-sizing: border-box;
+    background-color: #252526;
+    outline:2px solid black;
 }
 
 .header{
     box-sizing:border-box;
     background-color: black;
+    border-top: 2px solid #252526;
+    border-left: 2px solid #252526;
+    border-right: 2px solid #252526;
     padding: 10px;
     color: #C4C4C4;
     width: 100%;
     font-size: 15px;
-}
-
-.box{
-    background-color: #252526;
-    outline:2px solid black;
-}
-
-.left{
-    flex: 0 0 50%;
     display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    max-width: 50%;
+    justify-content:space-between;
+    align-items: center;
 }
 
-.canva{
-    flex: 0 0 50%;
-}
-
-.canva_container {
-    height: 320px;
-    width: 480px;
+.metrics_container {
+    padding: 10px;
 }
 
 .metric{
-    flex: 0 0 50%;
-}
-
-.right{
-    flex: 0 0 50%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 2px solid black;
+    width: 100%;
+    margin-bottom: 5px;
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 5px;
+    background-color: #3E3E42;
+}
+
+.metric_icon{
+    display: block;
+    background-color: white;
+    color: #252526;
+    border-radius: 5px;
+    font-size: 30px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.metric_title{
+    color: #C4C4C4;
+    font-size: 12px;
+}
+
+.metric_value {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.canvas_container{
+    width: 100%;
+    height: 90%;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+#game_over_container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #B15328;
+    opacity: 0.7;
+    display: flex;
     flex-direction: column;
-    max-width: 50%;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 50px;
+    font-weight: bold;
+    z-index: 10;
+    color: black;
+    cursor: pointer;
 }
 
-.code{
-    flex: 0 0 100%;
-}
-
-.code_container{
-    height: calc(100% - 38px);
-}
-
-.CodeMirror {
-    height: 100% !important;
+#game_over_container .small_text{
+    font-weight: normal;
+    font-size: 20px;
 }

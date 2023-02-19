@@ -35,10 +35,16 @@ body, html {
 .header{
     box-sizing:border-box;
     background-color: black;
+    border-top: 2px solid #252526;
+    border-left: 2px solid #252526;
+    border-right: 2px solid #252526;
     padding: 10px;
     color: #C4C4C4;
     width: 100%;
     font-size: 15px;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
 }
 
 .left{
@@ -144,6 +150,7 @@ body, html {
 }
 
 .box{
+    box-sizing: border-box;
     background-color: #252526;
     outline:2px solid black;
 }
@@ -310,28 +317,37 @@ body, html {
     float: right;
 }
 
+.game_buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 #save{
-    padding: 7px 20px;
-    color: #3E3E42 !important;
-    background-color: #B15328;
-    border-radius: 5px;
+    color: #C4C4C4;
+    background-color: transparent;
     border: none;
-    margin: 5px 30px;
-    font-size: 15px;
+    font-size: 30px;
     cursor: pointer;
+}
+
+#save:hover{
+    color: #B15328;
 }
 
 #play{
     padding: 7px 20px;
-    color: #3E3E42 !important;
+    color: #3E3E42;
     background-color: #C7B386;
     border-radius: 5px;
     border: none;
-    margin: 5px 0;
     font-size: 15px;
     cursor: pointer;
 }
 
+#play:hover{
+    background-color: #B15328;
+}
 
 #loading {
     position: fixed;
@@ -366,4 +382,23 @@ body, html {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.intro{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background-color: #B15328;
+    color: #3E3E42;
+    border-radius: 50%;
+    border: transparent;
+    font-size: 40px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.intro:hover{
+    background-color: #C7B386;
+    color: #3E3E42;
 }

@@ -36,13 +36,12 @@ router
 
 router
     .route("/edit/:id_game")
-    .get(async (req, res)=>{
-        // TODO: make sure only user -----
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
         var id_game = req.params.id_game;
         try {
             const game = await Game.findOne({ _id: id_game});
             if (game) {
-                res.render('edit_game', {game: game});
+                res.render('edit_game', {game: game, user:req.user});
             } else {
                 res.redirect('/login')
             }
@@ -53,14 +52,14 @@ router
 
 router
     .route("/play/:id_game")
-    .get(async (req, res)=>{
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
         //anyone can play the game
         var id_game = req.params.id_game;
         try {
             const game = await Game.findOne({ _id: id_game });
         if (game) {
             const assets = await Asset.find({game: id_game}, {_id:0, game: 0});
-            res.render('play_game', {game: game, assets: assets});
+            res.render('play_game', {game: game, assets: assets, user:req.user});
         }
         } catch (error) {
             res.redirect('/404')

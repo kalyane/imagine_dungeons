@@ -28,7 +28,7 @@ export default class Experience extends EventEmitter
 
         this.scene = new THREE.Scene()
         this.time = new Time()
-        
+        this.ready = false
     }
 
     // set the main attributes that doesn't change when reset
@@ -104,6 +104,7 @@ export default class Experience extends EventEmitter
         this.gameOver = false
 
         this.world.reset();
+        this.ready = true;
     }
 
     resize()
@@ -118,13 +119,13 @@ export default class Experience extends EventEmitter
         this.world.update()
         this.renderer.update()
 
-        if (this.playing && document.getElementById("ready").innerHTML == "true"){
-            //this.updateMetrics()
+        if (this.playing && this.ready){
+            this.updateMetrics()
         }
     }
 
     updateMetrics(){
-        var health = document.getElementById("health");
+        var health = document.getElementById("life");
         health.innerHTML = this.world.player.life
 
         var xp = document.getElementById("xp");
@@ -134,24 +135,24 @@ export default class Experience extends EventEmitter
         level.innerHTML = this.world.player.level
 
         var defense = document.getElementById("defense");
-        defense.innerHTML = this.world.player.defense_weapon ? this.world.player.defense_weapon.strength : "none"
+        defense.innerHTML = this.world.player.defense_weapon ? this.world.player.defense_weapon.strength : 0
 
         var attack = document.getElementById("attack");
-        attack.innerHTML = this.world.player.attack_weapon ? this.world.player.attack_weapon.strength : "none"
+        attack.innerHTML = this.world.player.attack_weapon ? this.world.player.attack_weapon.strength : 0
 
         var time = document.getElementById("time");
         time.innerHTML = this.time.elapsed
 
+        
         var over = document.getElementById("over");
         if (this.gameOver) {
+            this.ready = false
             if (this.world.player.controls.dead){
-                over.innerHTML = "lose"
+                over.innerHTML = "Lost"
             } else {
-                over.innerHTML = "win"
+                over.innerHTML = "Won"
             }
-        }
-        else {
-            over.innerHTML = this.gameOver
+            this.trigger("game_over")
         }
     }
 

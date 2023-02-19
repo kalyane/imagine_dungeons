@@ -6,11 +6,15 @@ html
         link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
+
+        link(rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.0/css/all.css")
         
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/darcula.css")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js")
+
+        script(src="https://cdn.jsdelivr.net/npm/chart.js")
     body 
         include includes/nav
         span(hidden)#ready
@@ -52,32 +56,32 @@ html
                 .bottom
                     .plot.box
                         .header PLOT
+                        .plot_container 
+                            canvas#myChart
 
     script(src="/static/bundles/agent_client_bundle.js")
     script. 
-        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             mode: "javascript",
             lineNumbers: true,
             theme: 'darcula',
             autocorrect: true
         });
 
-        editor.on('change', (instance, changeObj) => {
-            document.getElementById("code").value = editor.getValue()
+        window.editor.on('change', (instance, changeObj) => {
+            document.getElementById("code").value = window.editor.getValue()
         })
 
         function setSizeCanvas(){
             var canvas = document.getElementById("playCanvas")
             var width = canvas.parentNode.parentNode.clientWidth
-            var height = canvas.parentNode.parentNode.clientHeight
 
             var unit = Math.round(width/4);
-            if (unit*3 > height){
-                unit = Math.round(height/3);
-            }
 
             canvas.parentNode.style.height = unit*3 + "px"
-            canvas.parentNode.style.width = unit*4 + "px"
+
+            var render_canvas = document.getElementById("renderCanvas")
+            render_canvas.style.height = canvas.parentNode.style.height
         }
 
         setSizeCanvas()
@@ -86,3 +90,48 @@ html
         {
             setSizeCanvas()
         })
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        const data = {
+        labels: [],
+        datasets: [{
+            label: 'Rewards per Episode',
+            data: [],
+            backgroundColor: 'rgba(177, 83, 40, 0.2)',
+            borderColor: 'rgba(177, 83, 40, 1)',
+            borderWidth: 1
+        }]
+        };
+
+        const options = {
+            maintainAspectRatio: false,
+            responsive: true,  
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Episode #'
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Cumulative Reward'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        window.chart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });

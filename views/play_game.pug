@@ -3,13 +3,10 @@ html
     head 
         title Game Playing - Imagine Dungeons 
         link(rel="stylesheet" href="/static/css/play_game_style.css")
+        link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
-        
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css")
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/darcula.css")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js")
+        link(rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.0/css/all.css")
 
         script(type="importmap").
             {
@@ -20,68 +17,99 @@ html
                 }
             }
     body 
+        #loading
+            .loading-animation 
+            p Loading
+        include includes/nav
         .play_game(id_game=game._id size_x=game.size_x size_z=game.size_z near=game.near far=game.far)
-            .left 
-                .canva.box
-                    .header GAME PLAYING
-                    .canva_container
-                        canvas#playCanvas
-                .metric.box
-                    .header METRICS
+            .train_agent_container 
+            .game_container
+                .game.box
+                    .header GAME
+                    .canvas_container
+                        #game_over_container(hidden)
+                            .main_text
+                                | You &nbsp;
+                                span#over
+                            i.fas.fa-redo 
+                            .small_text Click to reset
+                        canvas#playCanvas 
+                .metrics.box
+                    .header METRICS 
                     .metrics_container 
-                        p 
-                            | HEALTH: 
-                            span#health
-                        p 
-                            | XP: 
-                            span#xp
-                        p 
-                            | LEVEL: 
-                            span#level
-                        p 
-                            | DEFENSE: 
-                            span#defense
-                        p 
-                            | ATTACK: 
-                            span#attack
-                        p 
-                            | TIME: 
-                            span#time
-                        p 
-                            | GAME READY: 
-                            span#ready
-                        p 
-                            | GAME OVER: 
-                            span#over
-                
-            .right 
-                .code.box 
-                    .header AI CODE 
-                    .code_container 
-                        textarea(id="code").
-                            print("Hello, World!")
-                            for i in range(10):
-                                print(i)
+                        .metric 
+                            i.metric_icon.fad.fa-heartbeat
+                            div
+                                .metric_title Life
+                                .metric_value#life 1222
 
-                        button(py-click="runTextInTag('code')" id="run") Run!
+                        .metric 
+                            i.metric_icon.fad.fa-star
+                            div
+                                .metric_title XP
+                                .metric_value#xp
+
+                        .metric 
+                            i.metric_icon.fad.fa-medal
+                            div
+                                .metric_title Level
+                                .metric_value#level
+
+                        .metric 
+                            i.metric_icon.fad.fa-sword
+                            div
+                                .metric_title Attack
+                                .metric_value#attack
+
+                        .metric 
+                            i.metric_icon.fad.fa-shield
+                            div
+                                .metric_title Defense
+                                .metric_value#defense
+
+                        .metric 
+                            i.metric_icon.fad.fa-clock
+                            div
+                                .metric_title Time
+                                .metric_value#time
+                        
                         
 
     script. 
         window.assets = !{JSON.stringify(assets)}
-        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            mode: "javascript",
-            lineNumbers: true,
-            theme: 'darcula'
+        window.game = !{JSON.stringify(game)}
+
+    script(src="/static/bundles/play_client_bundle.js")
+
+    script.
+        document.getElementById("game_over_container").style.visibility = "hidden";
+        let loaded = false;
+        let ready = false;
+
+        window.addEventListener("load", function() {
+            loaded = true;
+            checkLoading();
         });
 
-        editor.on('change', (instance, changeObj) => {
-            document.getElementById("code").value = editor.getValue()
-        })
+        window.experience.on('ready', function() {
+            ready = true;
+            checkLoading();
+        });
 
-        function getCode(){
-            var targetTextArea = document.getElementById("code_clean");
+        window.experience.on('game_over', function() {
+            document.getElementById("game_over_container").style.visibility = "visible";
+        });
 
-            // Copy the content of the editor to the target textarea
-            targetTextArea.value = editor.getValue();
+        function checkLoading() {
+            if (loaded && ready) {
+                const loading = document.querySelector("#loading");
+                loading.style.display = "none";
+                // startIntro() // when page loads start intro, maybe anoying
+            }
         }
-    script(src="/static/bundles/play_client_bundle.js")
+
+        document.getElementById("game_over_container").addEventListener("click", function() {
+            window.experience.reset();
+            document.getElementById("game_over_container").style.visibility = "hidden";
+        });
+    

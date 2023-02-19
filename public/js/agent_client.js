@@ -76,6 +76,9 @@ async function setExperienceAttributes(){
 }
 
 function executeCode() {
+    window.editor.setOption("readOnly", true);
+    window.editor.getWrapperElement().classList.toggle("readOnly", true);
+
     const code = document.getElementById("code").value;
     const wrapper = `async function myAsyncFunction() { ${code} }; myAsyncFunction();`;
 

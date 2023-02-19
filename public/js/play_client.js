@@ -1,54 +1,31 @@
 import Experience from '../Experience/Experience.js'
 
-var ready = document.getElementById("ready");
-ready.innerHTML = false
-
-var size_x = document.getElementsByClassName("play_game")[0].getAttributeNode("size_x").value;
-var size_z = document.getElementsByClassName("play_game")[0].getAttributeNode("size_z").value;
-
-var near = document.getElementsByClassName("play_game")[0].getAttributeNode("near").value;
-var far = document.getElementsByClassName("play_game")[0].getAttributeNode("far").value;
-
-const experience = new Experience(document.querySelector('canvas#playCanvas'), {'x': size_x*2,'z': size_z*2}, {'near': near, 'far': far} , true)
+const experience = new Experience(document.querySelector('canvas#playCanvas'))
 
 window.experience = experience;
 
-// get model that were saved in the database
-var id_game = document.getElementsByClassName("play_game")[0].getAttributeNode("id_game").value;
+let assets = window.assets;
+var game = window.game;
 
-// includes all assets from the database into the experience
+setExperienceAttributes()
 
-experience.world.on('ready', () => {
-    addAllAssets()
-    ready.innerHTML = true
-    experience.startPlaying()
-});
+function setExperienceAttributes(){
+    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, {'near': game.near, 'far': game.far} , true, true)
+    
+    experience.world.on('ready', async () => {
+        experience.reset()
 
-function addAllAssets(){
-    var assets = window.assets
-    console.log(assets)
-    for (var i = 0; i < assets.length; i++){
-        
-        experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
-        var curr_asset = experience.world.dictModels[assets[i].unique_name]
-        curr_asset.modelDragBox.position.x = assets[i].position_x
-        curr_asset.modelDragBox.position.z = assets[i].position_z
-        curr_asset.modelDragBox.quaternion.y = assets[i].quaternion_y
-        curr_asset.modelDragBox.quaternion.w = assets[i].quaternion_w
-        if (curr_asset.life){
-            curr_asset.life = assets[i].life
-        }
-        if (curr_asset.strength){
-            curr_asset.strength = assets[i].strength
-        }
-        if (curr_asset.attack_range){
-            curr_asset.attack_range = assets[i].attack_range
-        }
-        if (curr_asset.attack_weapon){
-            curr_asset.attack_weapon = assets[i].attack_weapon
-        }
-        if (curr_asset.defense_weapon){
-            curr_asset.defense_weapon = assets[i].defense_weapon
-        }        
-    }
+        experience.ready = true;
+        experience.trigger("ready");
+    });
+
+    // keep listening to when an asset is being transformed
+    experience.world.on('start_transform', () => {
+        selectAssetCard()
+    });
+
+    // when no asset is being transformed
+    experience.world.on('stop_transform', () => {
+        unselect()
+    });
 }

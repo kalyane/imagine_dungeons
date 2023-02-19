@@ -1,12 +1,34 @@
-nav
-    div.logo Imagine Dungeons
+nav(class=(name ? "main" : "secundary"))
+    div.logo
+        if !name
+            img(src="/static/images/logo.png")
+            | &emsp;
+        | Imagine Dungeons
     div.links
-        a(href="/" class=(name === "home" ? "active" : undefined)) Home 
-        a(href="/documentation" class=(name === "documentation" ? "active" : undefined)) Documentation 
         if user
-            a(href="/games" class=(name === "games" ? "active" : undefined)) Your Games
-            a(href="/agents" class=(name === "agents" ? "active" : undefined)) Your Agents 
-            a(href="/logout").btn-medium LOGOUT
+            a(href="/games" class=(name === "games" ? "active" : undefined))
+                i.far.fa-gamepad-alt
+                | &nbsp; Your Games
+            | &emsp;
+            a(href="/agents" class=(name === "agents" ? "active" : undefined))
+                i.far.fa-robot
+                | &nbsp; Your Agents
+            | &emsp;
+            a(href="/documentation" class=(name === "documentation" ? "active" : undefined)) 
+                i.far.fa-book
+                | &nbsp; Documentation 
+            | &emsp;
+            a(href="/logout").btn-logout
+                i.far.fa-sign-out-alt
+                | &nbsp; Logout 
         else
+            a(href="/" class=(name === "home" ? "active" : undefined))
+                i.far.fa-home
+                | &nbsp; Home
+            | &emsp;
+            a(href="/documentation" class=(name === "documentation" ? "active" : undefined)) 
+                i.far.fa-book
+                | &nbsp; Documentation 
+            | &emsp;
             a(href="/signup").btn-light SIGNUP 
             a(href="/login").btn-medium LOGIN 

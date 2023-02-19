@@ -201,7 +201,9 @@ export default class PlayerControl
 
     update(delta) {
         this.delta = delta
-        this.checkState()
+        if (!this.experience.gameOver){
+            this.checkState()
+        }
         this.stateActions()
     }
 

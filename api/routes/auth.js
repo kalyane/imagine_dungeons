@@ -75,7 +75,7 @@ router
     .route("/404")
     .get((req, res, next)=>{
         passport.authenticate('jwt', (err, user) => {
-            res.render('404', {user: user});
+            res.render('404', {user: user, name: "404"});
         })(req, res, next);
     });
 

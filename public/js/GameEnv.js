@@ -11,6 +11,8 @@ export default class GameEnv
         this.height = 150;
         this.observation_space = [this.height, this.width, 1];
 
+        this.reward_episode = []
+
         // Action key
         // 0 - IDLE (none), 1 - MOVE (w), 2 - ROTATE LEFT (a), 3 - ROTATE RIGHT (d)
         // 4 - WALK AND ROTATE LEFT (w + a), 5 -  WALK AND ROTATE RIGHT (w + d)
@@ -52,6 +54,10 @@ export default class GameEnv
 
     reset() {
         this.experience.reset();
+        if (this.total_reward){
+            this.reward_episode.push(this.total_reward)
+        }
+        this.total_reward = 0
       
         return new Promise(resolve => {
           if (this.ready) {
@@ -79,6 +85,8 @@ export default class GameEnv
         const observation = await this.getObservation();
 
         const reward = this.getReward()
+
+        this.total_reward += reward;
 
         return new Promise(resolve => {
             setTimeout(() => {
@@ -151,6 +159,13 @@ export default class GameEnv
         return matrix;
     }
 
+    plotReward(){
+        // Update the chart with new data
+        window.chart.data.datasets[0].data = this.reward_episode;
+        window.chart.data.labels = this.reward_episode.map((reward, index) => `${index + 1}`);
+        window.chart.update();
+    }
+
     render(){
         // Create a new ImageData object from the grayscale matrix
         const imageData = new ImageData(this.width, this.height);
@@ -167,9 +182,9 @@ export default class GameEnv
 
         // Create a canvas and display the image
         const canvas = document.getElementById("renderCanvas");
-        canvas.width = this.width;
-        canvas.height = this.height;
         const context = canvas.getContext('2d');
+        canvas.height = this.height
+        canvas.width = this.width
         context.putImageData(imageData, 0, 0);
     }
 }

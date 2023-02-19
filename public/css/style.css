@@ -28,8 +28,12 @@ body{
     flex-direction: column;
 }
 
+a{
+    text-decoration: none;
+}
+
 nav{
-    background-color: #161616;
+    background-color: black;
     box-sizing:border-box;
     padding: 10px max(50px, 10%);
     display: flex;
@@ -41,18 +45,45 @@ nav{
     z-index: 999;
 }
 
+.main{
+    padding: 10px max(50px, 10%);
+}
+
+.secundary{
+    padding: 5px 3%;
+}
+
 .logo {
+    display: flex;
+    align-items: center;
     font-family: Rye;
+    font-size: 30px;
     -webkit-text-stroke: 1px #C7B386;
     color: #B15328;
-    font-size: 30px;
-    text-decoration: none;
+}
+
+.secundary .logo{
+    font-size: 20px;
+    -webkit-text-stroke: 0.5px #C7B386;
+}
+
+.logo img{
+    height: 35px;
+    width: 35px;
+}
+
+.btn-logout{
+    color: #C7B386 !important; 
 }
 
 .links a{
     color: white;
     margin: 5px;
     text-decoration: none;
+}
+
+.links a:hover, .btn-logout:hover{
+    color: #B15328 !important;
 }
 
 .links .active{

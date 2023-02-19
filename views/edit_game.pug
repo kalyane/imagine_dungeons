@@ -4,8 +4,10 @@ html
         title Game Editing - Imagine Dungeons 
         link(rel="stylesheet" href="/static/css/edit_game_style.css")
         link(rel="stylesheet" href="/static/css/introjs.css")
+        link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.0/css/all.css")
 
         script(type="importmap").
             {
@@ -19,19 +21,7 @@ html
         #loading
             .loading-animation 
             p Loading
-
-        nav
-            .nav_left
-                button(onclick="location.href='/games'" style="color: #B15328; border: 2px solid #B15328;") YOUR GAMES 
-                button(onclick="startIntro()" style="color: #C7B386; border: 2px solid #C7B386;") TAKE A TOUR
-
-            .nav_right
-                button#play(onclick="location.href='/games/play/"+game._id+"';")
-                    i.fa-solid.fa-play(style="margin-right: 10px;")
-                    span PLAY
-                button#save
-                    i.fa-solid.fa-cloud-arrow-up(style="margin-right: 10px;")
-                    span SAVE GAME
+        include includes/nav
         .edit_game(id_game=game._id)
             .left
                 .settings.box
@@ -87,7 +77,15 @@ html
 
             .middle
                 .canva.box
-                    .header LAYOUT
+                    .header 
+                        span GAME LAYOUT
+                        .game_buttons
+                            button#save
+                                i.fas.fa-save
+                            | &emsp;
+                            button#play(onclick="location.href='/games/play/"+game._id+"';")
+                                | PLAY &nbsp;
+                                i.fa-solid.fa-play 
                     .canva_container
                         canvas#editCanvas
                 .project.box
@@ -141,6 +139,9 @@ html
                         span Weapons
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#weapon
+
+                    button(onclick="startIntro()").intro
+                        i.fas.fa-lightbulb-on
                         
     script(src="/static/bundles/edit_client_bundle.js")
     script(src="/static/js/intro.js")
