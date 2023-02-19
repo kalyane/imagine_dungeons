@@ -22,7 +22,30 @@ html
             p Loading
         include includes/nav
         .play_game(id_game=game._id size_x=game.size_x size_z=game.size_z near=game.near far=game.far)
+            #modal_container 
+                .modal 
+                    .modal_title
+                        | Train an Agent to Play this Game 
+                        br
+                        i.fas.fa-times#close
+                    .modal_content 
+                        label(for="agent_name") Choose an Agent
+                        br
+                        select(name="agent_name" id="agent_name")
+                            option(value="create") Create a new agent
+                            if agents
+                                each agent in agents 
+                                    option(value=agent._id)=agent.name
+                        button#choose Choose Option
+
             .train_agent_container 
+                .agent_button_container 
+                    button#train_agent Train Agent
+                .go_back_container
+                    .go_back_content
+                        a(href="/games/edit/"+game._id) 
+                            i.fas.fa-chevron-left
+                            | &nbsp; Go Back to Editing
             .game_container
                 .game.box
                     .header GAME
@@ -83,6 +106,8 @@ html
 
     script.
         document.getElementById("game_over_container").style.visibility = "hidden";
+        document.getElementById("modal_container").style.visibility = "hidden";
+        
         let loaded = false;
         let ready = false;
 
@@ -108,8 +133,25 @@ html
             }
         }
 
+        document.getElementById("train_agent").addEventListener("click", function() {
+            document.getElementById("modal_container").style.visibility = "visible";
+        });
+
+        document.getElementById("close").addEventListener("click", function() {
+            document.getElementById("modal_container").style.visibility = "hidden";
+        });
+
         document.getElementById("game_over_container").addEventListener("click", function() {
             window.experience.reset();
             document.getElementById("game_over_container").style.visibility = "hidden";
+        });
+
+        document.getElementById("choose").addEventListener("click", function() {
+            var choice = document.getElementById("agent_name").value;
+            if (choice == "create"){
+                window.location = '/agents/create/'+game._id;
+            } else {
+                window.location = '/agents/'+choice+'/'+game._id;
+            }
         });
     

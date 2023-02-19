@@ -5,10 +5,59 @@
     width: 100%;
     background-color: #252526;
     max-height: 100vh;
+    position: relative;
 }
 
 .train_agent_container{
     flex: 0 0 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+.agent_button_container {
+    flex: 0 0 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.agent_button_container button{
+    font-size: 25px;
+    background-color: #B15328;
+    color:#252526;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+.agent_button_container button:hover{
+    background-color: #C7B386;
+}
+
+.go_back_container{
+    flex: 0 0 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.go_back_content{
+    flex: 0 0 70%;
+    display: flex;
+    justify-content: left;
+}
+
+.go_back_content a {
+    color: white;
+    font-size: 15px;
+}
+
+.go_back_content a:hover {
+    color: #B15328;
 }
 
 .game_container{
@@ -88,7 +137,7 @@
 
 .canvas_container{
     width: 100%;
-    height: 90%;
+    height: 95%;
     max-width: 100%;
     max-height: 100%;
     position: relative;
@@ -116,4 +165,89 @@
 #game_over_container .small_text{
     font-weight: normal;
     font-size: 20px;
+}
+
+#modal_container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: #2525264d; 
+    backdrop-filter: blur(10px);
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    flex: 0 0 600px;
+    background-color: #C4C4C4;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.modal_title{
+    background-color: black;
+    color: white;
+    font-size: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 5px 5px 0 0;
+}
+
+.modal_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 10px;
+}
+
+.modal_content label{
+    color: #252526;
+    font-size: 30px;
+}
+
+.modal_content select{
+    box-sizing: border-box;
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 2px solid #252526;
+    background-color: white;
+    color: #252526;
+    cursor: pointer;
+}
+
+#choose{
+    padding: 10px 20px;
+    color: #252526 !important;
+    background-color: #B15328;
+    border-radius: 5px;
+    border: 2px solid #252526;
+    margin: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 300px;
+}
+
+#choose:hover{
+    background-color: #C7B386;
+}
+
+#close{
+    font-size: 20px;
+}
+
+#close:hover{
+    cursor: pointer;
+    color: #B15328;
 }

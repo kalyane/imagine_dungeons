@@ -37,7 +37,7 @@ html
                     select(name="game_name" id="game_name")
                         if games
                             each game in games 
-                                option(value=game._id)=game.name
+                                option(value=game._id selected=(game._id == id_game) ? true : false)=game.name
                     button#run
                         i.fa-solid.fa-play
                         span RUN CODE
@@ -58,6 +58,45 @@ html
                         .header PLOT
                         .plot_container 
                             canvas#myChart
+
+                    .metrics.box
+                        .header METRICS 
+                        .metrics_container 
+                            .metric
+                                i.metric_icon.fad.fa-clock
+                                div
+                                    .metric_title Time
+                                    .metric_value#time
+                                    
+                            .metric 
+                                i.metric_icon.fad.fa-heartbeat
+                                div
+                                    .metric_title Life
+                                    .metric_value#life 1222
+
+                            .metric 
+                                i.metric_icon.fad.fa-star
+                                div
+                                    .metric_title XP
+                                    .metric_value#xp
+
+                            .metric 
+                                i.metric_icon.fad.fa-medal
+                                div
+                                    .metric_title Level
+                                    .metric_value#level
+
+                            .metric 
+                                i.metric_icon.fad.fa-sword
+                                div
+                                    .metric_title Attack
+                                    .metric_value#attack
+
+                            .metric 
+                                i.metric_icon.fad.fa-shield
+                                div
+                                    .metric_title Defense
+                                    .metric_value#defense
 
     script(src="/static/bundles/agent_client_bundle.js")
     script. 

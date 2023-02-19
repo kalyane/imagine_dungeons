@@ -77,7 +77,6 @@ export default class World extends EventEmitter
         this.player;
         this.monsters = [];
         this.weapons = [];
-        this.solids = []
         this.solidModels = []
         this.assets = []
         this.assetsDragBox = []
@@ -86,6 +85,11 @@ export default class World extends EventEmitter
         this.dictModels = {}
 
         this.gridSize = this.experience.gridSize
+
+        this.possible_win = {}
+        this.possible_win.kill_all_monsters = "kill_all_monsters"
+        this.possible_win.find_exit = "find_exit"
+        this.type_win = this.possible_win.kill_all_monsters
 
         // direction vectors 360 degrees
         this.directions = []
@@ -297,6 +301,10 @@ export default class World extends EventEmitter
             if (this.assets[i].interact){
                 this.interactables.push(this.assets[i])
                 this.interactableModels.push(this.assets[i].modelDragBox)
+
+                if (this.assets[i].exit){
+                    this.type_win = this.possible_win.find_exit
+                }
             }
         }
 
@@ -357,7 +365,6 @@ export default class World extends EventEmitter
         this.player = null;
         this.monsters = [];
         this.weapons = [];
-        this.solids = []
         this.solidModels = []
         this.assets = []
         this.assetsDragBox = []
@@ -439,6 +446,14 @@ export default class World extends EventEmitter
             }
         }
         return true
+    }
+
+    checkWin(){
+        if (this.type_win == this.possible_win.kill_all_monsters){
+            if (this.monsters.length == 0){
+                this.experience.gameOver = true
+            }
+        }
     }
 
     update()

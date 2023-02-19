@@ -14,6 +14,8 @@ export default class EndDoor extends Modular
         this.resource = this.resources.items[this.constructor.asset_name]
 
         this.preSetModel()
+
+        this.exit = true;
     }
 
     preSetModel(){

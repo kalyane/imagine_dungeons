@@ -15,29 +15,11 @@ router
     });
 
 router
-    .route("/create")
+    .route("/create/:id_game?")
     .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
         const agent = new Agent({ user: req.user._id});
         await agent.save();
-        res.redirect(`/agents/${agent._id}`);
-    });
-
-router
-    .route("/:id_agent")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
-        // TODO: make sure only user -----
-        var id_agent = req.params.id_agent;
-        try {
-            const agent = await Agent.findOne({ _id: id_agent});
-            const games = await Game.find({ user: req.user._id }).populate("user", "name");
-            if (agent) {
-                res.render('agent', {agent: agent, user: req.user, games});
-            } else {
-                res.redirect('/login')
-            }
-        } catch (error) {
-            res.redirect('/404')
-        }
+        res.redirect(`/agents/${agent._id}/${req.params.id_game}`);
     });
     
 router
@@ -80,6 +62,24 @@ router
             agent.versionHistory.push({ json, episodes, rewards});
             agent.save(); // will trigger pre-save middleware and remove the oldest version from the 'versionHistory' array
             res.status(200).send({message: "Agent updated successfully"})
+        } catch (error) {
+            res.redirect('/404')
+        }
+    });
+
+router
+    .route("/:id_agent/:id_game?")
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+        // TODO: make sure only user -----
+        var id_agent = req.params.id_agent;
+        try {
+            const agent = await Agent.findOne({ _id: id_agent});
+            const games = await Game.find({ user: req.user._id }).populate("user", "name");
+            if (agent) {
+                res.render('agent', {agent: agent, user: req.user, games, id_game: req.params.id_game});
+            } else {
+                res.redirect('/login')
+            }
         } catch (error) {
             res.redirect('/404')
         }

@@ -110,6 +110,7 @@ export default class MonsterControl
                         this.world.player.xp += this.model.maxLife
                         this.dead = true
                         this.world.deleteModel(this.model.unique_name)
+                        this.world.checkWin()
                     }
                  }, (play._clip.duration+0.5) * 1000);
                 this.playAnimation(play)
