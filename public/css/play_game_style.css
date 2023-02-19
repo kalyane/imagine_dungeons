@@ -25,7 +25,7 @@ body, html {
 
 .play_game{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     height: 100%;
     width: 100%;
 }
@@ -44,21 +44,43 @@ body, html {
     outline:2px solid black;
 }
 
+.left{
+    flex: 0 0 50%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    max-width: 50%;
+}
+
 .canva{
-    flex: 0 0 80%;
-    height: 100%;
-    color: #C4C4C4;
-    max-width: 80vw;
+    flex: 0 0 50%;
+}
+
+.canva_container {
+    height: 320px;
+    width: 480px;
 }
 
 .metric{
-    flex: 0 0 20%;
-    height: 100%;
-    max-width: 20vw;
+    flex: 0 0 50%;
 }
 
-.canva_container{
-    flex:1;
-    height: 640px;
-    width: 960px;
+.right{
+    flex: 0 0 50%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    max-width: 50%;
+}
+
+.code{
+    flex: 0 0 100%;
+}
+
+.code_container{
+    height: calc(100% - 38px);
+}
+
+.CodeMirror {
+    height: 100% !important;
 }

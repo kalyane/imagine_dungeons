@@ -10,6 +10,7 @@ export default class Renderer
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
         this.camera = this.experience.camera
+        this.current_image = null;
 
         this.setInstance()
     }
@@ -40,5 +41,9 @@ export default class Renderer
     update()
     {
         this.instance.render(this.scene, this.camera.instance)
+
+        if (this.experience.playing && !this.experience.user_input){
+            this.current_image = this.instance.domElement.toDataURL();
+        }
     }
 }

@@ -35,16 +35,6 @@ export default class Camera
 
         this.idealOffset = new THREE.Vector3(-1, 14, 15)
         this.idealLookat = new THREE.Vector3(0, 5, 0)
-
-        /*
-        var gui = new GUI();
-        gui.add(this.idealOffset, 'x', -20, 20);
-        gui.add(this.idealOffset, 'y', -20, 20);
-        gui.add(this.idealOffset, 'z', -20, 20);
-        gui.add(this.idealLookat, 'x', -20, 20);
-        gui.add(this.idealLookat, 'y', -20, 20);
-        gui.add(this.idealLookat, 'z', -20, 20);
-        */
     }
 
     setAxis(){

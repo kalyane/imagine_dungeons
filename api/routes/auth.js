@@ -6,8 +6,10 @@ let router = express.Router();
 
 router
     .route("/")
-    .get((req, res)=>{
-        res.render('home', {session: req.session});
+    .get((req, res, next)=>{
+        passport.authenticate('jwt', (err, user) => {
+            res.render('home', {name: 'home', user: user});
+        })(req, res, next);
     });
 
 router
@@ -31,7 +33,7 @@ router
             else{
                 const body = { _id: objs.user._id, email: objs.user.email };
                 const token = jwt.sign({ user: body }, 'TOP_SECRET');
-                res.cookie("token", token, { maxAge: 1000 * 60 * 10, httpOnly: false, secure: true });
+                res.cookie("token", token, { maxAge: 1000 * 60 * 60, httpOnly: false, secure: true });
                 return res.redirect("/games");
             }
         })(req, res, next);
@@ -67,6 +69,14 @@ router
     .get((req, res, next) => {
         res.clearCookie('token');
         res.redirect("/");
+    });
+
+router
+    .route("/404")
+    .get((req, res, next)=>{
+        passport.authenticate('jwt', (err, user) => {
+            res.render('404', {user: user});
+        })(req, res, next);
     });
 
 module.exports = router;

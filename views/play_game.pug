@@ -5,48 +5,83 @@ html
         link(rel="stylesheet" href="/static/css/play_game_style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
+        
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/darcula.css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js")
+
         script(type="importmap").
             {
                 "imports": {
                     "three": "https://cdn.skypack.dev/three@0.139.2/node_modules/three/build/three.module",
-                        "three/": "https://cdn.skypack.dev/three@0.139.2/",      
-                        "dat.gui": "https://cdn.skypack.dev/dat.gui"
+                    "three/": "https://cdn.skypack.dev/three@0.139.2/",      
+                    "dat.gui": "https://cdn.skypack.dev/dat.gui"
                 }
             }
     body 
         .play_game(id_game=game._id size_x=game.size_x size_z=game.size_z near=game.near far=game.far)
-            .canva.box
-                .header GAME PLAYING
-                .canva_container
-                    canvas#playCanvas
-            .metric.box
-                .header METRICS
-                .metrics_container 
-                    p 
-                        | HEALTH: 
-                        span#health
-                    p 
-                        | XP: 
-                        span#xp
-                    p 
-                        | LEVEL: 
-                        span#level
-                    p 
-                        | DEFENSE: 
-                        span#defense
-                    p 
-                        | ATTACK: 
-                        span#attack
-                    p 
-                        | TIME: 
-                        span#time
-                    p 
-                        | GAME READY: 
-                        span#ready
-                    p 
-                        | GAME OVER: 
-                        span#over
+            .left 
+                .canva.box
+                    .header GAME PLAYING
+                    .canva_container
+                        canvas#playCanvas
+                .metric.box
+                    .header METRICS
+                    .metrics_container 
+                        p 
+                            | HEALTH: 
+                            span#health
+                        p 
+                            | XP: 
+                            span#xp
+                        p 
+                            | LEVEL: 
+                            span#level
+                        p 
+                            | DEFENSE: 
+                            span#defense
+                        p 
+                            | ATTACK: 
+                            span#attack
+                        p 
+                            | TIME: 
+                            span#time
+                        p 
+                            | GAME READY: 
+                            span#ready
+                        p 
+                            | GAME OVER: 
+                            span#over
+                
+            .right 
+                .code.box 
+                    .header AI CODE 
+                    .code_container 
+                        textarea(id="code").
+                            print("Hello, World!")
+                            for i in range(10):
+                                print(i)
+
+                        button(py-click="runTextInTag('code')" id="run") Run!
                         
+
     script. 
         window.assets = !{JSON.stringify(assets)}
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "javascript",
+            lineNumbers: true,
+            theme: 'darcula'
+        });
+
+        editor.on('change', (instance, changeObj) => {
+            document.getElementById("code").value = editor.getValue()
+        })
+
+        function getCode(){
+            var targetTextArea = document.getElementById("code_clean");
+
+            // Copy the content of the editor to the target textarea
+            targetTextArea.value = editor.getValue();
+        }
     script(src="/static/bundles/play_client_bundle.js")

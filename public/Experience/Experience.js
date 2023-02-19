@@ -14,7 +14,7 @@ let instance = null
 
 export default class Experience extends EventEmitter
 {
-    constructor(_canvas, gridSize = {'x':50,'z':50}, fog = {'near': 10, 'far': 50}, playing = false)
+    constructor(_canvas)
     {
         super()
         // Singleton
@@ -24,18 +24,24 @@ export default class Experience extends EventEmitter
         }
         instance = this
 
-        // Options
         this.canvas = _canvas
-        this.playing = playing
 
-        // Setup
-        this.sizes = new Sizes(_canvas)
-        this.time = new Time()
         this.scene = new THREE.Scene()
+        this.time = new Time()
+        
+    }
+
+    // set the main attributes that doesn't change when reset
+    setAttributes(assets = null, gridSize = {'x':50,'z':50}, fog = {'near': 10, 'far': 50}, playing = false, user_input = true){
+        // true if playing, false if editing
+        this.playing = playing
+        // if user can send keyboard input
+        this.user_input = user_input
 
         this.gridSize = gridSize
 
-        this.gameOver = false
+        this.resources = new Resources(sources)
+        this.world = new World(assets)
 
         if (this.playing){
             this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), fog.near, fog.far);
@@ -46,18 +52,19 @@ export default class Experience extends EventEmitter
         let light = new THREE.AmbientLight( 0x444444 , 2);
         this.scene.add(light);
 
-        this.resources = new Resources(sources)
         
-        this.world = new World(gridSize)
+        this.sizes = new Sizes(this.canvas)
+        
         this.camera = new Camera()
         this.renderer = new Renderer()
+        
 
         // Resize event
         this.sizes.on('resize', () =>
         {
             this.resize()
         })
-
+        
         // Time tick event
         this.time.on('tick', () =>
         {
@@ -65,12 +72,38 @@ export default class Experience extends EventEmitter
         })
     }
 
-    startPlaying(){
-        this.world.classifyAssets()
-        this.world.player.setControl()
-        for (let monster of this.world.monsters){
-            monster.setControl()
-        }
+    cleanScene(){
+        // Traverse the whole scene
+        this.scene.traverse((child) =>
+        {
+            // Test if it's a mesh
+            if(child instanceof THREE.Mesh)
+            {
+                child.geometry.dispose()
+
+                // Loop through the material properties
+                for(const key in child.material)
+                {
+                    const value = child.material[key]
+
+                    // Test if there is a dispose function
+                    if(value && typeof value.dispose === 'function')
+                    {
+                        value.dispose()
+                    }
+                }
+            }
+        })
+    }
+
+    reset(){
+        this.trigger("not_ready");
+        this.cleanScene()
+        this.time.reset()
+
+        this.gameOver = false
+
+        this.world.reset();
     }
 
     resize()
@@ -86,7 +119,7 @@ export default class Experience extends EventEmitter
         this.renderer.update()
 
         if (this.playing && document.getElementById("ready").innerHTML == "true"){
-            this.updateMetrics()
+            //this.updateMetrics()
         }
     }
 
@@ -120,8 +153,6 @@ export default class Experience extends EventEmitter
         else {
             over.innerHTML = this.gameOver
         }
-        
-        // TODO: when player wins game
     }
 
     destroy()
@@ -154,5 +185,6 @@ export default class Experience extends EventEmitter
         this.camera.controls.dispose()
         this.renderer.instance.dispose()
 
+        instance = null
     }
 }

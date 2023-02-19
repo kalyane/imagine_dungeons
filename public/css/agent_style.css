@@ -1,0 +1,140 @@
+.agent{
+    box-sizing: border-box;
+    flex: 1;
+    background-color: #252526;
+    display: flex;
+    flex-direction: row;
+}
+.header{
+    box-sizing:border-box;
+    background-color: black;
+    padding: 10px;
+    color: #C4C4C4;
+    width: 100%;
+    font-size: 15px;
+    display: flex;
+    justify-content:space-between;
+}
+
+.code{
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+}
+
+.right{
+    flex: 0 0 55%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.top{
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: row;
+}
+.game{
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+}
+.render{
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+}
+.bottom{
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: row;
+}
+.plot{
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.choice{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    background-color: #252526;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.choice label{
+    color: white;
+    font-size: 40px;
+}
+
+
+.code_textarea{
+    flex: 1;
+}
+
+.box{
+    box-sizing: border-box;
+    background-color: #252526;
+    border: 2px solid black;
+}
+
+.CodeMirror{
+    height: 100% !important;
+}
+
+#save{
+    padding: 7px 20px;
+    color: #3E3E42 !important;
+    background-color: #B15328;
+    border-radius: 5px;
+    border: none;
+    margin: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#run{
+    padding: 10px 20px;
+    color: #3E3E42 !important;
+    background-color: #B15328;
+    border-radius: 5px;
+    border: none;
+    margin: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 300px;
+}
+
+select{
+    width: 300px !important;
+}
+
+input, select{
+    box-sizing: border-box;
+    width: 200px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #3E3E42;
+    color: white;
+}
+
+.cont_container {
+    box-sizing: border-box;
+    width: calc(30vw - 50px);
+    height: calc(50vh - 80px);
+    max-width: calc(30vw - 50px);
+    max-height: calc(50vh - 80px);
+}
+
+.canva_container {
+    line-height:0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}

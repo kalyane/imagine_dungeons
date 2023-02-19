@@ -65,9 +65,10 @@ import { TransformControls } from '/node_modules/three/examples/jsm/controls/Tra
 
 export default class World extends EventEmitter
 {
-    constructor()
+    constructor(assetsDB)
     {
         super()
+        this.assetsDB = assetsDB;
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
@@ -156,12 +157,6 @@ export default class World extends EventEmitter
                 "shield_heater" : ShieldHeater,
                 "shield_round" : ShieldRound
             }
-
-            // if not playing user can drag objects
-            if (!this.experience.playing){
-                this.setDragControl()
-                this.setTransformControl()
-            }
             
             this.trigger("ready")
         })
@@ -217,7 +212,7 @@ export default class World extends EventEmitter
     }
 
     setDragControl(){
-        this.dragControls = new DragControls(this.assetsDragBox, this.experience.camera.instance, this.experience.canvas)
+        this.dragControls = new DragControls(this.assetsDragBox, this.experience.camera.instance, this.canvas)
 
         this.dragControls.addEventListener('dragstart', (event) =>
         {
@@ -352,6 +347,63 @@ export default class World extends EventEmitter
         }
         this.dictModels[name].delete()
         delete this.dictModels[name]
+    }
+
+    deleteAllModels(){
+        for (var key in this.dictModels){
+            this.dictModels[key].delete()
+        }
+
+        this.player = null;
+        this.monsters = [];
+        this.weapons = [];
+        this.solids = []
+        this.solidModels = []
+        this.assets = []
+        this.assetsDragBox = []
+        this.interactables = []
+        this.interactableModels = []
+        this.dictModels = {}
+    }
+
+    reset(){
+        this.deleteAllModels()
+        for (var i = 0; i < this.assetsDB.length; i++){
+            this.addModel(this.assetsDB[i].asset_name, this.assetsDB[i].unique_name);
+            var curr_asset = this.dictModels[this.assetsDB[i].unique_name]
+            curr_asset.modelDragBox.position.x = this.assetsDB[i].position_x
+            curr_asset.modelDragBox.position.z = this.assetsDB[i].position_z
+            curr_asset.modelDragBox.quaternion.y = this.assetsDB[i].quaternion_y
+            curr_asset.modelDragBox.quaternion.w = this.assetsDB[i].quaternion_w
+            if (curr_asset.life){
+                curr_asset.life = this.assetsDB[i].life
+            }
+            if (curr_asset.strength){
+                curr_asset.strength = this.assetsDB[i].strength
+            }
+            if (curr_asset.attack_range){
+                curr_asset.attack_range = this.assetsDB[i].attack_range
+            }
+            if (curr_asset.attack_weapon){
+                curr_asset.attack_weapon = this.assetsDB[i].attack_weapon
+            }
+            if (curr_asset.defense_weapon){
+                curr_asset.defense_weapon = this.assetsDB[i].defense_weapon
+            }
+        }
+
+        if (this.experience.playing){
+            this.classifyAssets()
+            this.player.setControl()
+            for (let monster of this.monsters){
+                monster.setControl()
+            }
+
+            this.experience.trigger("ready");
+        } else{
+            this.setDragControl()
+            this.setTransformControl()
+        }
     }
 
     checkBoundaries(object){

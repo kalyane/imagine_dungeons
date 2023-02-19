@@ -1,31 +1,59 @@
-import Experience from './Experience/Experience.js'
+import Experience from '../Experience/Experience.js'
 
 const experience = new Experience(document.querySelector('canvas#editCanvas'))
 
 window.experience = experience;
 
+let assets = null;
 var id_game = document.getElementsByClassName("edit_game")[0].getAttributeNode("id_game").value;
 
-// get assets saved on database to populate the game
-var url = "/assets/" + id_game
-experience.world.on('ready', () => {
-    fetch(url).then(function(response) {
-        return response.json();
-    }).then(function(assets) {
-        for (var i = 0; i < assets.length; i++){
-            experience.world.addModel(assets[i].asset_name, assets[i].unique_name);
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.x = assets[i].position_x
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.position.z = assets[i].position_z
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.y = assets[i].quaternion_y
-            experience.world.dictModels[assets[i].unique_name].modelDragBox.quaternion.w = assets[i].quaternion_w
-        }
-        // update assets card on the project tab
-        updateAddedAssets()
+var weapon_attack = []
+var weapon_defense = []
 
-        experience.trigger("ready")
+// grid size configuration
+var size_x = document.getElementById('size_x');
+var size_z = document.getElementById('size_z');
+
+size_x.addEventListener('change', (event) => {
+    updateGridSize()
+})
+
+size_z.addEventListener('change', (event) => {
+    updateGridSize()
+})
+
+var url = "/assets/" + id_game
+fetch(url).then(function (response){
+    return response.json();
+}).then(function (resolvedValue){
+    assets = resolvedValue;
+    setExperienceAttributes();
+});
+
+function setExperienceAttributes(){
+    experience.setAttributes(assets)
+    
+    experience.world.on('ready', async () => {
+        experience.reset()
+        updateAddedAssets()
+        updateGridSize()
+        addAllModels()
+
+        experience.trigger("ready");
     });
 
+    // keep listening to when an asset is being transformed
+    experience.world.on('start_transform', () => {
+        selectAssetCard()
+    });
 
+    // when no asset is being transformed
+    experience.world.on('stop_transform', () => {
+        unselect()
+    });
+}
+
+function addAllModels(){
     // gets all possible assets to use and add to edit page
     for (var key in experience.world.modelClasses){
         let asset = experience.world.modelClasses[key];
@@ -66,23 +94,18 @@ experience.world.on('ready', () => {
             const asset_name = this.getAttributeNode("model").value;
             experience.world.addModel(asset_name);
             updateAddedAssets()
+            experience.world.transformControls.detach();
+            experience.world.transformControls.attach(experience.world.assets[experience.world.assets.length - 1].modelDragBox);
+            for (var key in experience.world.dictModels){
+                experience.world.dictModels[key].boxHelper.visible = false
+            }
+            experience.world.assets[experience.world.assets.length - 1].boxHelper.visible = true
+            selectAssetCard()
         });
     }
-});
+}
 
-// grid size configuration
-var size_x = document.getElementById('size_x');
-var size_z = document.getElementById('size_z');
 
-updateGridSize()
-
-size_x.addEventListener('change', (event) => {
-    updateGridSize()
-})
-
-size_z.addEventListener('change', (event) => {
-    updateGridSize()
-})
 
 function updateGridSize(){
     experience.world.gridSize.x = size_x.value * 2;
@@ -91,8 +114,39 @@ function updateGridSize(){
     experience.world.floor.floorTexture.repeat.set(experience.world.gridSize.x/2, experience.world.gridSize.z/2);
 }
 
-// keep listening to when an asset is being transformed
-experience.world.on('start_transform', () => {
+var life = document.getElementById('life');
+var strength = document.getElementById('strength');
+var attack_range = document.getElementById('attack_range');
+var attack = document.getElementById('attack');
+var defense = document.getElementById('defense');
+
+life.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].life = life.value;
+})
+
+strength.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].strength = strength.value;
+})
+
+attack_range.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].attack_range = attack_range.value;
+})
+
+attack.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].attack_weapon = attack.value;
+})
+
+defense.addEventListener('change', (event) => {
+    var unique_name = document.getElementById('asset_name').value;
+    experience.world.dictModels[unique_name].defense_weapon = defense.value;
+})
+
+
+function selectAssetCard(){
     // select only the object being transformed
     var added_assets = document.getElementsByClassName("added_asset");
 
@@ -132,10 +186,50 @@ experience.world.on('start_transform', () => {
         // include current value of strength to asset
         document.getElementById('strength').value = selected_asset.strength;
     }
-});
 
-// when no asset is being transformed
-experience.world.on('stop_transform', () => {
+    if ('attack_range' in selected_asset){
+        document.getElementsByClassName("properties_attack_range")[0].removeAttribute("hidden");
+        document.getElementById('attack_range').value = selected_asset.attack_range;
+    }
+
+    if ('attack_weapon' in selected_asset){
+        // make strength visible
+        document.getElementsByClassName("properties_attack")[0].removeAttribute("hidden");
+        // include current value of strength to asset
+        var select = document.getElementById('attack');
+        select.innerHTML = "";
+        for (var i=0; i<weapon_attack.length; i++){
+            var option = document.createElement('option');
+            option.value = weapon_attack[i]
+            option.innerHTML = weapon_attack[i];
+            if(weapon_attack[i] == selected_asset.attack_weapon){
+                option.selected = true;
+            }
+            select.appendChild(option);
+        }
+        experience.world.dictModels[unique_name].attack_weapon = select.value;
+    }
+
+    if ('defense_weapon' in selected_asset){
+        // make strength visible
+        document.getElementsByClassName("properties_defense")[0].removeAttribute("hidden");
+        // include current value of strength to asset
+        var select = document.getElementById('defense')
+        select.innerHTML = "";
+        for (var i=0; i<weapon_defense.length; i++){
+            var option = document.createElement('option');
+            option.value = weapon_defense[i]
+            option.innerHTML = weapon_defense[i];
+            if(weapon_defense[i] == selected_asset.defense_weapon){
+                option.selected = true;
+            }
+            select.appendChild(option);
+        }
+        experience.world.dictModels[unique_name].defense_weapon = select.value;
+    }
+}
+
+function unselect(){
     // deselect all assets
     var added_assets = document.getElementsByClassName("added_asset");
     for (let i = 0; i < added_assets.length; i++) {
@@ -146,7 +240,12 @@ experience.world.on('stop_transform', () => {
     document.getElementsByClassName("selected")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_life")[0].setAttribute("hidden", true);
     document.getElementsByClassName("properties_strength")[0].setAttribute("hidden", true);
-});
+    document.getElementsByClassName("properties_attack_range")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_attack")[0].setAttribute("hidden", true);
+    document.getElementsByClassName("properties_defense")[0].setAttribute("hidden", true);
+}
+
+
 
 // update the asset cards in the project to be the same as in the game
 function updateAddedAssets(){
@@ -157,6 +256,9 @@ function updateAddedAssets(){
 
     // get all assets in the game
     const models = experience.world.assets
+
+    weapon_attack = []
+    weapon_defense = []
   
     // create card for each game asset
     for (let i = 0; i < models.length; i++) {
@@ -181,12 +283,27 @@ function updateAddedAssets(){
         div.appendChild(divCont);
         addedAssetsCont.appendChild(div);
 
-        // watch when card is clicked
-        div.addEventListener("click", function(){
-            console.log(experience.world.dictModels[model.unique_name])
+        if (experience.world.dictModels[model.unique_name].attack){
+            weapon_attack.push(model.unique_name)
+        } else if (experience.world.dictModels[model.unique_name].defense){
+            weapon_defense.push(model.unique_name)
+        }
+
+        // 
+        divCont.addEventListener("click", () => {
+
+            for (var key in experience.world.dictModels){
+                experience.world.dictModels[key].boxHelper.visible = false
+            }
+
             experience.world.dictModels[model.unique_name].boxHelper.visible = true
+
+            // detach the previous object
             experience.world.transformControls.detach();
-            experience.world.transformControls.attach(experience.world.dictModels[model.unique_name]);
+            // attach the newly selected object
+            experience.world.transformControls.attach(experience.world.dictModels[model.unique_name].modelDragBox);
+
+            selectAssetCard()
         })
 
         // watch when the delete button is clicked
@@ -207,10 +324,15 @@ document.getElementById("save").addEventListener("click", function() {
 // save only game general details
 function saveGameDetails(){
     const input = document.getElementById('game_name');
+    var near = document.getElementById('near');
+    var far = document.getElementById('far');
+
     let data = {
         name: input.value,
         size_x: size_x.value,
-        size_z: size_z.value
+        size_z: size_z.value,
+        near: near.value,
+        far: far.value
     };
 
     // send request
@@ -237,8 +359,11 @@ function saveAssets(){
             position_z: assets[i].model.position.z,
             quaternion_y: assets[i].model.quaternion.y,
             quaternion_w: assets[i].model.quaternion.w,
-            life: (assets[i].model.life) ? assets[i].model.life  : 0,
-            strength: (assets[i].model.strength) ? assets[i].model.strength  : 0
+            life: (assets[i].life) ? assets[i].life  : 0,
+            strength: (assets[i].strength) ? assets[i].strength  : 0,
+            attack_range: (assets[i].attack_range) ? assets[i].attack_range  : 0,
+            attack_weapon: (assets[i].attack_weapon) ? assets[i].attack_weapon  : "",
+            defense_weapon: (assets[i].defense_weapon) ? assets[i].defense_weapon  : "",
         };
         data.push(assetData)
     }

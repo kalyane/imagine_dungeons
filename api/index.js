@@ -38,11 +38,13 @@ const auth = require("./routes/auth")
 app.use("/", auth)
 const games = require("./routes/games")
 app.use("/games", games)
+const agents = require("./routes/agents")
+app.use("/agents", agents)
 const assets = require("./routes/assets")
 app.use("/assets", assets)
 
 app.all('*', (req, res) => {
-    res.render('404');
+    res.redirect('/404')
 })
 
 

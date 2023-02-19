@@ -23,6 +23,11 @@ body, html {
     height: 100%;
 }
 
+body{
+    display: flex;
+    flex-direction: column;
+}
+
 nav{
     background-color: #161616;
     box-sizing:border-box;
@@ -30,9 +35,10 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
+    z-index: 999;
 }
 
 .logo {
@@ -47,6 +53,10 @@ nav{
     color: white;
     margin: 5px;
     text-decoration: none;
+}
+
+.links .active{
+    color: #B15328;
 }
 
 .btn-light{
@@ -144,7 +154,7 @@ h1, h2, h3, h4, h5 {
 
 footer{
     box-sizing:border-box;
-    position: fixed;
+    position: sticky;
     bottom: 0;
     background-color: black;
     padding: 10px max(50px, 10%);
@@ -248,11 +258,11 @@ footer a{
 
 .games{
     box-sizing:border-box;
-    padding: 100px 50px;
+    padding: 50px;
     background-color: #252526;
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
+    flex: 1;
 }
 #create-game{
     box-sizing:border-box;

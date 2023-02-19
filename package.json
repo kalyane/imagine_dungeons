@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tensorflow/tfjs-node": "^4.2.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cannon-es": "^0.20.0",
@@ -30,6 +31,7 @@
     "mongoose": "^6.8.3",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "ndarray": "^1.0.19",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

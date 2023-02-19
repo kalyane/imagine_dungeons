@@ -14,8 +14,7 @@ export default class PlayerControl
 
         // constants
         this.fadeDuration = 0.2;
-        this.runVelocity = 25;
-        this.walkVelocity = 15;
+        this.walkVelocity = 25;
         this.rotation = 0.025;
 
         // use model to change animation
@@ -28,13 +27,10 @@ export default class PlayerControl
         this.states = {
             IDLE: 'IDLE',
             WALKING: 'WALKING',
-            RUNNING: 'RUNNING',
             ROTATING_LEFT: 'ROTATING_LEFT',
             ROTATING_RIGHT: 'ROTATING_RIGHT',
             WALKING_AND_ROTATING_LEFT: 'WALKING_AND_ROTATING_LEFT',
             WALKING_AND_ROTATING_RIGHT: 'WALKING_AND_ROTATING_RIGHT',
-            RUNNING_AND_ROTATING_LEFT: 'RUNNING_AND_ROTATING_LEFT',
-            RUNNING_AND_ROTATING_RIGHT: 'RUNNING_AND_ROTATING_RIGHT',
             ATTACKING: 'ATTACKING',
             DYING: 'DYING',
             INTERACTING: 'INTERACTING'
@@ -43,30 +39,41 @@ export default class PlayerControl
         this.isAttaking = false
         this.dead = false
 
-        // state
-        this.toggleRun = true;
-
         this.currentState =  this.states.IDLE;
 
         // check if key was pressed or released
-        this.keysPressed = {};
+        this.keysPressed = {
+            'w': false,
+            'a': false,
+            'd': false,
+            ' ': false,
+            'e': false
+        };
+
         document.addEventListener('keydown', (event) => {
-            if (event.shiftKey) {
-                this.switchRunToggle();
-            }
-            else {
-              this.keysPressed[event.key.toLowerCase()] = true;
+            if (experience.user_input){
+                this.keysPressed[event.key.toLowerCase()] = true;
             }
         }, false);
 
         document.addEventListener('keyup', (event) => {
-          this.keysPressed[event.key.toLowerCase()] = false;
+            if (experience.user_input){
+                this.keysPressed[event.key.toLowerCase()] = false;
+            }
         }, false);
 
     }
 
-    switchRunToggle(){
-      this.toggleRun = !this.toggleRun;
+    sendInput(keys){
+        for (var i=0; i<keys.length; i++){
+            this.keysPressed[keys[i]] = true;
+        }
+
+        setTimeout(()=>{
+            for (var i=0; i<keys.length; i++){
+                this.keysPressed[keys[i]] = false;
+            }
+        }, 10)
     }
 
     checkState(){
@@ -77,16 +84,10 @@ export default class PlayerControl
             this.currentState = this.states.INTERACTING;
         } else if (this.keysPressed[' '] || this.isAttaking) {
             this.currentState = this.states.ATTACKING;
-        } else if (this.keysPressed['w'] && this.keysPressed['a'] && this.toggleRun) {
-            this.currentState = this.states.RUNNING_AND_ROTATING_LEFT;
-        } else if (this.keysPressed['w'] && this.keysPressed['d'] && this.toggleRun) {
-            this.currentState = this.states.RUNNING_AND_ROTATING_RIGHT;
         } else if (this.keysPressed['w'] && this.keysPressed['a']) {
             this.currentState = this.states.WALKING_AND_ROTATING_LEFT;
         } else if (this.keysPressed['w'] && this.keysPressed['d']) {
             this.currentState = this.states.WALKING_AND_ROTATING_RIGHT;
-        } else if (this.keysPressed['w'] && this.toggleRun) {
-            this.currentState = this.states.RUNNING;
         } else if (this.keysPressed['w']) {
             this.currentState = this.states.WALKING;
         } else if (this.keysPressed['a']) {
@@ -107,11 +108,6 @@ export default class PlayerControl
             case this.states.WALKING:
                 this.move(this.walkVelocity)
                 this.playAnimation(this.model.animation.actions.walk_forward);
-                break;
-
-            case this.states.RUNNING:
-                this.move(this.runVelocity)
-                this.playAnimation(this.model.animation.actions.run_forward);
                 break;
 
             case this.states.ROTATING_LEFT:
@@ -136,24 +132,12 @@ export default class PlayerControl
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
-            case this.states.RUNNING_AND_ROTATING_LEFT:
-                this.modelDragBox.rotateY(this.rotation);
-                this.move(this.runVelocity)
-                this.playAnimation(this.model.animation.actions.run_forward);
-                break;
-
-            case this.states.RUNNING_AND_ROTATING_RIGHT:
-                this.modelDragBox.rotateY(-this.rotation);
-                this.move(this.runVelocity)
-                this.playAnimation(this.model.animation.actions.run_forward);
-                break;
-
             case this.states.ATTACKING:
                 var play = this.model.animation.actions.attack;
-                if (!play.isRunning()) {
+                if (!this.isAttaking) {
                     this.attackStartTime = this.time.current;
                     this.isAttaking = true
-                } 
+                }
                 var elapsedTime = this.time.current - this.attackStartTime;
                 if (elapsedTime > play._clip.duration/play.timeScale * 1000 && this.isAttaking) {
                     this.endAttack()

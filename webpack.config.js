@@ -3,8 +3,9 @@ const path = require('path');
 module.exports = {
     devtool: 'source-map',
     entry: {
-        play_client: './public/play_client.js',
-        edit_client: './public/edit_client.js'
+        play_client: './public/js/play_client.js',
+        edit_client: './public/js/edit_client.js',
+        agent_client: './public/js/agent_client.js'
     },
     output: {
         path: path.resolve(__dirname, 'public/bundles/'),
@@ -20,5 +21,10 @@ module.exports = {
                 }
             }
         ]
+    },
+    resolve: {
+        alias: {
+          '@tensorflow/tfjs': path.resolve(__dirname, 'node_modules/@tensorflow/tfjs')
+        }
     }
 };

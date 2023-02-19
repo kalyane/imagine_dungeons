@@ -1,0 +1,88 @@
+doctype html 
+html 
+    head 
+        title Agent Code - Imagine Dungeons 
+        link(rel="stylesheet" href="/static/css/agent_style.css")
+        link(rel="stylesheet" href="/static/css/style.css")
+        link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
+        script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
+        
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/darcula.css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js")
+    body 
+        include includes/nav
+        span(hidden)#ready
+        .agent(id_agent=agent._id)
+            .code.box
+                .header
+                    div(style="display: inline;")
+                        input(type="text" id="agent_name" name="agent_name" value=agent.name placeholder="Agent Name") 
+                        | .js
+                    button#save
+                        i.fa-solid.fa-cloud-arrow-up
+                        span Save Code 
+                .code_textarea
+                    textarea(id="code")=agent.code
+
+            .right
+                .choice
+                    label(for="game_name") Choose a game
+                    br
+                    select(name="game_name" id="game_name")
+                        if games
+                            each game in games 
+                                option(value=game._id)=game.name
+                    button#run
+                        i.fa-solid.fa-play
+                        span RUN CODE
+
+                .top
+                    .game.box 
+                        .header GAME
+                        .cont_container
+                            .canva_container
+                                canvas#playCanvas
+                    .render.box 
+                        .header RENDER 
+                        .render_container
+                            canvas#renderCanvas
+
+                .bottom
+                    .plot.box
+                        .header PLOT
+
+    script(src="/static/bundles/agent_client_bundle.js")
+    script. 
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "javascript",
+            lineNumbers: true,
+            theme: 'darcula',
+            autocorrect: true
+        });
+
+        editor.on('change', (instance, changeObj) => {
+            document.getElementById("code").value = editor.getValue()
+        })
+
+        function setSizeCanvas(){
+            var canvas = document.getElementById("playCanvas")
+            var width = canvas.parentNode.parentNode.clientWidth
+            var height = canvas.parentNode.parentNode.clientHeight
+
+            var unit = Math.round(width/4);
+            if (unit*3 > height){
+                unit = Math.round(height/3);
+            }
+
+            canvas.parentNode.style.height = unit*3 + "px"
+            canvas.parentNode.style.width = unit*4 + "px"
+        }
+
+        setSizeCanvas()
+
+        window.addEventListener('resize', () =>
+        {
+            setSizeCanvas()
+        })
