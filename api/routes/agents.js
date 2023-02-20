@@ -51,19 +51,28 @@ router
     });
 
 router
-    .route("/save/:id_agent")
+    .route("/object/:id_agent")
+    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+        var id_agent = req.params.id_agent;
+        try {
+            const agent = await Agent.findOne({ _id: id_agent, user: req.user._id});
+            if (agent) {
+                res.send(agent.user_object)
+            } else {
+                res.status(500).send({message: "Couldn't get object"})
+            }
+        } catch (error) {
+            res.status(500).send({message: "Couldn't get object"})
+        }
+    })
     .post(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
         var id_agent = req.params.id_agent;
-        var json = req.body.json;
-        var episodes = req.body.episodes;
-        var rewards = req.body.reward;
+        var user_object = req.body.user_object;
         try {
-            const agent = await Agent.findOne({ _id: id_agent });
-            agent.versionHistory.push({ json, episodes, rewards});
-            agent.save(); // will trigger pre-save middleware and remove the oldest version from the 'versionHistory' array
-            res.status(200).send({message: "Agent updated successfully"})
+            await Agent.findOneAndUpdate({ _id: id_agent }, { user_object});
+            res.status(200).send({message: "Object saved successfully"})
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: "Couldn't save object"})
         }
     });
 

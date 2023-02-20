@@ -263,8 +263,28 @@ footer a{
     color: #B15328;
 }
 
+.alerts-container{
+    box-sizing: border-box;
+    position: absolute;
+    top: 3%;
+    left: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+    z-index: 9999;
+}
+
 .alert{
-    padding: 10px max(50px, 10%);
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 5px;
 }
 
 .alert.error{
@@ -285,6 +305,49 @@ footer a{
 .alert.info{
     background-color: #CFF4FC;
     color: #075162;
+}
+
+.alert-content{
+    display: flex;
+    align-items: center;
+}
+
+.alert-content .type-icon{
+    font-size: 25px !important;
+    margin-right: 10px;
+}
+
+.alert .close-icon{
+    font-weight: 900 !important;
+    cursor: pointer !important;
+}
+
+.alert.error .message-button{
+    border: 1px solid #FA5060;
+    color: #FA5060;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.alert.success .message-button{
+    border: 1px solid #0F5133;
+    color: #0F5133;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.alert.warning .message-button{
+    border: 1px solid #6A4E03;
+    color: #6A4E03;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.alert.info .message-button{
+    border: 1px solid #075162;
+    color: #075162;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 .games{

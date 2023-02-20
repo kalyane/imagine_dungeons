@@ -29,6 +29,8 @@ export default class Experience extends EventEmitter
         this.scene = new THREE.Scene()
         this.time = new Time()
         this.ready = false
+
+        this.messages = []
     }
 
     // set the main attributes that doesn't change when reset
@@ -144,13 +146,15 @@ export default class Experience extends EventEmitter
         time.innerHTML = this.time.elapsed
 
         
-        var over = document.getElementById("over");
         if (this.gameOver) {
             this.ready = false
-            if (this.world.player.controls.dead){
-                over.innerHTML = "Lost"
-            } else {
-                over.innerHTML = "Won"
+            if (this.user_input){
+                var over = document.getElementById("over");
+                if (this.world.player.controls.dead){
+                    over.innerHTML = "Lost"
+                } else {
+                    over.innerHTML = "Won"
+                }
             }
             this.trigger("game_over")
         }

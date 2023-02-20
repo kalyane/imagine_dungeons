@@ -99,7 +99,7 @@ router
         var far = req.body.far
         try {
             await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z, near: near, far: far });
-            res.status(200).send({message: "Game updated successfully"})
+            res.status(200).send({message: { text: "Game settings updated successfully", type: "success"}})
         } catch (error) {
             res.redirect('/404')
         }

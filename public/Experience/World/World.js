@@ -74,7 +74,7 @@ export default class World extends EventEmitter
         this.resources = this.experience.resources
         this.canvas = this.experience.canvas
 
-        this.player;
+        this.player = null;
         this.monsters = [];
         this.weapons = [];
         this.solidModels = []
@@ -280,6 +280,10 @@ export default class World extends EventEmitter
     classifyAssets(){
         for (var i=0; i < this.assets.length; i++){
             if (this.assets[i].constructor.type == "player"){
+                if (this.player != null){
+                    this.experience.messages.push({text: "Can only have a single player in the game", type: "error", button: {text: "Back to Editing", href: "/games/edit/"+window.game._id}})
+                    this.experience.trigger("message")
+                }
                 this.player = this.assets[i]
             }
             if (this.assets[i].constructor.type == "monster"){
@@ -288,7 +292,7 @@ export default class World extends EventEmitter
             if (this.assets[i].constructor.type == "weapon"){
                 this.weapons.push(this.assets[i])
             }
-            if (this.assets[i].constructor.type == "modular" || this.assets[i].constructor.type == "object"){
+            if (this.assets[i].constructor.type == "modular" || this.assets[i].constructor.type == "decor"){
                 if (this.assets[i].separateBoxes){
                     for (var j = 0; j < this.assets[i].separateBoxes.length; j++){
                         this.solidModels.push(this.assets[i].separateBoxes[j])
@@ -306,6 +310,11 @@ export default class World extends EventEmitter
                     this.type_win = this.possible_win.find_exit
                 }
             }
+        }
+
+        if (this.player == null){
+            this.experience.messages.push({text: "The game needs to have a player", type: "error", button: {text: "Back to Editing", href: "/games/edit/"+window.game._id}})
+            this.experience.trigger("message")
         }
 
         this.trigger("classified")

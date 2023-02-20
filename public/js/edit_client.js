@@ -1,4 +1,7 @@
 import Experience from '../Experience/Experience.js'
+import MessageHandler from "./MessageHandler";
+
+var message_handler = new MessageHandler()
 
 const experience = new Experience(document.querySelector('canvas#editCanvas'))
 
@@ -315,6 +318,13 @@ function updateAddedAssets(){
     }
 }
 
+document.getElementById("play").addEventListener("click", function() {
+    saveGameDetails()
+    saveAssets()
+
+    window.location = "/games/play/"+id_game;
+});
+
 // when save button is clicked
 document.getElementById("save").addEventListener("click", function() {
     saveGameDetails()
@@ -341,7 +351,12 @@ function saveGameDetails(){
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
     }).then(function(response) {
-        console.log(response);
+        return response.json();
+    }).then(function(data_json) {
+        message_handler.addMessage(data_json.message)
+        message_handler.showMessages()
+    }).catch(function(error) {
+        console.error(error);
     });
 }
 
@@ -374,6 +389,11 @@ function saveAssets(){
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({assets: data})
     }).then(function(response) {
-        console.log(response);
+        return response.json();
+    }).then(function(data_json) {
+        message_handler.addMessage(data_json.message)
+        message_handler.showMessages()
+    }).catch(function(error) {
+        console.error(error);
     });
 }

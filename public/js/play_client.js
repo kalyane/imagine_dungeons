@@ -1,8 +1,19 @@
 import Experience from '../Experience/Experience.js'
+import MessageHandler from "./MessageHandler";
+
+var message_handler = new MessageHandler()
 
 const experience = new Experience(document.querySelector('canvas#playCanvas'))
 
 window.experience = experience;
+
+experience.on('message', () => {
+    for (var i = 0; i < experience.messages.length; i++){
+        message_handler.addMessage(experience.messages[i])
+    }
+    experience.messages = []
+    message_handler.showMessages()
+});
 
 let assets = window.assets;
 var game = window.game;

@@ -4,13 +4,12 @@ html
         title Log in - Imagine Dungeons 
         link(rel="stylesheet" href="/static/css/style.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
+        link(rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.0/css/all.css")
     body 
         #loading
             .loading-animation 
             p Loading
             
-        if message
-            .alert(class=message.type)= message.text
         .bg
             .box_center
                 a(href="/").logo Imagine Dungeons 
@@ -29,7 +28,10 @@ html
                     a(href="/signup") Signup now
 
 script.
+    window.messages = [!{JSON.stringify(message)}]
     window.addEventListener("load", function() {
         const loading = document.querySelector("#loading");
         loading.style.display = "none";
     });
+
+script(src="/static/bundles/message_handler_bundle.js")

@@ -1,5 +1,6 @@
 import Experience from '../Experience/Experience.js'
 import GameEnv from './GameEnv.js'
+import DBManager from './DBManager.js'
 
 import * as tf from '@tensorflow/tfjs';
 
@@ -45,6 +46,7 @@ document.getElementById("run").addEventListener("click", function() {
         return response.json();
     }).then(function (resolvedValue) {
         game = resolvedValue;
+        window.game = game;
         if (game && assets) {
             setExperienceAttributes();
         }
@@ -84,8 +86,8 @@ function executeCode() {
 
     try {
         // Define an async function that takes in the env object
-        const fn = new Function('tf', 'GameEnv', wrapper);
-        fn( tf, GameEnv); // Call the function with the environment and action arguments
+        const fn = new Function('tf', 'GameEnv', 'DBManager',wrapper);
+        fn( tf, GameEnv, DBManager); // Call the function with the environment and action arguments
     } catch (e) {
         console.error(e);
     }

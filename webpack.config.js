@@ -5,7 +5,8 @@ module.exports = {
     entry: {
         play_client: './public/js/play_client.js',
         edit_client: './public/js/edit_client.js',
-        agent_client: './public/js/agent_client.js'
+        agent_client: './public/js/agent_client.js',
+        message_handler: './public/js/message_handler.js'
     },
     output: {
         path: path.resolve(__dirname, 'public/bundles/'),
