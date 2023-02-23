@@ -79,6 +79,14 @@ router
         })(req, res, next);
     });
 
+router
+    .route("/documentation")
+    .get((req, res, next)=>{
+        passport.authenticate('jwt', (err, user) => {
+            res.render('documentation', {user: user, name: "documentation"});
+        })(req, res, next);
+    });
+
 module.exports = router;
 
 

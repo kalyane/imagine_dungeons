@@ -1,0 +1,124 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    height: auto;
+}
+.documentation {
+    flex: 1;
+    background-color: #252526;
+}
+
+.side-menu {
+    width: 20%;
+    max-height: calc(100vh - 100px);
+    padding: 20px;
+    overflow-y: auto;
+    position: fixed;
+    align-self: flex-start; /* <-- this is the fix */
+}
+
+.side-menu .section{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.section-icon {
+    margin-right: 20px;
+    font-size: 20px;
+    color: #B15328 !important;
+}
+
+.section-links a{
+    color: #C4C4C4 !important;
+    display: block;
+    margin-bottom: 7px;
+    top: 250px;
+}
+
+.section-links a:hover{
+    color: #B15328 !important;
+}
+
+.section-links a.h1 {
+    font-size: 17px;
+    font-family: Lato-Black;
+}
+
+.section-links .h2 {
+    margin-left: 15px;
+    font-size: 15px;
+    font-family: Lato-Bold;
+}
+
+.section-links .h3 {
+    font-size: 13px;
+    margin-left: 30px;
+}
+
+.container {
+    padding: 20px 20% 0 25%;
+}
+
+[id]::before {
+    content: '';
+    display: block;
+    height:      75px;
+    margin-top: -75px;
+    visibility: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: white !important;
+}
+
+h1 {
+    margin: 30px 0 20px 0;
+}
+
+h2, h3{
+    margin: 25px 0 20px 0;
+}
+
+h4 {
+    margin: 15px 0 10px 0;
+}
+
+.section{
+    color: #C4C4C4;
+}
+
+.section p{
+    margin-bottom: 20px;
+    line-height: 25px;
+}
+
+.section ul, .section ol{
+    padding-left: 10px;
+    list-style-position: inside;
+    line-height: 25px;
+}
+
+li {
+    margin-bottom: 7px;
+}
+
+ol li::marker{
+    font-family: Lato-Black;
+    color: #B15328;
+  }
+
+ul {
+    list-style-type: none;  
+}
+
+.keep_style {
+    list-style-type: disc;
+}
+
+li b {
+    font-family: Lato-Bold;
+    color: #B15328;
+}
