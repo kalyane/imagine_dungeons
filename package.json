@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tensorflow/tfjs-node": "^4.2.0",
+    "@tensorflow/tfjs": "^4.2.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cannon-es": "^0.20.0",

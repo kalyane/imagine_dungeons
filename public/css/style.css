@@ -28,6 +28,11 @@
     src: url(/static/fonts/Lato-Black.ttf);
 }
 
+@font-face {
+    font-family: RobotoMono-Regular;
+    src: url(/static/fonts/RobotoMono-Regular.ttf);
+}
+
 *{
     margin: 0;
     padding: 0;

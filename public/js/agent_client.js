@@ -3,6 +3,9 @@ import GameEnv from './GameEnv.js'
 import DBManager from './DBManager.js'
 
 import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-webgl';
+
+tf.setBackend('webgl');
 
 let assets = null;
 let game = null;

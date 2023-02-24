@@ -1,15 +1,14 @@
-import * as tf from '@tensorflow/tfjs'
 import Experience from '../Experience/Experience.js'
 import ndarray from 'ndarray';
 
 export default class GameEnv
 {
-    constructor()
+    constructor(width, height, weights)
     {
         this.experience = new Experience();
-        this.width = 200;
-        this.height = 150;
-        this.observation_space = [this.height, this.width, 1];
+        this.width = width;
+        this.height = height;
+        this.observation_space = [this.width, this.height, 1];
 
         this.reward_episode = []
 
@@ -22,22 +21,11 @@ export default class GameEnv
             1: ['w'],
             2: ['a'],
             3: ['d'],
-            4: ['w','a'],
-            5: ['w','d'],
-            6: [' '],
-            7: ['e']
+            4: [' '],
+            5: ['e']
         }
 
-        this.reward_weights = {
-            "health": 1,
-            "xp": 2,
-            "level": 3,
-            "defense": 1,
-            "attack": 2,
-            "time": 0.005,
-            "game_over": -9999,
-            "game_win": 1000
-        }
+        this.reward_weights = weights;
 
         this.action_space = Object.keys(this.action_map).length;
 
@@ -52,30 +40,33 @@ export default class GameEnv
         });
     }
 
-    reset() {
+    async reset() {
         this.experience.reset();
         if (this.total_reward){
             this.reward_episode.push(this.total_reward)
         }
+        this.plotReward()
         this.total_reward = 0
+
+        const observation = await this.getObservation();
       
         return new Promise(resolve => {
-          if (this.ready) {
-            this.previous_metrics = this.getMetrics();
-            resolve();
-          } else {
-            const checkReady = () => {
-              if (this.ready) {
+            if (this.ready) {
                 this.previous_metrics = this.getMetrics();
-                resolve();
-              } else {
-                setTimeout(checkReady, 100);
-              }
-            };
-            checkReady();
-          }
+                resolve([observation]);
+            } else {
+                const checkReady = () => {
+                    if (this.ready) {
+                        this.previous_metrics = this.getMetrics();
+                        resolve([observation]);
+                    } else {
+                        setTimeout(checkReady, 100);
+                    }
+                };
+                checkReady();
+            }
         });
-      }
+    }
 
     async step(action){
         this.experience.world.player.controls.sendInput(this.action_map[action]);
@@ -90,12 +81,11 @@ export default class GameEnv
 
         return new Promise(resolve => {
             setTimeout(() => {
-              resolve({
-                done,
+              resolve([
                 observation,
                 reward,
-                promise: null
-              });
+                done
+              ]);
             }, 10);
         });
     }
@@ -147,16 +137,18 @@ export default class GameEnv
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const matrix = ndarray(new Float32Array(imageData.data.length / 4), [canvas.width, canvas.height], [1, canvas.width], 0);
+        var stateArray = [];
         for (let i = 0; i < imageData.data.length; i += 4) {
             const r = imageData.data[i];
             const g = imageData.data[i + 1];
             const b = imageData.data[i + 2];
             const luminosity = 0.21 * r + 0.72 * g + 0.07 * b;
             matrix.data[i / 4] = luminosity;
+            stateArray.push(luminosity);
         }
         this.grayscaleMatrix = matrix;
 
-        return matrix;
+        return stateArray;
     }
 
     plotReward(){
