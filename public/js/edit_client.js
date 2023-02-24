@@ -347,7 +347,7 @@ function saveGameDetails(){
 
     // send request
     fetch("/games/update/"+id_game, {
-        method: "POST",
+        method: "PUT",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
     }).then(function(response) {

@@ -14,7 +14,7 @@ router
             throw error;
         }
     })
-    .post(async (req, res)=>{
+    .patch(async (req, res)=>{
         let id_game = req.params.id_game;
         let assets = req.body.assets;
     

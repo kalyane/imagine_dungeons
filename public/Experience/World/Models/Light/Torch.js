@@ -16,6 +16,8 @@ export default class Torch extends Light
         this.preSetModel()
     }
 
+
+
     preSetModel(){
         // creates a copy of the original model
         this.model = this.resource.scene.clone()
@@ -38,3 +40,6 @@ export default class Torch extends Light
         this.setModel()
     }
 }
+
+
+

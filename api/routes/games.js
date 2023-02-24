@@ -76,21 +76,21 @@ router
 
 router
     .route("/delete/:id_game")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
+    .delete(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
         try {
             const game = await Game.findOneAndDelete({ _id: req.params.id_game, user: req.user._id });
             if (!game) {
                 throw new Error("Game not found or you do not have permission to delete this game");
             }
-            res.redirect('/games');
+            res.status(200).send({message: { text: "Game deleted successfully", type: "success"}})
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: { text: error, type: "error"}})
         }
     });
 
 router
     .route("/update/:id_game")
-    .post(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+    .put(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
         var id_game = req.params.id_game;
         var name = req.body.name;
         var size_x = req.body.size_x
@@ -101,7 +101,7 @@ router
             await Game.findOneAndUpdate({ _id: id_game }, { name: name, size_x: size_x, size_z: size_z, near: near, far: far });
             res.status(200).send({message: { text: "Game settings updated successfully", type: "success"}})
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: { text: error, type: "error"}})
         }
     });
 
