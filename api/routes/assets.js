@@ -9,9 +9,9 @@ router
         const id_game = req.params.id_game;
         try {
             const assets = await Asset.find({game: id_game});
-            res.send(assets);
+            res.status(200).send(assets);
         } catch (error) {
-            throw error;
+            res.status(500).send(error);
         }
     })
     .patch(async (req, res)=>{
@@ -85,7 +85,7 @@ router
             }
             res.status(200).send({message: { text: "Assets updated successfully", type: "success"}});
         } catch (error) {
-            res.redirect('/404');
+            res.status(500).send({message: { text: error, type: "error"}});
         }
     });
     

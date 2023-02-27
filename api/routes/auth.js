@@ -33,7 +33,7 @@ router
             else{
                 const body = { _id: objs.user._id, email: objs.user.email };
                 const token = jwt.sign({ user: body }, 'TOP_SECRET');
-                res.cookie("token", token, { maxAge: 1000 * 60 * 60, httpOnly: false, secure: true });
+                res.cookie("token", token, { maxAge: 1000 * 60 * 60 * 24, httpOnly: false, secure: true });
                 return res.redirect("/games");
             }
         })(req, res, next);

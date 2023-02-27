@@ -45,22 +45,28 @@ script.
         loading.style.display = "none";
     });
     function createGame() {
-        window.location = '/games/create';
+        fetch('/games', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.redirected) {
+            window.location.href = response.url;
+            }
+        });
     }
     function deleteGame(id) {
         var answer = window.confirm("Do you want to delete this game?");
         if (answer) {
-            fetch('/games/delete/' + id, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            fetch('/games/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                // handle successful deletion
                 location.reload()
             })
             .catch(error => {

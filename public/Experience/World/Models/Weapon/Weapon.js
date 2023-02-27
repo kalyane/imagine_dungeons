@@ -1,5 +1,6 @@
 import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../../../Experience.js'
+import {GUI} from 'dat.gui'
 
 export default class Weapon
 {
@@ -44,6 +45,20 @@ export default class Weapon
         this.scene.add(this.modelDragBox)
         this.scene.add(this.boxHelper)
         this.scene.add(this.model)
+
+        /*
+        const gui = new GUI()
+        const cubeFolder = gui.addFolder('Offset Rotation')
+        cubeFolder.add(this.offsetRot, 'x', -50, 50)
+        cubeFolder.add(this.offsetRot, 'y', -50, 50)
+        cubeFolder.add(this.offsetRot, 'z', -50, 50)
+        cubeFolder.open()
+        const cubeFolder2 = gui.addFolder('Offset Position')
+        cubeFolder2.add(this.offsetPos, 'x', -50, 50)
+        cubeFolder2.add(this.offsetPos, 'y', -50, 50)
+        cubeFolder2.add(this.offsetPos, 'z', -50, 50)
+        cubeFolder2.open()
+        */
     }
 
     update()

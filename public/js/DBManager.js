@@ -18,7 +18,7 @@ export default class DBManager
     async saveObject(user_object) {
         try {
           const response = await fetch("/agents/object/" + this.id_agent, {
-            method: "POST",
+            method: "PUT",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 user_object

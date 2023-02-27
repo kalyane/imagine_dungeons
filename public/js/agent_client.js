@@ -26,8 +26,8 @@ document.getElementById("save").addEventListener("click", function() {
         code: code
     };
 
-    fetch("/agents/update/"+id_agent, {
-        method: "POST",
+    fetch("/agents/"+id_agent, {
+        method: "PATCH",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
     }).then(function(response) {
@@ -94,4 +94,4 @@ function executeCode() {
     } catch (e) {
         console.error(e);
     }
-  }
+}

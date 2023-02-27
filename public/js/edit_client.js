@@ -346,8 +346,8 @@ function saveGameDetails(){
     };
 
     // send request
-    fetch("/games/update/"+id_game, {
-        method: "PUT",
+    fetch("/games/"+id_game, {
+        method: "PATCH",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
     }).then(function(response) {
@@ -385,7 +385,7 @@ function saveAssets(){
 
     // send request
     fetch("/assets/"+id_game, {
-        method: "POST",
+        method: "PATCH",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({assets: data})
     }).then(function(response) {

@@ -1,87 +1,104 @@
 const express = require('express');
 const Agent = require('../../dbmodels/Agent');
 const Game = require('../../dbmodels/Game');
-const passport = require('passport');
-
-require('./jwt_strategy');
 
 let router = express.Router();
 
+// set all agents routes
 router
     .route("/")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
-        const agents = await Agent.find({ user: req.user._id }).populate("user", "name");
-        res.render('agents', {name: 'agents', user: req.user, agents:agents});
+    // show all agents the user has
+    .get(async (req, res) => {
+        try {
+            const agents = await Agent.find({ user: req.user._id }).populate("user", "name");
+            res.render('games', {name: 'games', user: req.user, agents: agents});
+        } catch (error) {
+            res.status(500).send({message: { text: error, type: "error"}})
+        }
+    })
+    // create a new agent
+    .post(async (req, res) => {
+        const agent = new Agent({ user: req.user._id });
+        try {
+            await agent.save();
+            res.redirect('/agents/'+agent._id);
+        } catch (error) {
+            res.status(500).send({message: { text: error, type: "error"}})
+        }
     });
 
 router
     .route("/:id_agent")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
-        // TODO: make sure only user -----
-        var id_agent = req.params.id_agent;
+    // render agent page
+    .get(async (req, res) => {
+        const id_game = req.params.id_agent;
         try {
-            const agent = await Agent.findOne({ _id: id_agent});
+            const agent = await Agent.findOne({ _id: id_agent, user: req.user._id});
             const games = await Game.find({ user: req.user._id }).populate("user", "name");
-            if (agent) {
-                res.render('agent', {agent: agent, user: req.user, games, id_game: req.params.id_game});
-            } else {
-                res.redirect('/login')
+            if (!agent) {
+                // guarantees only the owner can see this page
+                return res.status(403).send({message: { text: "Agent not found or you do not have permission to get this agent", type: "error"}})
             }
+            return res.render('agent', {agent: agent, user: req.user, games, id_game: req.params.id_game});
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: { text: error, type: "error"}})
         }
     })
-    .post(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
-        const agent = new Agent({ user: req.user._id});
-        await agent.save();
-        res.redirect(`/agents/${agent._id}/${req.params.id_game}`);
-    })
-    .patch(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+    // update agent information
+    .patch(async (req, res)=>{
         var id_agent = req.params.id_agent;
         var name = req.body.name;
         var code = req.body.code;
+
         try {
-            await Agent.findOneAndUpdate({ _id: id_agent }, { name, code });
-            res.status(200).send({message: "Agent updated successfully"})
+            const agent = await Agent.findOneAndUpdate({ _id: id_agent, user: req.user._id  }, { name, code });
+            if (!agent) {
+                // guarantees only the owner can update a agent
+                return res.status(403).send({message: { text: "Agent not found or you do not have permission to update this agent", type: "error"}})
+            }
+            return res.status(200).send({message: { text: "Agent updated successfully", type: "success"}})
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: { text: error, type: "error"}})
         }
     })
-    .delete(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res) => {
+    // delete game
+    .delete(async (req, res) => {
         try {
             const agent = await Agent.findOneAndDelete({ _id: req.params.id_agent, user: req.user._id });
             if (!agent) {
-                throw new Error("Agent not found or you do not have permission to delete this agent");
+                // guarantees only the owner can delete an agent
+                return res.status(403).send({message: { text: "Agent not found or you do not have permission to delete this agent", type: "error"}})
             }
-            res.redirect('/agents');
+            return res.status(200).send({message: { text: "Agent deleted successfully", type: "success"}})
         } catch (error) {
-            res.redirect('/404')
+            res.status(500).send({message: { text: error, type: "error"}})
         }
     });
 
 router
     .route("/object/:id_agent")
-    .get(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+    // get the agent user_object
+    .get(async (req, res)=>{
         var id_agent = req.params.id_agent;
         try {
             const agent = await Agent.findOne({ _id: id_agent, user: req.user._id});
-            if (agent) {
-                res.send(agent.user_object)
-            } else {
-                res.status(500).send({message: "Couldn't get object"})
-            }
+            if (!agent) {
+                return res.status(403).send("Object not found or you do not have permission to get this object")
+            } 
+            return res.status(200).send(agent.user_object)
         } catch (error) {
-            res.status(500).send({message: "Couldn't get object"})
+            res.status(500).send(error)
         }
     })
-    .patch(passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), async (req, res)=>{
+    // update agent user_object
+    .put(async (req, res)=>{
         var id_agent = req.params.id_agent;
         var user_object = req.body.user_object;
         try {
-            await Agent.findOneAndUpdate({ _id: id_agent }, { user_object});
+            await Agent.findOneAndUpdate({ _id: id_agent, user: req.user._id }, { user_object});
             res.status(200).send({message: "Object saved successfully"})
         } catch (error) {
-            res.status(500).send({message: "Couldn't save object"})
+            res.status(500).send(error)
         }
     });
 
