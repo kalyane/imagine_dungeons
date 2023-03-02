@@ -113,23 +113,31 @@ nav{
 .btn-light{
     cursor: pointer;
     padding: 10px 20px;
-    color: #3E3E42 !important;
+    color: black !important;
     background-color: #C7B386;
     border-radius: 5px;
     border: none;
     margin: 5px;
     font-size: 12px;
+    border: 2px solid transparent;
 }
 
 .btn-medium{
     cursor: pointer;
     padding: 10px 20px;
-    color: #3E3E42 !important;
+    color: black !important;
     background-color: #B15328;
     border-radius: 5px;
     border: none;
     margin: 5px;
     font-size: 12px;
+    border: 2px solid transparent;
+}
+
+.btn-light:hover, .btn-medium:hover{
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 2px solid #B15328;
 }
 
 .home{
@@ -272,6 +280,13 @@ footer a{
     cursor: pointer;
     color: #3E3E42;
     background-color: #B15328;
+    border: 2px solid transparent;
+}
+
+.box_center input[type=submit]:hover{
+    color: #B15328;
+    background-color: transparent;
+    border: 2px solid #B15328;
 }
 
 .link_question{
@@ -280,6 +295,10 @@ footer a{
 }
 
 .link_question a{
+    color: #C7B386;
+}
+
+.link_question a:hover{
     color: #B15328;
 }
 
@@ -340,6 +359,10 @@ footer a{
 .alert .close-icon{
     font-weight: 900 !important;
     cursor: pointer !important;
+}
+
+.message-button {
+    text-align: center;
 }
 
 .alert.error .message-button{

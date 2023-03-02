@@ -52,7 +52,6 @@ html
                     .canvas_container
                         #game_over_container(hidden)
                             .main_text
-                                | You &nbsp;
                                 span#over
                             i.fas.fa-redo 
                             .small_text Click to reset
@@ -149,9 +148,18 @@ html
         document.getElementById("choose").addEventListener("click", function() {
             var choice = document.getElementById("agent_name").value;
             if (choice == "create"){
-                window.location = '/agents/create/'+game._id;
+                fetch('/agents', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json'},
+                    body: JSON.stringify({id_game: game._id})
+                })
+                .then(response => {
+                    if (response.redirected) {
+                    window.location.href = response.url;
+                    }
+                });
             } else {
-                window.location = '/agents/'+choice+'/'+game._id;
+                window.location = `/agents/${choice}/?id_game=${game._id}`;
             }
         });
     

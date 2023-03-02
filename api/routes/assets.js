@@ -14,7 +14,7 @@ router
             res.status(500).send(error);
         }
     })
-    .patch(async (req, res)=>{
+    .put(async (req, res)=>{
         let id_game = req.params.id_game;
         let assets = req.body.assets;
     

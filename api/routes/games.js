@@ -45,7 +45,7 @@ router
         }
     })
     // update game information
-    .patch(async (req, res)=>{
+    .put(async (req, res)=>{
         // get game information from the request body
         var id_game = req.params.id_game;
         var name = req.body.name;

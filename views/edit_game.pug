@@ -85,7 +85,7 @@ html
                             | &emsp;
                             button#play
                                 | PLAY &nbsp;
-                                i.fa-solid.fa-play 
+                                i.fas.fa-play 
                     .canva_container
                         canvas#editCanvas
                 .project.box
@@ -99,49 +99,49 @@ html
                     .header ASSETS
 
                     div.collapsible
-                        i.fa-solid.fa-dungeon
+                        i.fas.fa-dungeon
                         | &nbsp;&nbsp;
                         span Modular
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#modular
                                         
                     div.collapsible
-                        i.fa-solid.fa-person 
+                        i.fas.fa-user-ninja
                         | &nbsp;&nbsp;
                         span Players
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#player
 
                     div.collapsible
-                        i.fa-solid.fa-ghost 
+                        i.fas.fa-ghost 
                         | &nbsp;&nbsp;
                         span Monsters
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#monster
 
                     div.collapsible
-                        i.fa-solid.fa-lightbulb
+                        i.fas.fa-lightbulb-on
                         | &nbsp;&nbsp;
                         span Lights
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#light
 
                     div.collapsible
-                        i.fa-solid.fa-cube
+                        i.fas.fa-image
                         | &nbsp;&nbsp;
                         span Decor
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#decor
 
                     div.collapsible
-                        i.fa-solid.fa-shield
+                        i.fas.fa-swords
                         | &nbsp;&nbsp;
                         span Weapons
                         i.fa-solid.fa-plus.icon_collapse
                     .collapsible_content#weapon
 
                     button(onclick="startIntro()").intro
-                        i.fas.fa-lightbulb-on
+                        i.far.fa-question-circle
                         
     script(src="/static/bundles/edit_client_bundle.js")
     script(src="/static/js/intro.js")
@@ -202,19 +202,19 @@ html
                 {
                     element: '.properties',
                     title: "Asset properties",
-                    intro: "Whenever you select an asset, this section will display its properties for you to review and adjust as needed. Take control of your game's look and feel and make it truly your own.",
+                    intro: "Whenever you select an asset, this section will display its properties for you to review and adjust as needed.",
                     position: 'right'
                 },
                 {
                     element: '#save',
                     title: "Save Your Game",
-                    intro: "This game editing page doesn't save automatically, so be sure to click on the 'SAVE GAME' button to preserve your progress and ensure you don't lose any of your edits. Please note that it may take a few seconds to save.",
+                    intro: "This game editing page doesn't save automatically, so be sure to click on the 'SAVE' button to preserve your progress and ensure you don't lose any of your edits. Please note that it may take a few seconds to save.",
                     position: 'bottom'
                 },
                 {
                     element: '#play',
                     title: "Play Your Game",
-                    intro: "Simply click the 'Play Your Game' button to enter the world you've created. This is also the page where your AI will have access, so you can see how it performs in the environment you've created.",
+                    intro: "Simply click the 'PLAY' button to enter the world you've created. This is a similar interface the AI will have access, so you can see how it performs in the environment you've created.",
                     position: 'bottom'
                 }
                 

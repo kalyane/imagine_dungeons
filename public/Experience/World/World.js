@@ -86,10 +86,13 @@ export default class World extends EventEmitter
 
         this.gridSize = this.experience.gridSize
 
-        this.possible_win = {}
-        this.possible_win.kill_all_monsters = "kill_all_monsters"
-        this.possible_win.find_exit = "find_exit"
-        this.type_win = this.possible_win.kill_all_monsters
+        this.possible_win = {
+            none: "none",
+            kill_all_monsters: "kill_all_monsters",
+            find_exit: "find_exit"
+        }
+
+        this.type_win = this.possible_win.none
 
         // direction vectors 360 degrees
         this.directions = []
@@ -288,6 +291,9 @@ export default class World extends EventEmitter
             }
             if (this.assets[i].constructor.type == "monster"){
                 this.monsters.push(this.assets[i])
+                if (this.type_win == this.possible_win.none){
+                    this.type_win = this.possible_win.kill_all_monsters;
+                }
             }
             if (this.assets[i].constructor.type == "weapon"){
                 this.weapons.push(this.assets[i])
@@ -310,6 +316,10 @@ export default class World extends EventEmitter
                     this.type_win = this.possible_win.find_exit
                 }
             }
+        }
+
+        if (this.type_win == this.possible_win.none){
+            this.experience.gameOver = true
         }
 
         if (this.player == null){

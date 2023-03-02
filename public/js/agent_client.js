@@ -1,4 +1,6 @@
 import Experience from '../Experience/Experience.js'
+import MessageHandler from "./MessageHandler";
+
 import GameEnv from './GameEnv.js'
 import DBManager from './DBManager.js'
 
@@ -10,13 +12,29 @@ tf.setBackend('webgl');
 let assets = null;
 let game = null;
 
-var ready = document.getElementById("ready");
-ready.innerHTML = false
+var message_handler = new MessageHandler()
 
 let experience = new Experience(document.querySelector('canvas#playCanvas'));
 window.experience = experience;
 
-document.getElementById("save").addEventListener("click", function() {
+document.getElementById("save").addEventListener("click", async function() {
+    // show loading icon animation
+    const icon = this.getElementsByTagName("i")[0];
+    icon.classList.remove("fa-save");
+    icon.classList.add("fa-spinner");
+    icon.classList.add("fa-pulse");
+
+    await save();
+
+    // show save icon again
+    icon.classList.add("fa-save");
+    icon.classList.remove("fa-spinner");
+    icon.classList.remove("fa-pulse");
+
+    message_handler.showMessages()
+});
+
+async function save(){
     const id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value;
     const code = document.getElementById("code").value;
     const name = document.getElementById("agent_name").value;
@@ -26,17 +44,21 @@ document.getElementById("save").addEventListener("click", function() {
         code: code
     };
 
-    fetch("/agents/"+id_agent, {
-        method: "PATCH",
+    const response = await fetch(`/agents/${id_agent}`, {
+        method: "PUT",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(data)
-    }).then(function(response) {
-        console.log(response);
     });
-});
 
-document.getElementById("run").addEventListener("click", function() {
-    const code = editor.getValue();
+    const data_json = await response.json();
+    // adds any message returned to the message_handler
+    message_handler.addMessage(data_json.message);
+
+}
+
+document.getElementById("run").addEventListener("click", async function() {
+    await save();
+
     const id_game = document.getElementById("game_name").value;
 
     if (id_game == null || id_game == ""){
@@ -74,24 +96,44 @@ async function setExperienceAttributes(){
     
     experience.world.on('ready', async () => {
         experience.reset()
-        ready.innerHTML = true
 
         await executeCode()
     });
 }
 
-function executeCode() {
+async function executeCode() {
+    document.getElementById("agent_name").readOnly = true;
     window.editor.setOption("readOnly", true);
-    window.editor.getWrapperElement().classList.toggle("readOnly", true);
 
     const code = document.getElementById("code").value;
-    const wrapper = `async function myAsyncFunction() { ${code} }; myAsyncFunction();`;
+
+    const wrapper = `
+        async function myAsyncFunction() {
+            try {
+                ${code}
+            } catch (error) {
+                console.log(error)
+                message_handler.addMessage({text: error, type:"error"});
+                message_handler.showMessages()
+            }
+        };
+        try {
+            myAsyncFunction();
+        } catch (error) {
+            console.log(error)
+            message_handler.addMessage({text: error, type:"error"});
+            message_handler.showMessages()
+        }`;
 
     try {
         // Define an async function that takes in the env object
-        const fn = new Function('tf', 'GameEnv', 'DBManager',wrapper);
-        fn( tf, GameEnv, DBManager); // Call the function with the environment and action arguments
-    } catch (e) {
-        console.error(e);
+        const fn = new Function('tf', 'GameEnv', 'DBManager','message_handler',wrapper);
+        fn( tf, GameEnv, DBManager, message_handler); // Call the function with the environment and action arguments
+    } catch (error) {
+        console.log(error)
+        message_handler.addMessage({text: error.message, type:"error"});
+        message_handler.showMessages()
     }
+
+    message_handler.showMessages()
 }

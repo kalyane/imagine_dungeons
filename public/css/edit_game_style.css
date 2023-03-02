@@ -189,11 +189,16 @@ body, html {
     flex-wrap: wrap;
 }
 
+.collapsible .fas{
+    width: 25px;
+    text-align: center;
+}
+
 .icon_collapse{
     float: right;
 }
 
-.asset_card{
+.model_card{
     box-sizing: border-box;
     padding: 10px;
     flex: 0 0 33.3333%;
@@ -203,7 +208,15 @@ body, html {
     position: relative;
 }
 
-.asset_card div{
+.icon_container {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    color: #B15328 !important;
+    font-size: 15px !important;
+}
+
+.model_card div:not(.icon_container){
     box-sizing: border-box;
     cursor: pointer;
     background-color: white;
@@ -229,7 +242,7 @@ body, html {
     cursor: pointer;
 }
 
-.asset_card img{
+.model_card img{
     box-sizing: border-box;
     padding: 10px;
     width: 100%;
@@ -291,7 +304,7 @@ body, html {
     height: 100%;
 }
 
-.asset_card div:hover .add{
+.model_card div:hover .add{
     display: block;
 }
 
@@ -388,17 +401,20 @@ body, html {
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+    background-color: transparent;
+    border: transparent;
+}
+
+.intro i {
     background-color: #B15328;
     color: #3E3E42;
     border-radius: 50%;
-    border: transparent;
-    font-size: 40px;
-    cursor: pointer;
-    margin: 10px;
+    font-size: 70px;
 }
 
-.intro:hover{
+.intro i:hover{
     background-color: #C7B386;
     color: #3E3E42;
 }

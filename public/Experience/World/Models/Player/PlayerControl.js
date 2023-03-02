@@ -183,7 +183,9 @@ export default class PlayerControl
     {
         for (var i=0; i<this.world.monsters.length; i++){
             if (this.world.checkCollision(this, this.world.monsters[i])){
-                this.world.monsters[i].life -= this.model.attack_weapon.strength
+                if (this.model.attack_weapon.strength){ 
+                    this.world.monsters[i].life -= this.model.attack_weapon.strength
+                }
                 break;
             }
         }
@@ -203,6 +205,10 @@ export default class PlayerControl
         this.delta = delta
         if (!this.experience.gameOver){
             this.checkState()
+        } else {
+            if (this.currentState != this.states.DYING){
+                this.currentState = this.states.IDLE;
+            }
         }
         this.stateActions()
     }

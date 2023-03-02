@@ -137,10 +137,10 @@ export default class Experience extends EventEmitter
         level.innerHTML = this.world.player.level
 
         var defense = document.getElementById("defense");
-        defense.innerHTML = this.world.player.defense_weapon ? this.world.player.defense_weapon.strength : 0
+        defense.innerHTML = this.world.player.defense_weapon.strength ? this.world.player.defense_weapon.strength : 0;
 
         var attack = document.getElementById("attack");
-        attack.innerHTML = this.world.player.attack_weapon ? this.world.player.attack_weapon.strength : 0
+        attack.innerHTML = this.world.player.attack_weapon.strength ? this.world.player.attack_weapon.strength : 0;
 
         var time = document.getElementById("time");
         time.innerHTML = this.time.elapsed
@@ -149,11 +149,21 @@ export default class Experience extends EventEmitter
         if (this.gameOver) {
             this.ready = false
             if (this.user_input){
+                var container = document.getElementById("game_over_container");
+                container.className = '';
                 var over = document.getElementById("over");
                 if (this.world.player.controls.dead){
-                    over.innerHTML = "Lost"
+                    over.innerHTML = "You Lost"
+                    container.classList.add("lose")
+                } else if (this.world.type_win == this.world.possible_win.none) {
+                    over.innerHTML = "No Way to Win"
+                    container.classList.add("no_way")
+
+                    this.messages.push({text: "There is no way to win the game. Add an end_door or monsters.", type: "error", button: {text: "Back to Editing", href: "/games/edit/"+window.game._id}})
+                    this.trigger("message")
                 } else {
-                    over.innerHTML = "Won"
+                    over.innerHTML = "You Won"
+                    container.classList.add("win")
                 }
             }
             this.trigger("game_over")

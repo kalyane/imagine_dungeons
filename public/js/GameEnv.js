@@ -95,8 +95,8 @@ export default class GameEnv
             "health": this.experience.world.player.life,
             "xp": this.experience.world.player.xp,
             "level": this.experience.world.player.level,
-            "defense": this.experience.world.player.defense_weapon ? this.experience.world.player.defense_weapon.strength : 0,
-            "attack": this.experience.world.player.attack_weapon ? this.experience.world.player.attack_weapon.strength : 0,
+            "defense": this.experience.world.player.defense_weapon.strength ? this.experience.world.player.defense_weapon.strength : 0,
+            "attack": this.experience.world.player.attack_weapon.strength ? this.experience.world.player.attack_weapon.strength : 0,
             "time": this.experience.time.elapsed,
             "game_over": this.experience.gameOver && this.experience.world.player.controls.dead,
             "game_win": this.experience.gameOver && !this.experience.world.player.controls.dead

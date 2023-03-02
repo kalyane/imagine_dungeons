@@ -25,8 +25,7 @@ html
                         input(type="text" id="agent_name" name="agent_name" value=agent.name placeholder="Agent Name") 
                         | .js
                     button#save
-                        i.fa-solid.fa-cloud-arrow-up
-                        span Save Code 
+                        i.fas.fa-save
                 .code_textarea
                     textarea(id="code")=agent.code
 
@@ -39,8 +38,8 @@ html
                             each game in games 
                                 option(value=game._id selected=(game._id == id_game) ? true : false)=game.name
                     button#run
-                        i.fa-solid.fa-play
-                        span RUN CODE
+                        | RUN CODE &nbsp;
+                        i.fas.fa-play 
 
                 .top
                     .game.box 
@@ -63,40 +62,46 @@ html
                         .header METRICS 
                         .metrics_container 
                             .metric
-                                i.metric_icon.fad.fa-clock
-                                div
-                                    .metric_title Time
-                                    .metric_value#time
+                                .metric_cont
+                                    i.metric_icon.fad.fa-clock
+                                    div
+                                        .metric_title Time
+                                        .metric_value#time
                                     
                             .metric 
-                                i.metric_icon.fad.fa-heartbeat
-                                div
-                                    .metric_title Life
-                                    .metric_value#life 1222
+                                .metric_cont
+                                    i.metric_icon.fad.fa-heartbeat
+                                    div
+                                        .metric_title Life
+                                        .metric_value#life
 
                             .metric 
-                                i.metric_icon.fad.fa-star
-                                div
-                                    .metric_title XP
-                                    .metric_value#xp
+                                .metric_cont
+                                    i.metric_icon.fad.fa-star
+                                    div
+                                        .metric_title XP
+                                        .metric_value#xp
 
                             .metric 
-                                i.metric_icon.fad.fa-medal
-                                div
-                                    .metric_title Level
-                                    .metric_value#level
+                                .metric_cont
+                                    i.metric_icon.fad.fa-medal
+                                    div
+                                        .metric_title Level
+                                        .metric_value#level
 
                             .metric 
-                                i.metric_icon.fad.fa-sword
-                                div
-                                    .metric_title Attack
-                                    .metric_value#attack
+                                .metric_cont
+                                    i.metric_icon.fad.fa-sword
+                                    div
+                                        .metric_title Attack
+                                        .metric_value#attack
 
                             .metric 
-                                i.metric_icon.fad.fa-shield
-                                div
-                                    .metric_title Defense
-                                    .metric_value#defense
+                                .metric_cont
+                                    i.metric_icon.fad.fa-shield
+                                    div
+                                        .metric_title Defense
+                                        .metric_value#defense
 
     script(src="/static/bundles/agent_client_bundle.js")
     script. 

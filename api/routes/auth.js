@@ -6,6 +6,7 @@ let router = express.Router();
 
 router
     .route("/")
+    // show homepage
     .get((req, res, next)=>{
         passport.authenticate('jwt', (err, user) => {
             res.render('home', {name: 'home', user: user});
@@ -14,9 +15,12 @@ router
 
 router
     .route("/login")
+    // show login page
     .get((req, res)=>{
         res.render('login');
-    }).post(async (req, res, next)=>{
+    })
+    // logs user in
+    .post(async (req, res, next)=>{
         const { email, password } = req.body;
 
         if (email == "" || password == "") {
@@ -32,7 +36,9 @@ router
             }
             else{
                 const body = { _id: objs.user._id, email: objs.user.email };
+                // generate secure token
                 const token = jwt.sign({ user: body }, 'TOP_SECRET');
+                // store token in a 24h cookie
                 res.cookie("token", token, { maxAge: 1000 * 60 * 60 * 24, httpOnly: false, secure: true });
                 return res.redirect("/games");
             }
@@ -41,6 +47,11 @@ router
 
 router
     .route("/signup")
+    // show signup page
+    .get((req, res) => {
+        res.render('signup');
+    })
+    // creates a new user
     .post((req, res, next) =>{
         const { first_name, last_name, email, password } = req.body;
 
@@ -59,13 +70,11 @@ router
                 return res.render('login', { message: objs.message });
             }
           })(req, res, next);
-    })
-    .get((req, res) => {
-        res.render('signup');
     });
     
 router
     .route("/logout")
+    // logs user out
     .get((req, res, next) => {
         res.clearCookie('token');
         res.redirect("/");
@@ -73,6 +82,7 @@ router
 
 router
     .route("/404")
+    // show 404 page
     .get((req, res, next)=>{
         passport.authenticate('jwt', (err, user) => {
             res.render('404', {user: user, name: "404"});
@@ -81,6 +91,7 @@ router
 
 router
     .route("/documentation")
+    // show documentation page
     .get((req, res, next)=>{
         passport.authenticate('jwt', (err, user) => {
             res.render('documentation', {user: user, name: "documentation"});
