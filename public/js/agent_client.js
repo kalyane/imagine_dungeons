@@ -1,21 +1,57 @@
-import Experience from '../Experience/Experience.js'
 import MessageHandler from "./MessageHandler";
-
-import GameEnv from './GameEnv.js'
-import DBManager from './DBManager.js'
-
-import * as tf from '@tensorflow/tfjs';
-import '@tensorflow/tfjs-backend-webgl';
-
-tf.setBackend('webgl');
 
 let assets = null;
 let game = null;
 
 var message_handler = new MessageHandler()
 
-let experience = new Experience(document.querySelector('canvas#playCanvas'));
-window.experience = experience;
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/bundles/agent_worker_bundle.js').then(registration => {
+        // Send a message to the service worker
+        const id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value
+        registration.active.postMessage({trigger: "id_agent", data: {id_agent: id_agent}});
+    }).catch(error => {
+        console.error('Error registering service worker:', error);
+    });
+}
+
+const worker = new Worker('/static/bundles/agent_worker_bundle.js');
+
+const id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value
+
+worker.postMessage({trigger: "id_agent", data: {id_agent: id_agent}})
+
+const canvas = document.getElementById('playCanvas');
+const ctx = canvas.getContext('2d');
+
+worker.addEventListener('message', event => {
+    const { trigger, data } = event.data;
+
+    if (trigger == "update"){
+        const bitmap = data.bitmap
+
+        ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+        // Calculate the aspect ratio of the bitmap
+        const aspectRatio = bitmap.width / bitmap.height;
+
+        // Resize the bitmap to fit the canvas
+        if (bitmap.width > canvas.width || bitmap.height > canvas.height) {
+            if (aspectRatio > 1) {
+            ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.width / aspectRatio);
+            } else {
+            ctx.drawImage(bitmap, 0, 0, canvas.height * aspectRatio, canvas.height);
+            }
+        } else {
+            ctx.drawImage(bitmap, 0, 0);
+        }
+    }
+
+    if (trigger == "message"){
+        message_handler.addMessage(data)
+        message_handler.showMessages()
+    }
+});
 
 document.getElementById("save").addEventListener("click", async function() {
     // show loading icon animation
@@ -35,7 +71,6 @@ document.getElementById("save").addEventListener("click", async function() {
 });
 
 async function save(){
-    const id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value;
     const code = document.getElementById("code").value;
     const name = document.getElementById("agent_name").value;
 
@@ -57,6 +92,9 @@ async function save(){
 }
 
 document.getElementById("run").addEventListener("click", async function() {
+    document.getElementById("agent_name").readOnly = true;
+    window.editor.setOption("readOnly", true);
+
     await save();
 
     const id_game = document.getElementById("game_name").value;
@@ -92,48 +130,12 @@ document.getElementById("run").addEventListener("click", async function() {
 });
 
 async function setExperienceAttributes(){
-    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, {'near': game.near, 'far': game.far} , true, false)
-    
-    experience.world.on('ready', async () => {
-        experience.reset()
-
-        await executeCode()
-    });
-}
-
-async function executeCode() {
-    document.getElementById("agent_name").readOnly = true;
-    window.editor.setOption("readOnly", true);
-
     const code = document.getElementById("code").value;
 
-    const wrapper = `
-        async function myAsyncFunction() {
-            try {
-                ${code}
-            } catch (error) {
-                console.log(error)
-                message_handler.addMessage({text: error, type:"error"});
-                message_handler.showMessages()
-            }
-        };
-        try {
-            myAsyncFunction();
-        } catch (error) {
-            console.log(error)
-            message_handler.addMessage({text: error, type:"error"});
-            message_handler.showMessages()
-        }`;
-
-    try {
-        // Define an async function that takes in the env object
-        const fn = new Function('tf', 'GameEnv', 'DBManager','message_handler',wrapper);
-        fn( tf, GameEnv, DBManager, message_handler); // Call the function with the environment and action arguments
-    } catch (error) {
-        console.log(error)
-        message_handler.addMessage({text: error.message, type:"error"});
-        message_handler.showMessages()
-    }
-
-    message_handler.showMessages()
+    worker.postMessage({trigger: 'experience', data: {
+        assets:assets, 
+        gridSize : {'x': game.size_x*2,'z': game.size_z*2}, 
+        fog: {'near': game.near, 'far': game.far}, 
+        code: code
+    }})
 }

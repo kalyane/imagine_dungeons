@@ -53,31 +53,26 @@ export default class Monster
 
     setLifeBar(){
         // Create the canvas and context
-        this.canvas = document.createElement('canvas');
+        this.canvas = new OffscreenCanvas(100, 10);
         this.context = this.canvas.getContext('2d');
-
-        // Set the canvas size
-        this.canvas.width = 100;
-        this.canvas.height = 10;
-
+      
         // Draw the life bar
         this.context.fillStyle = 'green';
         this.context.fillRect(0, 0, this.canvas.width * (this.life / this.maxLife), this.canvas.height);
         this.context.strokeRect(0, 0, this.canvas.width, this.canvas.height);
-
+      
         // Create a texture from the canvas
-        var texture = new THREE.CanvasTexture(this.canvas);
-
+        const texture = new THREE.CanvasTexture(this.canvas);
+      
         // Create a sprite using the texture
-        var spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+        const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
         this.sprite = new THREE.Sprite(spriteMaterial);
-
-        //this.sprite.scale.set(this.canvas.width/this.canvas.height, 1, 1);
-        this.sprite.scale.set(this.canvas.width/20, this.canvas.height/20, 1);
-
+      
+        this.sprite.scale.set(this.canvas.width / 20, this.canvas.height / 20, 1);
+      
         // Add the sprite to the scene
         this.scene.add(this.sprite);
-    }
+      }
 
     updateLifeBar() {
         // Clear the canvas

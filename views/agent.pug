@@ -117,25 +117,6 @@ html
             document.getElementById("code").value = window.editor.getValue()
         })
 
-        function setSizeCanvas(){
-            var canvas = document.getElementById("playCanvas")
-            var width = canvas.parentNode.parentNode.clientWidth
-
-            var unit = Math.round(width/4);
-
-            canvas.parentNode.style.height = unit*3 + "px"
-
-            var render_canvas = document.getElementById("renderCanvas")
-            render_canvas.style.height = canvas.parentNode.style.height
-        }
-
-        setSizeCanvas()
-
-        window.addEventListener('resize', () =>
-        {
-            setSizeCanvas()
-        })
-
         const ctx = document.getElementById('myChart').getContext('2d');
 
         const data = {

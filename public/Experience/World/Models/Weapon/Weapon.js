@@ -1,6 +1,5 @@
 import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from '../../../Experience.js'
-import {GUI} from 'dat.gui'
 
 export default class Weapon
 {

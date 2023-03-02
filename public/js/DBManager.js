@@ -1,14 +1,17 @@
 export default class DBManager
 {
-    constructor()
+    constructor(id_agent)
     {
-        this.id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value;
+        this.id_agent = id_agent;
     }
 
     async getObject() {
         try {
           const response = await fetch("/agents/object/" + this.id_agent);
           const user_object = await response.json();
+          if (Object.keys(user_object).length === 0){
+            return null
+          }
           return user_object;
         } catch (error) {
           console.error(error);

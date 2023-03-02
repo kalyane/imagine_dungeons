@@ -14,7 +14,7 @@ let instance = null
 
 export default class Experience extends EventEmitter
 {
-    constructor(_canvas)
+    constructor(_canvas, training = false)
     {
         super()
         // Singleton
@@ -25,12 +25,23 @@ export default class Experience extends EventEmitter
         instance = this
 
         this.canvas = _canvas
+        this.training = training
 
         this.scene = new THREE.Scene()
         this.time = new Time()
         this.ready = false
 
         this.messages = []
+
+        this.metrics = {
+            time: 0,
+            life: 0,
+            defense: 0,
+            attack: 0,
+            xp: 0,
+            level: 0,
+            over: 0
+        }
     }
 
     // set the main attributes that doesn't change when reset
@@ -55,11 +66,10 @@ export default class Experience extends EventEmitter
         this.scene.add(light);
 
         
-        this.sizes = new Sizes(this.canvas)
+        this.sizes = new Sizes(this.canvas, this.training)
         
         this.camera = new Camera()
         this.renderer = new Renderer()
-        
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -127,23 +137,17 @@ export default class Experience extends EventEmitter
     }
 
     updateMetrics(){
-        var health = document.getElementById("life");
-        health.innerHTML = this.world.player.life
+        this.metrics.life = this.world.player.life
 
-        var xp = document.getElementById("xp");
-        xp.innerHTML = this.world.player.xp
+        this.metrics.xp = this.world.player.xp
 
-        var level = document.getElementById("level");
-        level.innerHTML = this.world.player.level
+        this.metrics.level = this.world.player.level
 
-        var defense = document.getElementById("defense");
-        defense.innerHTML = this.world.player.defense_weapon.strength ? this.world.player.defense_weapon.strength : 0;
+        this.metrics.defense = this.world.player.defense_weapon.strength ? this.world.player.defense_weapon.strength : 0;
 
-        var attack = document.getElementById("attack");
-        attack.innerHTML = this.world.player.attack_weapon.strength ? this.world.player.attack_weapon.strength : 0;
+        this.metrics.attack = this.world.player.attack_weapon.strength ? this.world.player.attack_weapon.strength : 0;
 
-        var time = document.getElementById("time");
-        time.innerHTML = this.time.elapsed
+        this.metrics.time = this.time.elapsed
 
         
         if (this.gameOver) {

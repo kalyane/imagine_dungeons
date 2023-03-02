@@ -28,7 +28,10 @@ export default class Renderer
         this.instance.shadowMap.enabled = true
         this.instance.shadowMap.type = THREE.PCFSoftShadowMap
         this.instance.setClearColor('#211d20')
-        this.instance.setSize(this.sizes.width, this.sizes.height)
+        if (!this.experience.training){
+            this.instance.setSize(this.sizes.width, this.sizes.height)
+        }
+        
         this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2))
     }
 
@@ -43,7 +46,7 @@ export default class Renderer
         this.instance.render(this.scene, this.camera.instance)
 
         if (this.experience.playing && !this.experience.user_input){
-            this.current_image = this.instance.domElement.toDataURL();
+            this.current_image = this.instance.domElement.transferToImageBitmap();
         }
     }
 }

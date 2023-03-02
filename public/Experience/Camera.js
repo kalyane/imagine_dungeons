@@ -2,8 +2,6 @@ import * as THREE from '/node_modules/three/build/three.module.js'
 import Experience from './Experience.js'
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls.js'
 
-import { GUI } from 'dat.gui'
-
 export default class Camera
 {
     constructor()

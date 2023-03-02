@@ -45,7 +45,7 @@ export default class GameEnv
         if (this.total_reward){
             this.reward_episode.push(this.total_reward)
         }
-        this.plotReward()
+        // this.plotReward()
         this.total_reward = 0
 
         const observation = await this.getObservation();
@@ -120,34 +120,22 @@ export default class GameEnv
     }
 
     async getObservation() {
-        const dataURL = this.experience.renderer.current_image;
-        const img = new Image();
-
-        img.src = dataURL;
-
-        await new Promise((resolve, reject) => {
-            img.onload = () => resolve();
-            img.onerror = () => reject(new Error('Failed to load image'));
-        });
-
-        const canvas = document.createElement('canvas');
+        const imageBitmap = this.experience.renderer.current_image;
+        const canvas = new OffscreenCanvas(this.width, this.height);
         const ctx = canvas.getContext('2d');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const matrix = ndarray(new Float32Array(imageData.data.length / 4), [canvas.width, canvas.height], [1, canvas.width], 0);
-        var stateArray = [];
+        const stateArray = [];
         for (let i = 0; i < imageData.data.length; i += 4) {
-            const r = imageData.data[i];
-            const g = imageData.data[i + 1];
-            const b = imageData.data[i + 2];
-            const luminosity = 0.21 * r + 0.72 * g + 0.07 * b;
-            matrix.data[i / 4] = luminosity;
-            stateArray.push(luminosity);
+          const r = imageData.data[i];
+          const g = imageData.data[i + 1];
+          const b = imageData.data[i + 2];
+          const luminosity = 0.21 * r + 0.72 * g + 0.07 * b;
+          matrix.data[i / 4] = luminosity;
+          stateArray.push(luminosity);
         }
         this.grayscaleMatrix = matrix;
-
         return stateArray;
     }
 
@@ -171,12 +159,15 @@ export default class GameEnv
             imageData.data[i + 2] = value;
             imageData.data[i + 3] = 255;
         }
-
+        /*
         // Create a canvas and display the image
+        const canvas = new OffscreenCanvas(this.width, this.height);
+        const ctx = canvas.getContext('2d');
+
         const canvas = document.getElementById("renderCanvas");
         const context = canvas.getContext('2d');
         canvas.height = this.height
         canvas.width = this.width
-        context.putImageData(imageData, 0, 0);
+        context.putImageData(imageData, 0, 0);*/
     }
 }
