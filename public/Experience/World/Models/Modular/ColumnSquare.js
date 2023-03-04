@@ -20,11 +20,11 @@ export default class ColumnSquare extends Modular
         // creates a copy of the original model
         this.model = this.resource.scene.clone()
 
-        this.model.scale.set(1.5,1.5,1.5)
+        this.model.scale.set(2,2,2)
 
         // creates a box to cover the model
-        const boxGeo = new THREE.BoxGeometry(2, 6, 2)
-        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 3, 0 ) )
+        const boxGeo = new THREE.BoxGeometry(2.5, 8, 2.5)
+        boxGeo.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 4, 0 ) )
         this.modelDragBox = new THREE.Mesh(
             boxGeo,
             new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })

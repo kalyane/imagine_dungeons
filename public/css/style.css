@@ -148,6 +148,8 @@ nav{
 .banner{
     display: flex;
     align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 h1, h2, h3, h4, h5 {
@@ -160,17 +162,16 @@ h1, h2, h3, h4, h5 {
 
 .banner_left{
     color: white;
-    width: min(100%, 600px);
-    margin-left: 0;
+    flex: 0 0 40%;
 }
 
 .banner_right{
-    margin-right: 0;
+    flex: 0 0 40%;
     text-align: right;
 }
 
 .banner_right img{
-    width: min(100%, 500px);
+    width: 100%;
 }
 
 .cards{
@@ -206,9 +207,7 @@ h1, h2, h3, h4, h5 {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.card .icon img{
-    width: 80%;
+    font-size: 55px;
 }
 
 footer{

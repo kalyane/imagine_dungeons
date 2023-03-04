@@ -48,7 +48,7 @@ changeNameFile()
 
 async function save(){
     if (current_code != "main"){
-        var answer = window.confirm("By clicking OK you confirm to replace the code on "+ name.value + ".js file with the current code in the editor");
+        var answer = window.confirm("By clicking OK you confirm to replace the code on '"+ name.value + ".js' file with the current code in the editor");
         if (!answer){
             return false
         }
@@ -58,6 +58,7 @@ async function save(){
     const code = window.editor.getValue();
 
     current_code = "main"
+    availableCodes[current_code] = code
     availableCodeWithChanges[current_code] = code
     selectOptionCode()
 

@@ -4,6 +4,7 @@ html
         title Agent Code - Imagine Dungeons 
         link(rel="stylesheet" href="/static/css/agent_style.css")
         link(rel="stylesheet" href="/static/css/style.css")
+        link(rel="stylesheet" href="/static/css/introjs.css")
         link(rel="icon" type="image/x-icon" href="/static/images/favicon.ico")
         script(src="https://kit.fontawesome.com/534e6fef90.js" crossorigin="anonymous")
 
@@ -58,7 +59,7 @@ html
 
                 .top
                     .game.box 
-                        .header GAME
+                        .header LIVE PLAY
                         .cont_container
                             .canva_container
                                 canvas#playCanvas
@@ -212,49 +213,49 @@ html
                 steps: [
                 { 
                     title: "Welcome",
-                    intro: "Unleash your creativity and bring your dungeon game vision to life! On this game editing page, you have the tools to create a customized 3D dungeon game that includes an architecture for training an AI agent."
+                    intro: "Welcome to the Agent page! With an easy-to-use code editor, you can write your agent code from scratch or modify an existing one to make it more efficient and effective. But that's not all! Here you can see your agent in action, playing the game you have created."
                 },
                 {
-                    element: '.settings',
-                    title: "General Game Settings",
-                    intro: 'Here you can customize the general game settings to your liking.',
-                    position: 'right'
-                },
-                {
-                    element: '.assets',
-                    title: "Choose Your Game Assets",
-                    intro: "This section is home to a diverse collection of assets, organized into categories for easy browsing. Simply click on your desired asset to add it to the center of your game.",
-                    position: 'left'
-                },
-                {
-                    element: '.canva',
-                    title: "Game Layout",
-                    intro: "Once you add an asset, it will appear in the center of the layout, but you have the power to rearrange it to your liking. Easily change the position of an asset by dragging it or by clicking 'G'. You can also adjust the rotation of an asset by dragging the green circle under it or by clicking 'R' if the circle is not already visible.",
+                    element: '#agent_name',
+                    title: "Agent Name",
+                    intro: "This input field allows you to change your agent's name to something you desire and is used to identify your agent in the platform.",
                     position: 'bottom'
                 },
                 {
-                    element: '.project',
-                    title: "Manage Your Assets",
-                    intro: "In this section, you can view all the assets that are currently in your game, including the ability to select and highlight specific assets. Additionally, you have the power to remove any unwanted assets.",
-                    position: 'top'
+                    element: '.code_textarea',
+                    title: "Editor",
+                    intro: "This code editor allows you to write JavaScript code to train your agent using pre-loaded libraries. Here you can easily create complex algorithms and logic to help your customized agent navigate the game environment easily.",
+                    position: 'right'
                 },
                 {
-                    element: '.properties',
-                    title: "Asset properties",
-                    intro: "Whenever you select an asset, this section will display its properties for you to review and adjust as needed.",
-                    position: 'right'
+                    element: '#undo',
+                    title: "Undo",
+                    intro: "This button lets you quickly revert any changes you've made to your code and return to the last saved version of your code. However, it's important to note that once you've clicked, you cannot go back to the changes you had previously made.",
+                    position: 'bottom'
                 },
                 {
                     element: '#save',
-                    title: "Save Your Game",
-                    intro: "This game editing page doesn't save automatically, so be sure to click on the 'SAVE' button to preserve your progress and ensure you don't lose any of your edits. Please note that it may take a few seconds to save.",
+                    title: "Save",
+                    intro: "This button lets you save your current code directly to your main file. It ensures that all your progress and changes are safely stored and can be accessed anytime.",
                     position: 'bottom'
                 },
                 {
-                    element: '#play',
-                    title: "Play Your Game",
-                    intro: "Simply click the 'PLAY' button to enter the world you've created. This is a similar interface the AI will have access, so you can see how it performs in the environment you've created.",
+                    element: '#files',
+                    title: "Code Examples",
+                    intro: "The code editor has access to various example files, showcasing different strategies for using reinforcement learning to train game-playing agents. These examples can be beneficial if you seek inspiration and guidance on creating effective game-playing agents. Each example is thoroughly documented and explained, making it easy to understand and adapt the underlying logic to your needs.",
                     position: 'bottom'
+                },
+                {
+                    element: '#game_name',
+                    title: "Choose a game",
+                    intro: "You can select the game you want to train your agent from the options provided. The list includes all the games that you have created on the platform.",
+                    position: 'left'
+                },
+                {
+                    element: '#run',
+                    title: "Train your agent",
+                    intro: "This button initiates the training process and applies your code to the game environment, allowing your agent to learn and improve its performance over time.",
+                    position: 'left'
                 }
                 
                 ]
@@ -262,5 +263,41 @@ html
         }
 
         function training(){
-
+            introJs().setOptions({
+                showProgress: true,
+                exitOnOverlayClick: true,
+                steps: [
+                {
+                    element: '.code_textarea',
+                    title: "Editor is read-only",
+                    intro: "While the agent is training, the editor is set to read-only mode, and no changes will be possible. If you want to change the code, please reload the page to start fresh with your code.",
+                    position: 'right'
+                },
+                {
+                    element: '.game',
+                    title: "Live play",
+                    intro: "This tab displays the game your agent is playing in real-time, allowing you to observe your agent's behavior and see how it responds to different game scenarios.",
+                    position: 'left'
+                },
+                {
+                    element: '.render',
+                    title: "Render",
+                    intro: "This tab renders a black-and-white image showing the current game state sent by the game environment to train your agent. You can observe how your agent processes this information by monitoring the state observation in real time.",
+                    position: 'left'
+                },
+                {
+                    element: '.plot',
+                    title: "Rewards Plot",
+                    intro: "This tab shows the cumulative reward received by your agent as it learns to play a game, allowing you to monitor the agent's progress and observe its improvement over time. The plot refreshes with real-time information every time the game resets.",
+                    position: 'top'
+                },
+                {
+                    element: '.metrics',
+                    title: "Metrics",
+                    intro: "This tab displays the current game metrics as your agent plays the game.  The metrics tab includes a range of information about the game environment, such as the player's life, current level, XP, and time elapsed.",
+                    position: 'top'
+                }
+                
+                ]
+            }).start()
         }
