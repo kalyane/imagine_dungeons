@@ -10,8 +10,8 @@ export default class GameEnv
         this.height = height;
         this.observation_space = [this.width, this.height, 1];
 
-        this.reward_episode = []
-
+        this.rewards = []
+        
         // Action key
         // 0 - IDLE (none), 1 - MOVE (w), 2 - ROTATE LEFT (a), 3 - ROTATE RIGHT (d)
         // 4 - WALK AND ROTATE LEFT (w + a), 5 -  WALK AND ROTATE RIGHT (w + d)
@@ -43,7 +43,7 @@ export default class GameEnv
     async reset() {
         this.experience.reset();
         if (this.total_reward){
-            this.reward_episode.push(this.total_reward)
+            this.rewards.push(this.total_reward)
         }
         this.plotReward()
         this.total_reward = 0
@@ -97,7 +97,7 @@ export default class GameEnv
             "level": this.experience.world.player.level,
             "defense": this.experience.world.player.defense_weapon.strength ? this.experience.world.player.defense_weapon.strength : 0,
             "attack": this.experience.world.player.attack_weapon.strength ? this.experience.world.player.attack_weapon.strength : 0,
-            "time": this.experience.time.elapsed,
+            "time": this.experience.time.ticks,
             "game_over": this.experience.gameOver && this.experience.world.player.controls.dead,
             "game_win": this.experience.gameOver && !this.experience.world.player.controls.dead
         }
@@ -153,8 +153,8 @@ export default class GameEnv
 
     plotReward(){
         // Update the chart with new data
-        window.chart.data.datasets[0].data = this.reward_episode;
-        window.chart.data.labels = this.reward_episode.map((reward, index) => `${index + 1}`);
+        window.chart.data.datasets[0].data = this.rewards;
+        window.chart.data.labels = this.rewards.map((reward, index) => `${index + 1}`);
         window.chart.update();
     }
 

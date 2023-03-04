@@ -34,13 +34,35 @@ document.getElementById("save").addEventListener("click", async function() {
     message_handler.showMessages()
 });
 
+const name = document.getElementById("agent_name");
+
+name.addEventListener("change", function(){
+    changeNameFile()
+})
+
+function changeNameFile(){
+    document.getElementById("main").innerHTML = name.value + ".js"
+}
+
+changeNameFile()
+
 async function save(){
+    if (current_code != "main"){
+        var answer = window.confirm("By clicking OK you confirm to replace the code on "+ name.value + ".js file with the current code in the editor");
+        if (!answer){
+            return false
+        }
+    }
+
     const id_agent = document.getElementsByClassName("agent")[0].getAttributeNode("id_agent").value;
-    const code = document.getElementById("code").value;
-    const name = document.getElementById("agent_name").value;
+    const code = window.editor.getValue();
+
+    current_code = "main"
+    availableCodeWithChanges[current_code] = code
+    selectOptionCode()
 
     let data = {
-        name: name,
+        name: name.value,
         code: code
     };
 
@@ -54,17 +76,31 @@ async function save(){
     // adds any message returned to the message_handler
     message_handler.addMessage(data_json.message);
 
+    return true
+
 }
 
 document.getElementById("run").addEventListener("click", async function() {
-    await save();
+    var saved = await save();
+    if (!saved){
+        return
+    }
 
     const id_game = document.getElementById("game_name").value;
-
     if (id_game == null || id_game == ""){
         alert("No game was selected");
         return
     }
+
+    const icon = this.getElementsByTagName("i")[0];
+    icon.classList.remove("fa-play");
+    icon.classList.add("fa-spinner");
+    icon.classList.add("fa-pulse");
+
+    document.getElementsByClassName("code")[0].style.opacity = 0.5;
+    document.getElementById("agent_name").readOnly = true;
+    window.editor.setOption("readOnly", true);
+    
 
     var url = "/games/" + id_game
     fetch(url).then(function (response) {
@@ -102,10 +138,7 @@ async function setExperienceAttributes(){
 }
 
 async function executeCode() {
-    document.getElementById("agent_name").readOnly = true;
-    window.editor.setOption("readOnly", true);
-
-    const code = document.getElementById("code").value;
+    const code = window.editor.getValue();
 
     const wrapper = `
         async function myAsyncFunction() {
@@ -137,3 +170,57 @@ async function executeCode() {
 
     message_handler.showMessages()
 }
+
+const options_container = document.getElementsByClassName("algo_options")[0];
+const options = document.querySelectorAll('.algo_option');
+
+document.getElementById("files").addEventListener("click", async function() {
+    options_container.hidden = !options_container.hidden;
+});
+
+// Add a click event listener to each button
+options.forEach(option => {
+    option.addEventListener('click', () => {
+        changeCodeOnEditor(option.getAttributeNode("code").value)
+    });
+});
+
+const availableCodes = {
+    "main": window.codes["main"],
+    "dqn": window.codes["dqn"],
+    "placeholder": window.codes["placeholder"]
+}
+
+const availableCodeWithChanges = {...availableCodes}
+
+var current_code = "main"
+
+function changeCodeOnEditor(code){
+    availableCodeWithChanges[current_code] = window.editor.getValue();
+
+    window.editor.setValue(availableCodeWithChanges[code]);
+
+    current_code = code;
+
+    selectOptionCode()
+
+    options_container.hidden = true
+}
+
+function selectOptionCode(){
+    options.forEach(option => {
+        if (option.getAttributeNode("code").value == current_code){
+            option.classList.add("selected")
+        } else {
+            option.classList.remove("selected")
+        }
+    });
+}
+
+selectOptionCode()
+
+document.getElementById("undo").addEventListener("click", async function() {
+    availableCodeWithChanges[current_code] = availableCodes[current_code]
+    window.editor.setValue(availableCodeWithChanges[current_code]);
+});
+

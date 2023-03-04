@@ -143,7 +143,7 @@ export default class Experience extends EventEmitter
         attack.innerHTML = this.world.player.attack_weapon.strength ? this.world.player.attack_weapon.strength : 0;
 
         var time = document.getElementById("time");
-        time.innerHTML = this.time.elapsed
+        time.innerHTML = this.time.ticks
 
         
         if (this.gameOver) {

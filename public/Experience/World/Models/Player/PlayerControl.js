@@ -50,17 +50,15 @@ export default class PlayerControl
             'e': false
         };
 
-        document.addEventListener('keydown', (event) => {
-            if (experience.user_input){
+        if (this.experience.user_input){
+            document.addEventListener('keydown', (event) => {
                 this.keysPressed[event.key.toLowerCase()] = true;
-            }
-        }, false);
-
-        document.addEventListener('keyup', (event) => {
-            if (experience.user_input){
+            }, false);
+    
+            document.addEventListener('keyup', (event) => {
                 this.keysPressed[event.key.toLowerCase()] = false;
-            }
-        }, false);
+            }, false);
+        }
 
     }
 

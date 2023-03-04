@@ -140,6 +140,7 @@
     flex: 1;
     max-height: 100%;
     max-width: 100%;
+    position: relative;
 }
 
 .box{
@@ -157,16 +158,22 @@
     font-family: monospace;
   }
 
-#save{
+.header button  {
     margin-right: 10px;
-    color: #C4C4C4;
-    background-color: transparent;
+    background-color: #C4C4C4;
+    color: #3E3E42;
     border: none;
-    font-size: 30px;
     cursor: pointer;
+    font-size: 30px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
 }
 
-#save:hover{
+.header button:hover{
     color: #B15328;
 }
 
@@ -237,4 +244,59 @@ input, select{
     flex: 1;
     padding: 20px;
     max-height: 35vh;
+}
+
+.intro{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    margin: 10px;
+    background-color: transparent;
+    border: transparent;
+    z-index: 100;
+}
+
+.intro i {
+    background-color: #B15328;
+    color: #3E3E42;
+    border-radius: 50%;
+    font-size: 70px;
+}
+
+.intro i:hover{
+    background-color: #C7B386;
+    color: #3E3E42;
+}
+
+.algo_options {
+    position: absolute;
+    top: 5px;
+    right: 22px;
+    z-index: 10;
+    box-sizing: border-box;
+    list-style: none;
+    background-color: white;
+    padding: 5px 0;
+    border-radius: 5px;
+    width: 200px;
+}
+.algo_options li {
+    padding: 5px 0;
+    padding-left: 30px;
+    font-family: Lato-Light;
+}
+.algo_options li:hover {
+    background-color: #C4C4C4;
+    cursor: pointer;
+}
+
+.division {
+    font-family: Lato-Bold;
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+.algo_option.selected {
+    background-color: #c7b38678;
 }

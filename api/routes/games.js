@@ -73,6 +73,7 @@ router
                 // guarantees only the owner can delete a game
                 return res.status(403).send({message: { text: "Game not found or you do not have permission to delete this game", type: "error"}})
             }
+            await Asset.deleteMany({ game: game._id });
             return res.status(200).send({message: { text: "Game deleted successfully", type: "success"}})
         } catch (error) {
             res.status(500).send({message: { text: error, type: "error"}})

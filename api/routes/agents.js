@@ -22,7 +22,7 @@ router
     .post(async (req, res) => {
         try {
             // get placeholder javascript for the agent
-            const jsFileContent = fs.readFileSync('public/js/placeholder.js', 'utf8');
+            const jsFileContent = fs.readFileSync('public/js/agent_code/placeholder.js', 'utf8');
             // create new agent with placeholder code
             const agent = new Agent({ user: req.user._id, code: jsFileContent});
             await agent.save();
@@ -40,11 +40,16 @@ router
         try {
             const agent = await Agent.findOne({ _id: id_agent, user: req.user._id});
             const games = await Game.find({ user: req.user._id }).populate("user", "name");
+            const codes = {
+                "main": agent.code,
+                "dqn": fs.readFileSync('public/js/agent_code/dqn.js', 'utf8'),
+                "placeholder": fs.readFileSync('public/js/agent_code/placeholder.js', 'utf8')
+            }
             if (!agent) {
                 // guarantees only the owner can see this page
                 return res.status(403).send({message: { text: "Agent not found or you do not have permission to get this agent", type: "error"}})
             }
-            return res.render('agent', {agent: agent, user: req.user, games, id_game: req.query.id_game});
+            return res.render('agent', {agent: agent, user: req.user, games, id_game: req.query.id_game, codes: codes});
         } catch (error) {
             res.status(500).send({message: { text: error, type: "error"}})
         }
