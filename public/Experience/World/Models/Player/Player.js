@@ -53,6 +53,8 @@ export default class Player
 
         this.rightHand = this.model.getObjectByName("mixamorigRightHandIndex1")
         this.leftForeArm = this.model.getObjectByName("mixamorigLeftForeArm")
+
+        
     }
 
     setAnimation(animations)

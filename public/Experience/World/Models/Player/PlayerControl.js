@@ -60,6 +60,7 @@ export default class PlayerControl
             }, false);
         }
 
+        this.start_angle = 225;
     }
 
     sendInput(keys){
@@ -109,23 +110,23 @@ export default class PlayerControl
                 break;
 
             case this.states.ROTATING_LEFT:
-                this.modelDragBox.rotateY(this.rotation);
+                this.rotate(this.rotation);
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
             case this.states.ROTATING_RIGHT:
-                this.modelDragBox.rotateY(-this.rotation);
+                this.rotate(-this.rotation);
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
             case this.states.WALKING_AND_ROTATING_LEFT:
-                this.modelDragBox.rotateY(this.rotation);
+                this.rotate(this.rotation);
                 this.move(this.walkVelocity)
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
 
             case this.states.WALKING_AND_ROTATING_RIGHT:
-                this.modelDragBox.rotateY(-this.rotation);
+                this.rotate(-this.rotation);
                 this.move(this.walkVelocity)
                 this.playAnimation(this.model.animation.actions.walk_forward);
                 break;
@@ -160,6 +161,11 @@ export default class PlayerControl
         }
     }
 
+    rotate(rad){
+        this.modelDragBox.rotateY(rad);
+        this.start_angle += THREE.MathUtils.radToDeg(-rad);
+    }
+
     interact(){
         const raycaster = new THREE.Raycaster();
         var radius = 2
@@ -180,13 +186,37 @@ export default class PlayerControl
     endAttack()
     {
         for (var i=0; i<this.world.monsters.length; i++){
-            if (this.world.checkCollision(this, this.world.monsters[i])){
+            var monster = this.getMonsterColliding();
+            if (monster){
                 if (this.model.attack_weapon.strength){ 
-                    this.world.monsters[i].life -= this.model.attack_weapon.strength
+                    this.world.dictModels[monster.userData].life -= this.model.attack_weapon.strength
                 }
                 break;
             }
         }
+    }
+
+    getMonsterColliding(){
+        const raycaster = new THREE.Raycaster();
+        var radius = 4
+
+        for (let i = this.start_angle; i < this.start_angle+90; i += 10) {
+            const angle = THREE.MathUtils.degToRad(i);
+            const direction = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+
+            raycaster.set(this.modelDragBox.position, direction, 0, 10);
+            //this.experience.scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 10, 0xff0000))
+
+            const intersects = raycaster.intersectObjects(this.world.monstersModels)
+
+            // if there is a solid distance less than radius, player can't move
+            if (intersects.length > 0 && intersects[0].distance < radius){
+                console.log(intersects[0].object)
+                return intersects[0].object
+            }
+        }
+        console.log(null)
+        return null
     }
 
     playAnimation(play){

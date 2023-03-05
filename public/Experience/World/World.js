@@ -76,6 +76,7 @@ export default class World extends EventEmitter
 
         this.player = null;
         this.monsters = [];
+        this.monstersModels = [];
         this.weapons = [];
         this.solidModels = []
         this.assets = []
@@ -97,7 +98,8 @@ export default class World extends EventEmitter
         // direction vectors 360 degrees
         this.directions = []
         for (let i = 0; i < 360; i += 3) {
-            this.directions.push(new THREE.Vector3(Math.cos(i), 0, Math.sin(i)));
+            const angle = THREE.MathUtils.degToRad(i);
+            this.directions.push(new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle)));
         }
 
         this.map = new Map()
@@ -291,6 +293,7 @@ export default class World extends EventEmitter
             }
             if (this.assets[i].constructor.type == "monster"){
                 this.monsters.push(this.assets[i])
+                this.monstersModels.push(this.assets[i].modelDragBox)
                 if (this.type_win == this.possible_win.none){
                     this.type_win = this.possible_win.kill_all_monsters;
                 }
@@ -371,6 +374,7 @@ export default class World extends EventEmitter
         }
         if (this.dictModels[name].constructor.type == "monster"){
             this.monsters.splice(this.monsters.indexOf(this.dictModels[name]), 1);
+            this.monstersModels.splice(this.monsters.indexOf(this.dictModels[name]), 1);
         }
         this.dictModels[name].delete()
         delete this.dictModels[name]
@@ -383,6 +387,7 @@ export default class World extends EventEmitter
 
         this.player = null;
         this.monsters = [];
+        this.monstersModels = [];
         this.weapons = [];
         this.solidModels = []
         this.assets = []
