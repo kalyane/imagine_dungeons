@@ -118,6 +118,13 @@ html
                                     div
                                         .metric_title Defense
                                         .metric_value#defense
+
+                            .metric 
+                                .metric_cont
+                                    i.metric_icon.fad.fa-keyboard
+                                    div
+                                        .metric_title Key Pressed
+                                        .metric_value#key
     script.
         window.codes = !{JSON.stringify(codes)}
 
@@ -132,7 +139,6 @@ html
     script(src="/static/bundles/agent_client_bundle.js")
     script(src="/static/js/intro.js")
     script. 
-
         function setSizeCanvas(){
             var canvas = document.getElementById("playCanvas")
             var width = canvas.parentNode.parentNode.clientWidth

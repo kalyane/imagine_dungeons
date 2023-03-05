@@ -60,27 +60,52 @@ html
             .container
                 .section
                     h1#introduction Introduction
-                    p Imagine Dungeons is a platform for creating and training agents to play 3D dungeon games using reinforcement learning. With Imagine Dungeons, you can create games or use existing ones and then train your agents to play them. The platform provides various tools and libraries to simplify the process.
+                    p Imagine Dungeons is a platform for creating and training agents to play 3D dungeon games using reinforcement learning. With Imagine Dungeons, you can create games and then train your agents to play them. The platform provides various tools and libraries to simplify the process.
 
-                    p Through Imagine Dungeons, you will gain experience creating games, building agents to play those games, and training those agents using reinforcement learning. This platform provides a user-friendly interface, enabling you to develop and train agents using popular deep-learning frameworks such as TensorFlow.js. Whether you're new to the field or have experience with machine learning, Imagine Dungeons can help you create and train agents that can learn to play complex games and make decisions in complex environments.
+                    p This platform provides a user-friendly interface, enabling you to develop and train agents using popular deep-learning frameworks such as TensorFlow.js. Whether you're new to the field or have experience with machine learning, Imagine Dungeons can help you create and train agents that can learn to play complex games and make decisions in complex environments.
 
                 .section
                     h1#getting-started Getting Started
                     p To get started with Imagine Dungeons, you can follow these simple steps:
                     ol 
-                        li Sign up for an account on the Imagine Dungeons website.
-                        li Create your own game using the platform's game engine.
-                        li Create your agent training script using the available libraries.
-                        li Evaluate the performance of your agent and fine-tune it as needed.
-                        li Share your agent with the community or use it for your projects.
-                    p With Imagine Dungeons, you can create and train agents that can learn to play complex games and make intelligent decisions based on their environment. The platform is easy to use and flexible, making it an ideal tool for developers and researchers who want to explore the field of reinforcement learning and train intelligent agents.
-                
+                        li
+                            a(href="/signup") Sign up
+                            | &nbsp; for an account on the Imagine Dungeons website.
+                        li 
+                            a(href="/games") Create your own game
+                            | &nbsp; using the platform's game engine.
+                        li 
+                            a(href="/agents") Create your agent
+                            | &nbsp; training script using the 
+                            a(href="#available-libraries") available libraries
+                            | &nbsp; or adapt the 
+                            a(href="#example") example agent's codes.
+                        li 
+                            | Evaluate your agent's performance using the 
+                            a(href="#reward-plot") reward plot
+                            | &nbsp; and fine-tune your code and 
+                            a(href="#reward-weights") reward weights
+                            | &nbsp; as needed.
+                        li 
+                            | You're all done. If you would like to share the results, make sure to reference the 
+                            a(href="https://www.linkedin.com/in/kalyanebezerra/") author
+                            | &nbsp; of this application.
+                    p See?! That's why Imagine Dungeons is an ideal tool for people who want to explore the field of reinforcement learning. Creating and training agents who can learn to play complex games and make intelligent decisions based on their environment becomes more effortless using this app.
+
                 .section 
                     h1#game-editing Game Editing
-                    p You'll be directed to the game editing page when you create a new game. You can also access this page by clicking on the [edit icon] of the game on the Your Games page. You can customize a 3D dungeon game on this page to match your reinforcement learning plans.
+                    p 
+                        | You'll be directed to the game editing page when you create a new game. You can also access this page by clicking on the &nbsp;
+                        i.fas.fa-edit
+                        | &nbsp; icon of the game on the 
+                        a(href="/games") Your Games
+                        | &nbsp; page. You can customize a 3D dungeon game on this page to match your reinforcement learning plans.
 
+                    .gif
+                        img(src="/static/images/documentation/edit_game.png")
+                    
                     h2#general-settings General Settings
-                    p Each game has several general settings:
+                    p Each game has a few general settings:
 
                     ul 
                         li 
@@ -90,46 +115,82 @@ html
                             b Map size: 
                             | This setting indicates the size of the map in the x and z directions. Changing these values adjusts the map size, which you can see in the layout tab. The map will adjust from the center, so increasing the x or z map size increases both directions in that axis.
 
+                    .gif
+                        img(src="/static/images/documentation/map_size.gif")
+                    
                     h2#assets Assets
                     p On the game editing page, you'll find a variety of assets available for your dungeon-themed game. Each asset added to the scene will have a unique name you cannot modify, consisting of the original model name with an increasing index number.
 
                     h3#types-and-properties Types and Properties
                     p Different types of assets behave differently in the game. Here are the available asset types and their properties:
 
-                    ul 
-                        li 
-                            b Modular: 
-                            | These assets construct the game's map and include building pieces. This type of asset doesn't have any customizable properties. Even though you can't customize them, the player can interact with them. This type of object is considered a solid object, so the player can't cross it. For the arch_bars and end_door, the player can interact with them. When interacting with arch_bars (by pressing 'e' and being close to it), it will move down. When interacting with end_door, the game will end, and the player will win.
-                        li 
-                            b Player: 
-                            | You can choose from a few players to add to the scene, but only one player can exist. The player is a requirement for the game to run because the camera follows the player. The player has life, an initial attack weapon, and an initial defense weapon as customizable properties. The options for attack and defense weapons come from the weapons added to the project. If you don't choose an initial attack weapon, the player won't be able to attack until it gets a weapon. If you select an initial attack/defense weapon, the object will keep its position on the map when on the editing page, but when the game starts, the player will wear them. The player can wear both attack and defense weapons at the same time.
-                        li 
-                            b Monster: 
-                            | You can choose from various options of monsters. The monsters have life, strength, and attack range as customizable properties. The attack range represents the number of units the player needs to be from the monster for it to start following the player to attack.
-                        li 
-                            b Light: 
-                            | This type of asset doesn't have any customizable properties. It provides a Three.js point light at the location of the light source.
-                        li 
-                            b Decor: 
-                            | These objects are related to the game's theme and can be added to the scene as solid objects.
-                        li 
-                            b Weapon: 
-                            | The weapon is divided into two types: attack and defense. Both types have a strength property that represents their power over enemies.
+                    .types_list
+                        .types_card
+                            div 
+                                img(src="/static/images/models/modular/arch.png")
+                            div
+                                b Modular: 
+                                | These assets construct the game's map and include modular building pieces. This type of asset doesn't have any customizable properties. Even though you can't customize them, the player can interact with them. This type of object is considered a solid object, so the player can't cross it. For the arch_bars and end_door, the player can interact with them. When interacting with arch_bars (by pressing 'e' and being close to it), it will move down. When interacting with end_door, the game will end, and the player will win.
+                        .types_card
+                            div 
+                                img(src="/static/images/models/player/ranger.png")
+                            div
+                                b Player: 
+                                | You can choose from a few players to add to the scene, but only one player can exist. The player is a requirement for the game to run because the camera follows the player. The player has life, an initial attack weapon, and an initial defense weapon as customizable properties. The options for attack and defense weapons come from the weapons added to the project. If you don't choose an initial attack weapon, the player won't be able to attack until it gets a weapon. If you select an initial attack/defense weapon, the object will keep its position on the map when on the editing page, but when the game starts, the player will wear them. The player can wear both attack and defense weapons at the same time.
+                        .types_card
+                            div 
+                                img(src="/static/images/models/monster/demon.png")
+                            div
+                                b Monster: 
+                                | You can choose from various options of monsters. The monsters have life, strength, and attack range as customizable properties. The attack range represents the number of units the player needs to be from the monster for it to start following the player to attack.
+                        .types_card
+                            div 
+                                img(src="/static/images/models/light/woodfire.png")
+                            div
+                                b Light: 
+                                | This type of asset doesn't have any customizable properties. It provides a Three.js point light at the location of the light source.
+                        .types_card
+                            div 
+                                img(src="/static/images/models/decor/barrel.png")
+                            div
+                                b Decor: 
+                                | These objects are related to the game's theme and can be added to the scene as solid objects.
+                        .types_card
+                            div 
+                                img(src="/static/images/models/weapon/claymore.png")
+                            div
+                                b Weapon: 
+                                | The weapon is divided into two types: attack and defense. Both types have a strength property that represents their power over enemies.
                     
                     p To view an asset's properties, click on the asset in the layout scene or project tab. The asset's properties will then appear in the properties tab.
 
+                    .gif
+                        img(src="/static/images/documentation/properties.gif")
+                    
                     h3#adding-and-deleting-assets Adding and Deleting Assets
 
                     p To add an asset to your game, navigate to the assets tab and select the section corresponding to the asset type you want to add. Next, click on the asset you want to include, and it will appear in the center of the game at position (0,0). You can then find the asset listed in the project tab with its unique name.
+                    .gif
+                        img(src="/static/images/documentation/add.gif")
+
                     p To remove an asset from your game, locate it in the project tab and click on its trash icon. This will delete the asset from your game and will no longer be visible in the scene. Note that once an asset is removed, you cannot recover it, so keep saving your project before making any significant changes.
+                    .gif
+                        img(src="/static/images/documentation/delete.gif")
 
                     h3#changing-position-and-rotation Changing Position and Rotation
 
                     p To change the assets' position, you can drag the object in the scene or choose to only change its position in a single axis by pressing G and dragging that axis vector. Note that the asset can only move in the x and z-axis. The y-axis is fixed. Also, the object cannot move outside the map, and the game engine will round its position to the nearest half unit, so moving in a discrete space allows you to better position the elements in the scene.
+                    .gif
+                        img(src="/static/images/documentation/position.gif")
+                    
                     p To change an asset's rotation, you can drag the green circle that appears beneath the asset to the desired direction. The asset's rotation is executed only in 90-degree increments on the y-axis. If the green circle does not appear, press R to make it appear.
+                    .gif
+                        img(src="/static/images/documentation/rotation.gif")
 
                     h2#game Game
                     p To play the game you created, click the “play” button. This will take you to the play page, where you can interact with the game and see various metrics.
+                    .gif
+                        img(src="/static/images/documentation/play.gif")
 
                     h3#user-input User Input
                     p To control the player, you can use the keyboard. The following commands are available:
@@ -218,55 +279,108 @@ html
                     h1#agent Agent
 
                     p On the agent page, you can create artificial intelligence (AI) agents to play the games you created on the platform.
+                    .gif
+                        img(src="/static/images/documentation/agent.png")
 
                     h2#reinforcement-learning-agent What is a reinforcement learning agent?
                     p A reinforcement learning agent is an AI agent that learns to play a game through trial and error. The agent interacts with the game environment and receives rewards or penalties based on its actions. The agent's goal is to learn to take actions that maximize its long-term reward, typically defined as a cumulative sum of the rewards obtained over time.
                     p Reinforcement learning agents use a trial-and-error approach to explore different actions and learn from the feedback received from the environment. They update their policy or decision-making strategy based on the rewards obtained, so they can learn to make better decisions over time. As the agent learns to play the game, it becomes increasingly effective and efficient and may even outperform human players in some cases.
+                    .gif
+                        img(src="/static/images/documentation/reinforcement_learning.png")
+
                     p In Imagine Dungeons, you can create a reinforcement learning agent using JavaScript and the available libraries. You can train your agent to play the game by defining its policy and using the built-in functions to interact with the game environment. You can also test your agent's performance and fine-tune its policy to improve its gameplay.
 
-                    h2#available-libraries Available Libraries
+                    h2#available-libraries Available Classes and Libraries
 
                     p The following libraries are available to use in Imagine Dungeons to develop and train reinforcement learning agents:
 
-                    h4 GameEnv
-                    p This library acts as a bridge between your code and the game. It provides the reset and step functions, and you can set the metric weights used in the reward function, which calculates the reward at every step.
+                    h3 GameEnv
+                    p This library acts as a bridge between your code and the game. 
+                    
+                    h4 Constructor 
+                    p
+                        b GameEnv( width : Int, height : Int, weights : Dict )
+                    p
+                        a width
+                        | &nbsp; (required) of the game environment observation.
+                    p
+                        a height
+                        | &nbsp; (required) of the game environment observation.
+                    p#reward-weights
+                        a weights
+                        | &nbsp; (required) for the reward function. It should include all the metrics as keys followed by a value.
+                        | For example, if you want the player to fastly find the exit and kill the monster it encounters, consider having the weights similar to this
+                        | { "life": 0, "xp": 0.5, "level": 2, "defense": 0, "attack": 0, "time": -0.05, "game_lost": -100, "game_win": 100}
 
-                    h4 DBManager
+                    h4 Methods
+                    p 
+                        a .reset ()
+                        | : [observation: Array]
+                        br
+                        | Resets the game environment and returns the first observation.
+                    
+                    p 
+                        a .step (action: Int)
+                        | : [observation: Array, reward: Float, done: Boolean]
+                        br
+                        | Takes an action in the game environment and returns the observation, reward, and done flag after taking the action.
+                    
+                    p 
+                        a .render ()
+                        br
+                        | Renders the last observation in the display.
+                    
+
+                    h3 DBManager
                     p This class enables you to save and retrieve JSON objects from the database to avoid losing data during agent training. For example, you can save your model weights in a JSON format every few episodes to ensure you do not lose any progress. Note that the database has a size limit of 16 MB.
 
-                    h4 Memory
-                    p To train reinforcement learning agents, it is crucial to save previous episodes so that the agent can be retrained with them in the future and not forget what it has learned. You can use this class to store this information while running your code.
+                    h4 Constructor 
+                    p
+                        b DBManager()
 
-                    h4 TensorFlow.js
-                    p TensorFlow.js is a popular library for creating neural networks and reinforcement learning agents. In Imagine Dungeons, TensorFlow.js can utilize GPU resources, resulting in similar or even better processing times than when working with TensorFlow in a Python environment.
+                    h4 Methods 
+                    p 
+                        a .saveObject (user_object: Object)
+                        br
+                        | Saves the user object to the database.
+                    
+                    p 
+                        a .getObject ()
+                        | : [user_object: Object]
+                        br
+                        | Retrieves a user object from the database. If object is empty, returns null.
+                    
 
+                    
+                    h3 TensorFlow.js as tf
+                    p 
+                        a(href="https://www.tensorflow.org/js") TensorFlow.js
+                        | &nbsp; is a popular library for creating neural networks and reinforcement learning agents. In Imagine Dungeons, TensorFlow.js can utilize GPU resources, resulting in similar or even better processing times than when working with TensorFlow in a Python environment.
+                    
                     h2#display Display 
                     p When the code is running, you will see four tabs on the right side of the screen:
-                    ul 
-                        li 
-                            b Game: 
-                            | This tab displays the game that the agent is currently playing. You can see the actions taken by the agent and the changes in the game environment in real time.
-                        li 
-                            b Render: 
-                            | This tab displays the observation space that the agent is receiving. The observation space contains information about the state of the game environment and is used by the agent to make decisions.
-                        li 
-                            b Plot: 
-                            | This tab displays a graph of the rewards earned by the agent over time, since the start of the training process. This can help you visualize how the agent's performance improves over time.
-                        li 
-                            b Metrics: 
-                            | This tab displays the current metrics of the game, such as the ***current episode, the total number of episodes, the average reward, and the current score***. This information can help understand the game's progress and the agent's performance.
-
+                    div
+                        b Live Play:
+                        p This tab displays the game that the agent is currently playing. You can see the actions taken by the agent and the changes in the game environment in real time.
+                    div
+                        b Render: 
+                        p This tab displays the observation space that the agent is receiving. The observation space contains information about the state of the game environment and is used by the agent to make decisions.
+                    div
+                        b#reward-plot Plot: 
+                        p This tab displays a graph of the rewards earned by the agent over time, since the start of the training process. This can help you visualize how the agent's performance improves over time.
+                    div 
+                        b Metrics: 
+                        p This tab displays the current metrics of the game, such as the Life, XP, Attack, Time, Key Pressed, etc. This information can help understand the game's progress and the agent's performance.
+                    .gif
+                        img(src="/static/images/documentation/display.png")
 
                 .section
                     h1#example Example
 
-                    h2 How to create a game?
-                    p TODO
-                    h2 How to create an agent?
-                    p IN PROGRESS 
+                    h2 How to create a Deep Q Learning (DQN) agent?
 
-                    p Reinforcement learning (RL) is a subfield of machine learning that involves an agent learning how to make decisions by interacting with an environment. The goal of the agent is to learn a policy that maximizes a reward signal provided by the environment. The agent learns by trial and error, receiving feedback in the form of a reward signal from the environment based on the actions it takes. The objective is to maximize the cumulative reward over time.
-
+                    p Deep Q-Learning (DQN) is a reinforcement learning algorithm that combines the Q-learning algorithm with deep neural networks. It uses a neural network to approximate the action-value function (Q-function) of the environment and updates its Q-values based on the rewards received for its actions and the predicted rewards for its future actions.
+                    
                     p The code defines a DQNAgent class that initializes the Q network and the target Q network. The Q network is a convolutional neural network that takes the current state of the game as input and outputs the Q-values for each possible action. The Q-values represent the expected future reward for each action, given the current state. The target Q network is used for computing the target Q-values during training. It is a copy of the Q network that is updated less frequently and is used to stabilize the training process.
 
                     p The DQNAgent class also defines the hyperparameters and functions for selecting actions, storing transitions, and updating the Q network. The getAction function selects the next action based on an epsilon-greedy policy, which selects a random action with probability epsilon and selects the action with the highest Q-value with probability 1 - epsilon. The storeTransition function stores the current transition (state, action, reward, next state, done) in a replay memory. The updateQNetwork function updates the Q network using a minibatch of transitions sampled randomly from the replay memory. It computes the target Q-values using the target Q network and the Bellman equation and trains the Q network using the mean squared error loss.

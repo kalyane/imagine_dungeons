@@ -5,17 +5,23 @@ export default class GameEnv
 {
     constructor(width, height, weights)
     {
+        // Create a instance of the Experience class that is a singleton
         this.experience = new Experience();
+
+        // Set the width and height of the game environment
         this.width = width;
         this.height = height;
+        
+        // Define the observation space
         this.observation_space = [this.width, this.height, 1];
 
+        // Initialize the rewards array
         this.rewards = []
         
-        // Action key
-        // 0 - IDLE (none), 1 - MOVE (w), 2 - ROTATE LEFT (a), 3 - ROTATE RIGHT (d)
-        // 4 - WALK AND ROTATE LEFT (w + a), 5 -  WALK AND ROTATE RIGHT (w + d)
-        // 6 - ATTACK (space), 7 - INTERACT (e)
+        // Define the mapping between actions and keys
+        //      Action key
+        //      0 - IDLE (none), 1 - MOVE (w), 2 - ROTATE LEFT (a), 3 - ROTATE RIGHT (d)
+        //      4 - ATTACK (space), 5 - INTERACT (e)
         this.action_map = {
             0: [],
             1: ['w'],
@@ -25,36 +31,51 @@ export default class GameEnv
             5: ['e']
         }
 
+        // Define the reward weights
         this.reward_weights = weights;
 
+        // Determine the number of actions
         this.action_space = Object.keys(this.action_map).length;
 
+        // Set the ready state of the game to false
         this.ready = false;
 
+        // When the experience is ready, set the ready variable to true
         this.experience.on('ready', () => {
             this.ready = true;
         });
 
+        // When the experience is not ready, set the ready variable to false
         this.experience.on('not_ready', () => {
             this.ready = false;
         });
     }
 
+    // Reset the game environment
     async reset() {
+        // Reset the experience
         this.experience.reset();
+
+        // If there is a total reward, add it to the rewards array
         if (this.total_reward){
             this.rewards.push(this.total_reward)
         }
+
+        // Update the reward plot
         this.plotReward()
+
         this.total_reward = 0
 
         const observation = await this.getObservation();
       
         return new Promise(resolve => {
+            // If the experience is ready, get the current metrics and resolve the promise
             if (this.ready) {
                 this.previous_metrics = this.getMetrics();
                 resolve([observation]);
-            } else {
+            } 
+            // If the experience is not ready, check every 100ms until it is ready
+            else {
                 const checkReady = () => {
                     if (this.ready) {
                         this.previous_metrics = this.getMetrics();
@@ -68,17 +89,23 @@ export default class GameEnv
         });
     }
 
+    // Take a step in the game environment
     async step(action){
+        // Send the input to the player controls
         this.experience.world.player.controls.sendInput(this.action_map[action]);
 
+        // Check if the game is over
         const done = this.experience.gameOver;
 
+        // Get the current observation
         const observation = await this.getObservation();
 
+        // Get the reward for the current step
         const reward = this.getReward()
-
+        // Add the reward to the total reward
         this.total_reward += reward;
 
+        // Wait for 10ms and then resolve the promise with the observation, reward, and done variables
         return new Promise(resolve => {
             setTimeout(() => {
               resolve([
@@ -90,51 +117,62 @@ export default class GameEnv
         });
     }
 
+    // Get the current metrics for the player
     getMetrics(){
         var metrics = {
-            "health": this.experience.world.player.life,
-            "xp": this.experience.world.player.xp,
-            "level": this.experience.world.player.level,
-            "defense": this.experience.world.player.defense_weapon.strength ? this.experience.world.player.defense_weapon.strength : 0,
-            "attack": this.experience.world.player.attack_weapon.strength ? this.experience.world.player.attack_weapon.strength : 0,
-            "time": this.experience.time.ticks,
-            "game_over": this.experience.gameOver && this.experience.world.player.controls.dead,
-            "game_win": this.experience.gameOver && !this.experience.world.player.controls.dead
+            "life": this.experience.metrics.life,
+            "xp": this.experience.metrics.xp,
+            "level": this.experience.metrics.level,
+            "defense": this.experience.metrics.defense,
+            "attack": this.experience.metrics.attack,
+            "time": this.experience.metrics.time,
+            "game_lost": this.experience.metrics.over == "lost",
+            "game_win": this.experience.metrics.over == "won"
         }
 
         return metrics
     }
 
+    // Calculate the reward for the current step
     getReward(){
         var reward = 0
 
+        // Get the current metrics
         const metrics = this.getMetrics();
 
+        // Calculate the reward based on the reward weights and the difference in metrics from the previous step
         for(const key in this.reward_weights){
             reward += this.reward_weights[key] * (metrics[key] - this.previous_metrics[key])
         }
 
+        // Update the previous metrics
         this.previous_metrics = metrics
 
         return reward
     }
 
+    // Get the current observation
     async getObservation() {
+        // Get the current image data from the renderer
         const dataURL = this.experience.renderer.current_image;
         const img = new Image();
 
         img.src = dataURL;
 
+        // Wait for the image to load
         await new Promise((resolve, reject) => {
             img.onload = () => resolve();
             img.onerror = () => reject(new Error('Failed to load image'));
         });
 
+        // Create a canvas and context to draw the image onto
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = this.width;
         canvas.height = this.height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // Get the image data from the canvas and convert it to a grayscale ndarray
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const matrix = ndarray(new Float32Array(imageData.data.length / 4), [canvas.width, canvas.height], [1, canvas.width], 0);
         var stateArray = [];
