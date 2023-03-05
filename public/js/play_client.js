@@ -21,7 +21,7 @@ var game = window.game;
 setExperienceAttributes()
 
 function setExperienceAttributes(){
-    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, {'near': game.near, 'far': game.far} , true, true)
+    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, true, true)
     
     experience.world.on('ready', async () => {
         experience.reset()

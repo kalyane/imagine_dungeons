@@ -33,8 +33,20 @@ export default class Camera
             this.player = this.experience.world.player.model
         });
 
-        this.idealOffset = new THREE.Vector3(-1, 14, 15)
-        this.idealLookat = new THREE.Vector3(0, 5, 0)
+        this.idealOffset = new THREE.Vector3(0, 30, 3)
+        this.idealLookat = new THREE.Vector3(0.3, 20, 0)
+        /*
+        const gui = new GUI()
+        const cubeFolder = gui.addFolder('Offset')
+        cubeFolder.add(this.idealOffset, 'x', -50, 50)
+        cubeFolder.add(this.idealOffset, 'y', -20, 50)
+        cubeFolder.add(this.idealOffset, 'z', -20, 50)
+        cubeFolder.open()
+        const cubeFolder2 = gui.addFolder('Lookat')
+        cubeFolder2.add(this.idealLookat, 'x', -20, 50)
+        cubeFolder2.add(this.idealLookat, 'y', -20, 50)
+        cubeFolder2.add(this.idealLookat, 'z', -20, 50)
+        cubeFolder2.open()*/
     }
 
     setAxis(){
@@ -63,7 +75,7 @@ export default class Camera
 
     setInstance()
     {
-        this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100000)
+        this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 1, 100000)
         this.instance.position.set(30, 30, 30)
         this.scene.add(this.instance)
     }

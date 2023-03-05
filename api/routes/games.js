@@ -51,11 +51,9 @@ router
         var name = req.body.name;
         var size_x = req.body.size_x
         var size_z = req.body.size_z
-        var near = req.body.near
-        var far = req.body.far
 
         try {
-            const game = await Game.findOneAndUpdate({ _id: id_game, user: req.user._id  }, { name: name, size_x: size_x, size_z: size_z, near: near, far: far });
+            const game = await Game.findOneAndUpdate({ _id: id_game, user: req.user._id  }, { name: name, size_x: size_x, size_z: size_z});
             if (!game) {
                 // guarantees only the owner can update a game
                 return res.status(403).send({message: { text: "Game not found or you do not have permission to update this game", type: "error"}})

@@ -497,8 +497,6 @@ async function saveGameDetails() {
 
     // get all inputs
     const input = document.getElementById('game_name');
-    const near = document.getElementById('near');
-    const far = document.getElementById('far');
     const size_x = document.getElementById('size_x');
     const size_z = document.getElementById('size_z');
 
@@ -506,9 +504,7 @@ async function saveGameDetails() {
     const data = {
         name: input.value,
         size_x: size_x.value,
-        size_z: size_z.value,
-        near: near.value,
-        far: far.value
+        size_z: size_z.value
     };
 
     // send game data to API

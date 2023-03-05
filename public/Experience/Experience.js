@@ -34,7 +34,7 @@ export default class Experience extends EventEmitter
     }
 
     // set the main attributes that doesn't change when reset
-    setAttributes(assets = null, gridSize = {'x':50,'z':50}, fog = {'near': 10, 'far': 50}, playing = false, user_input = true){
+    setAttributes(assets = null, gridSize = {'x':50,'z':50}, playing = false, user_input = true){
         // true if playing, false if editing
         this.playing = playing
         // if user can send keyboard input
@@ -44,10 +44,6 @@ export default class Experience extends EventEmitter
 
         this.resources = new Resources(sources)
         this.world = new World(assets)
-
-        if (this.playing){
-            this.scene.fog = new THREE.Fog(new THREE.Color('#222222'), fog.near, fog.far);
-        }
 
         this.scene.background = new THREE.Color(0xb0b16);
 

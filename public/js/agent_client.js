@@ -129,7 +129,7 @@ document.getElementById("run").addEventListener("click", async function() {
 });
 
 async function setExperienceAttributes(){
-    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, {'near': game.near, 'far': game.far} , true, false)
+    experience.setAttributes(assets, {'x': game.size_x*2,'z': game.size_z*2}, true, false)
     
     experience.world.on('ready', async () => {
         experience.reset()
