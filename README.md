@@ -1,12 +1,13 @@
-![Logo](https://raw.githubusercontent.com/kalyane/imagine_dungeons/main/public/static/images/logo-icon.png)
-# Imagine Dungeons: A platform for developing 3D dungeon games with an architecture that allows for the training of intelligent agents to play the game.
+![Logo](https://raw.githubusercontent.com/kalyane/imagine_dungeons/main/public/images/logo-icon.png)
+# <center>Welcome to Imagine Dungeons</center> 
 
+<center>A Web-Based Platform for Creating 3D Dungeon Games and Training AI Agents</center>
 
 # Description
 
-Imagine Dungeons is a web-based platform focused on AI students trying to explore the training of AI agents that play games. The tool allows the users to create an account and easily create a 3D dungeon game using pre-defined assets and structure for a dungeon game. It is not required any coding related to developing the game. It was developed using three.js, and the game runs in the browser. I created a custom environment on OpenAi Gym, so you can train the agent using a well know reinforcement learning architecture.
+Imagine Dungeons is a platform for creating and training agents to play 3D dungeon games using reinforcement learning. With Imagine Dungeons, you can create games and then train your agents to play them. The platform provides various tools and libraries to simplify the process.
 
-# Getting Started
+# How to Install and Run the Project
 
 Download [Node.js](https://nodejs.org/en/download/).
 Run this followed commands:
@@ -18,17 +19,22 @@ npm install
 # Run the local server at localhost:8080
 npm run dev
 
-# TODO test cases
-
 ```
 
-# Usage
-Examples of how to use the project, including code snippets and screenshots.
-TODO
+# Demo
+
+[![Demo Imagine Dungeons](https://raw.githubusercontent.com/kalyane/imagine_dungeons/main/public/images/demo.gif)](https://youtu.be/C-r_5RO2nko)
 
 # Documentation
 Any additional documentation, such as API references or user guides.
 TODO
 
+# License
+
+Copyright © 2023 [Kalyane](https://github.com/kalyane).
+
+This project is [GPL-3.0](https://github.com/kalyane/imagine_dungeons/blob/main/LICENSE.md) licensed.
+
+<hr>
 
 *This project was developed as a capstone project for the computer science program at Minerva University, showcasing the skills and knowledge acquired throughout the program.*

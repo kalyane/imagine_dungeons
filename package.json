@@ -1,7 +1,8 @@
 {
   "name": "imagine_dungeons",
   "version": "1.0.0",
-  "description": "",
+  "description": "Imagine Dungeons: A Web-Based Platform for Creating 3D Dungeon Games and Training AI Agents",
+  "author": "Kalyane de Oliveira Bezerra",
   "engines": {
     "node": "16.x"
   },
@@ -10,8 +11,7 @@
     "start": "node ./api/index.js",
     "build": ""
   },
-  "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "@tensorflow/tfjs": "^4.2.0",
     "bcrypt": "^5.1.0",
